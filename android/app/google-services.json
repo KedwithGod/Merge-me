@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "984004899145",
+    "firebase_url": "https://merge-me-eb15a.firebaseio.com",
+    "project_id": "merge-me-eb15a",
+    "storage_bucket": "merge-me-eb15a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984004899145:android:bac0b683999cebba1c2a98",
+        "android_client_info": {
+          "package_name": "com.example.mergeme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984004899145-h3bg7ugkpqvm02jp9nnljjpvh3hlmasj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mergeme",
+            "certificate_hash": "c8b365d81766c527347a7c3ad71d040968417279"
+          }
+        },
+        {
+          "client_id": "984004899145-baubnm8injm3h5f9n2an8p3dirli5vlc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFhJwdgpil9MC1SxZeJ_T5zc6tcQNjZ3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984004899145-baubnm8injm3h5f9n2an8p3dirli5vlc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984004899145:android:aeb8ec56ac8c2ac41c2a98",
+        "android_client_info": {
+          "package_name": "com.kedindustries.mergeme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984004899145-baubnm8injm3h5f9n2an8p3dirli5vlc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFhJwdgpil9MC1SxZeJ_T5zc6tcQNjZ3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984004899145-baubnm8injm3h5f9n2an8p3dirli5vlc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
