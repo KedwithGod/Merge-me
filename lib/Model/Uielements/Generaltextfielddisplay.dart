@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GeneralTextField extends StatelessWidget {
+class GeneralTextField extends StatefulWidget {
   final TextInputType keyInputType;
   final String textFieldValue;
   final int textFieldLineSpan;
@@ -20,13 +20,19 @@ class GeneralTextField extends StatelessWidget {
       this.textFieldLineSpan,
       this.textFieldLabelColor);
 
+  @override
+  _GeneralTextFieldState createState() => _GeneralTextFieldState();
+}
+
+class _GeneralTextFieldState extends State<GeneralTextField> {
   bool isValidPhoneNumber(String input) {
     final RegExp regex = new RegExp(r'^\(\d\d\d\)\d\d\d\-\d\d\d\d$');
     return regex.hasMatch(input);
   }
 
-  bool isValidPassword(String value){
-    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  bool isValidPassword(String value) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     RegExp regExp = new RegExp(pattern);
     return regExp.hasMatch(value);
   }
@@ -42,23 +48,27 @@ class GeneralTextField extends StatelessWidget {
     Orientation orientation = MediaQuery.of(context).orientation;
     return SafeArea(
       child: TextFormField(
-        keyboardType: keyInputType,
+        keyboardType: widget.keyInputType,
         onChanged: (val) {
-          val = textFieldValue;
+          setState(() {
+            val = widget.textFieldValue;
+          });
         },
-        maxLines: textFieldLineSpan,
+        maxLines: widget.textFieldLineSpan,
         autofocus: false,
         validator: (value) {
-          if (functionValue == 'email') {
+          if (widget.functionValue == 'email') {
             return isValidEmail(value)
                 ? null
                 : 'Please enter a valid email address';
-          } else if (functionValue == 'name') {
+          } else if (widget.functionValue == 'name') {
             return value.isEmpty ? 'Value  is required' : null;
+          } else if (widget.functionValue == 'password') {
+            return isValidPassword(value)
+                ? null
+                : 'please enter a valid password';
           }
-          else if (functionValue=='password'){
-            return isValidPassword(value)? null:'please enter a valid password';
-          };
+          ;
           return null;
         },
         style: TextStyle(
@@ -70,19 +80,32 @@ class GeneralTextField extends StatelessWidget {
         autocorrect: true,
         decoration: InputDecoration(
           prefixIcon: Icon(
-            textFieldIcon,
+            widget.textFieldIcon,
             color: Colors.blue,
           ),
-          labelText: '$textFieldLabel',
+          labelText: '${widget.textFieldLabel}',
           hintStyle: TextStyle(color: Colors.grey[300]),
-          hintText: '$textFieldHint',
+          hintText: '${widget.textFieldHint}',
           labelStyle: TextStyle(
               fontSize: orientation == Orientation.portrait
                   ? MediaQuery.of(context).size.height * 12 / 667
                   : MediaQuery.of(context).size.width * 12 / 375,
-              color: textFieldLabelColor,
+              color: widget.textFieldLabelColor,
               fontWeight: FontWeight.w400),
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          contentPadding: EdgeInsets.fromLTRB(
+            orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 12 / 667
+                : MediaQuery.of(context).size.width * 12 / 375,
+            orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 2 / 667
+                : MediaQuery.of(context).size.width * 2 / 375,
+            orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 2 / 667
+                : MediaQuery.of(context).size.width * 2 / 375,
+            orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 2 / 667
+                : MediaQuery.of(context).size.width * 2 / 375,
+          ),
           border: OutlineInputBorder(
               borderRadius: orientation == Orientation.portrait
                   ? BorderRadius.circular(

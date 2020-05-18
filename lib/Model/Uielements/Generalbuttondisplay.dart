@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Generaltextdisplay.dart';
+import 'Generaltextdisplay.dart';
+
 
 class GeneralButton extends StatelessWidget {
   final double buttonHeight;
