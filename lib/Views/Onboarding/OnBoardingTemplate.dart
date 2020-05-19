@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Uielements/Generalbuttondisplay.dart';
-import 'package:mergeme/Model/Uielements/Generaltextdisplay.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/AdaptivePostionedWidget.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/Generalbuttondisplay.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/Generaltextdisplay.dart';
 
 class OnBoardingTemplate extends StatefulWidget {
   final String imageAsset;
@@ -31,8 +32,7 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
+      body:  Stack(
           children: <Widget>[
             Positioned(
               left: 0.0,
@@ -58,9 +58,9 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
                 ),
               ),
             ),
-            Positioned(
+            AdaptivePositioned(
                 left: 0.0,
-                top: 345,
+                top: 307,
                 child: Container(
                   color: Colors.black,
                   height: orientation == Orientation.portrait
@@ -70,28 +70,28 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
                       ? MediaQuery.of(context).size.height * (375 / 375)
                       : MediaQuery.of(context).size.width * (375 / 375),
                 )),
-            Positioned(
-                left: 30.0,
-                top: 370,
+            AdaptivePositioned(
+                left: 25.0,
+                top: 338,
                 child: GeneralTextDisplay(widget.title, Colors.black, 1, 25,
-                    FontWeight.w900, 'Give work onboarding text')),
-            Positioned(
-                left: 32.0,
-                top: 423,
+                    FontWeight.w900, '${widget.title} onboarding text')),
+            AdaptivePositioned(
+                left: 22.0,
+                top: 392,
                 child: GeneralTextDisplay(
                     widget.subtitle,
                     Color.fromRGBO(85, 85, 85, 1.0),
                     8,
                     14,
                     FontWeight.w200,
-                    'Give work onboarding text')),
-            Positioned(
-                top: 650,
-                left: 32,
+                    '${widget.title} onboarding subtitle')),
+            AdaptivePositioned(
+                top: 570,
+                left: 16,
                 child: GeneralButton(
                     "",
                     1,
-                    'Get started semantics',
+                    '${widget.title} Get started semantics',
                     'Get Started',
                     Colors.white,
                     13,
@@ -108,13 +108,13 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
                     4.0)),
             widget.useNextButton == false
                 ? Container()
-                : Positioned(
-                    top: 650,
-                    right: 32.0,
+                : AdaptivePositioned(
+                    top: 570,
+                    left: 260,
                     child: GeneralButton(
                         "Flat",
                         1,
-                        'Next button semantics',
+                        '${widget.title} Next button semantics',
                         'Next',
                         Color.fromRGBO(238, 83, 79, 1.0),
                         13,
@@ -122,22 +122,22 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
                         19,
                         32,
                         widget.nextButtonPress,
-                        11,
-                        11,
-                        11,
-                        11,
+                        2,
+                        2,
+                        2,
+                        2,
                         Colors.transparent,
                         Colors.white,
                         0.0)),
             widget.useBackButton == false
                 ? Container()
-                : Positioned(
-                    top: 650,
-                    right: widget.useNextButton == false ? 32 : 108.0,
+                : AdaptivePositioned(
+                    top: 644,
+                    left: widget.useNextButton == false ? 280 : 208,
                     child: GeneralButton(
                         "Flat",
                         1,
-                        'Back button semantics',
+                        '${widget.title} Back button semantics',
                         'Back',
                         widget.useNextButton == false
                             ? Color.fromRGBO(238, 83, 79, 1.0)
@@ -156,7 +156,7 @@ class _OnBoardingTemplateState extends State<OnBoardingTemplate> {
                         0.0))
           ],
         ),
-      ),
+
     );
   }
 }

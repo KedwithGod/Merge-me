@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'media_query.dart';
+
 class GeneralTextDisplay extends StatelessWidget {
   final String inputText;
   final double textFontSize;
@@ -13,15 +15,14 @@ class GeneralTextDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize= ResponsiveSize(context);
     return SafeArea(
       child: Text(
         inputText,
         style: TextStyle(
           color: textColor,
-          fontSize: orientation == Orientation.portrait
-              ? MediaQuery.of(context).size.height *(textFontSize/667)
-              : MediaQuery.of(context).size.width * (textFontSize/375),
+          fontSize:
+              dynamicSize.height(textFontSize/667),
           fontWeight: textFontWeight,
         ),
         maxLines: noOfTextLine,

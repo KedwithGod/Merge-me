@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Uielements/Generaltextdisplay.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/Generaltextdisplay.dart';
+
+import 'media_query.dart';
 
 class GeneralListTileDisplay extends StatefulWidget {
   final Key listTilePlaceholderKey;
@@ -72,7 +74,7 @@ class GeneralListTileDisplay extends StatefulWidget {
 class _GeneralListTileDisplayState extends State<GeneralListTileDisplay> {
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
         child: ListTile(
       onTap: widget.listTileOnPress,
@@ -80,67 +82,37 @@ class _GeneralListTileDisplayState extends State<GeneralListTileDisplay> {
           key: widget.listTileHeroKey,
           tag: widget.listTileHeroTag,
           child: Container(
-              height: orientation == Orientation.landscape
-                  ? MediaQuery.of(context).size.width *
-                      widget.listTileImageHeight /
-                      667
-                  : MediaQuery.of(context).size.height *
-                      widget.listTileImageWidth /
-                      375,
-              width: orientation == Orientation.landscape
-                  ? MediaQuery.of(context).size.height *
-                      widget.listTileImageHeight /
-                      667
-                  : MediaQuery.of(context).size.width *
-                      widget.listTileImageWidth /
-                      375,
+              height: dynamicSize.height(widget.listTileImageWidth / 375),
+              width: dynamicSize.width(widget.listTileImageWidth / 375),
               padding: EdgeInsets.all(
-                orientation == Orientation.landscape
-                    ? MediaQuery.of(context).size.height * widget.listTilePadding / 667
-                    : MediaQuery.of(context).size.width * widget.listTilePadding / 375,
+                dynamicSize.width(widget.listTilePadding / 375),
               ),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(
-                        orientation == Orientation.landscape
-                            ? MediaQuery.of(context).size.height *
-                                (widget.listTileTopLeftRadius / 667)
-                            : MediaQuery.of(context).size.width *
-                                (widget.listTileTopLeftRadius / 375),
+                        dynamicSize.width(widget.listTileTopLeftRadius / 375),
                       ),
-                      topRight: Radius.circular(
-                        orientation == Orientation.landscape
-                            ? MediaQuery.of(context).size.height *
-                                (widget.listTileTopRightRadius / 667)
-                            : MediaQuery.of(context).size.width *
+                      topRight: Radius.circular(dynamicSize.width
                                 (widget.listTileTopRightRadius / 375),
                       ),
-                      bottomLeft: Radius.circular(
-                        orientation == Orientation.landscape
-                            ? MediaQuery.of(context).size.height *
-                                (widget.listTileBottomLeftRadius / 667)
-                            : MediaQuery.of(context).size.width *
+                      bottomLeft: Radius.circular(dynamicSize.width
                                 (widget.listTileBottomLeftRadius / 375),
                       ),
                       bottomRight: Radius.circular(
-                        orientation == Orientation.landscape
-                            ? MediaQuery.of(context).size.height *
-                                (widget.listTileBottomRightRadius / 667)
-                            : MediaQuery.of(context).size.width *
+                        dynamicSize.width
                                 (widget.listTileBottomRightRadius / 375),
                       )),
                   image: DecorationImage(
-                          image: AssetImage(widget.listTileAssetImage),
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                        )))),
+                    image: AssetImage(widget.listTileAssetImage),
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                  )))),
       title: FlatButton(
           color: Colors.white,
           onPressed: widget.listTileOnPress,
           padding: EdgeInsets.all(
-            orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 10 / 667
-                : MediaQuery.of(context).size.width * 10 / 375,
+            dynamicSize.height(10 / 667)
+               ,
           ),
           child: GeneralTextDisplay(
               widget.titleInputText,

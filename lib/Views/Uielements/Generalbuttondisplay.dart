@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/media_query.dart';
 import 'Generaltextdisplay.dart';
 
 
@@ -42,52 +43,36 @@ class GeneralButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize= ResponsiveSize(context);
     return SafeArea(
       child: ButtonTheme(
-        height: orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.height * (buttonHeight / 667)
-            : MediaQuery.of(context).size.width * (buttonWidth / 375),
-        minWidth: orientation == Orientation.landscape
-            ? MediaQuery.of(context).size.height * (buttonHeight / 667)
-            : MediaQuery.of(context).size.width * (buttonWidth / 375),
+        height:  dynamicSize.height(buttonHeight/667),
+        minWidth: dynamicSize.width(buttonWidth/375),
         child: RaisedButton(
+          padding:EdgeInsets.symmetric(horizontal:2.0),
           splashColor: buttonSplashColor,
           color: buttonColor,
           shape: RoundedRectangleBorder(
+            side: BorderSide(color: buttonToggle=='border'? Color.fromRGBO(220, 42, 53, 1.0):Colors.transparent,
+                style: BorderStyle.solid,
+                width: 1.0),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                  orientation == Orientation.landscape
-                      ? MediaQuery.of(context).size.height *
-                          (topLeftRadius / 667)
-                      : MediaQuery.of(context).size.width *
+
+                topLeft: Radius.circular(dynamicSize.width
                           (topLeftRadius / 375),
                 ),
-                topRight: Radius.circular(
-                  orientation == Orientation.landscape
-                      ? MediaQuery.of(context).size.height *
-                          (topRightRadius / 667)
-                      : MediaQuery.of(context).size.width *
+                topRight: Radius.circular(dynamicSize.width
                           (topRightRadius / 375),
                 ),
-                bottomLeft: Radius.circular(
-                  orientation == Orientation.landscape
-                      ? MediaQuery.of(context).size.height *
-                          (bottomLeftRadius / 667)
-                      : MediaQuery.of(context).size.width *
+                bottomLeft: Radius.circular(dynamicSize.width
                           (bottomLeftRadius / 375),
                 ),
-                bottomRight: Radius.circular(
-                  orientation == Orientation.landscape
-                      ? MediaQuery.of(context).size.height *
-                          (bottomRightRadius / 667)
-                      : MediaQuery.of(context).size.width *
+                bottomRight: Radius.circular(dynamicSize.width
                           (bottomRightRadius / 375),
                 )),
           ),
           onPressed: onButtonPress,
           elevation: buttonToggle == "Flat" ? 0.0 : buttonElevation,
-          padding: EdgeInsets.all(2),
           child: GeneralTextDisplay(buttonText, buttonTextColor, noOfTextLine,
               buttonTextFontSize, buttonTextFontWeight, buttonSemanticLabel),
         ),
@@ -114,15 +99,13 @@ class GeneralIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize= ResponsiveSize(context);
     return SafeArea(
       child: IconButton(
         color: iconButtonColor,
         onPressed: onIconButtonPress,
         icon: iconButtonIcon,
-        iconSize: orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.height * (iconButtonHeight / 667)
-            : MediaQuery.of(context).size.width * (iconButtonWidth / 375),
+        iconSize:  dynamicSize.height(iconButtonHeight / 667),
         splashColor: iconButtonSplashColor,
       ),
     );

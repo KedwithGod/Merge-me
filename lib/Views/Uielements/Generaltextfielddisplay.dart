@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'media_query.dart';
+
 class GeneralTextField extends StatefulWidget {
   final TextInputType keyInputType;
   final String textFieldValue;
@@ -45,7 +47,7 @@ class _GeneralTextFieldState extends State<GeneralTextField> {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
       child: TextFormField(
         keyboardType: widget.keyInputType,
@@ -73,9 +75,7 @@ class _GeneralTextFieldState extends State<GeneralTextField> {
         },
         style: TextStyle(
             color: Colors.blue,
-            fontSize: orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 14 / 667
-                : MediaQuery.of(context).size.width * 14 / 375,
+            fontSize: dynamicSize.height(14 / 667),
             fontWeight: FontWeight.w600),
         autocorrect: true,
         decoration: InputDecoration(
@@ -87,34 +87,19 @@ class _GeneralTextFieldState extends State<GeneralTextField> {
           hintStyle: TextStyle(color: Colors.grey[300]),
           hintText: '${widget.textFieldHint}',
           labelStyle: TextStyle(
-              fontSize: orientation == Orientation.portrait
-                  ? MediaQuery.of(context).size.height * 12 / 667
-                  : MediaQuery.of(context).size.width * 12 / 375,
+              fontSize: dynamicSize.height(12 / 667),
               color: widget.textFieldLabelColor,
               fontWeight: FontWeight.w400),
           contentPadding: EdgeInsets.fromLTRB(
-            orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 12 / 667
-                : MediaQuery.of(context).size.width * 12 / 375,
-            orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 2 / 667
-                : MediaQuery.of(context).size.width * 2 / 375,
-            orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 2 / 667
-                : MediaQuery.of(context).size.width * 2 / 375,
-            orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 2 / 667
-                : MediaQuery.of(context).size.width * 2 / 375,
-          ),
+              dynamicSize.height(12 / 667),
+              dynamicSize.height(2 / 667),
+              dynamicSize.height(2 / 667),
+              dynamicSize.height(2 / 667)),
           border: OutlineInputBorder(
-              borderRadius: orientation == Orientation.portrait
-                  ? BorderRadius.circular(
-                      MediaQuery.of(context).size.height * 11 / 667)
-                  : BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 11 / 375,
+              borderRadius: BorderRadius.circular(
+                  dynamicSize.height (11 / 667))
                     )),
         ),
-      ),
     );
   }
 }

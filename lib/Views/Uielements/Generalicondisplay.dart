@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'media_query.dart';
+
 class GeneralIconDisplay extends StatelessWidget {
   final IconData icon;
   final double iconSize;
@@ -10,14 +12,12 @@ class GeneralIconDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    ResponsiveSize dynamicSize= ResponsiveSize(context);
     return SafeArea(
         child: Icon(
       icon,
       key: iconKey,
-      size: orientation == Orientation.portrait
-          ? MediaQuery.of(context).size.height * iconSize
-          : MediaQuery.of(context).size.width * iconSize,
+      size:dynamicSize.height(iconSize),
       color: iconColor,
     ));
   }

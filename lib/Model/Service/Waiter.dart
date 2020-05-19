@@ -25,7 +25,7 @@ class Calculate{
 
   }
 
- String waiterFun() {
+ void waiterFun() {
    ReceivePort rPort = ReceivePort();
    rPort.listen((message) {
      if (message is String) {
