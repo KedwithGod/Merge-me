@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import 'media_query.dart';
 
-class GeneralTextField extends StatefulWidget {
+class GeneralTextField extends StatelessWidget {
   final TextInputType keyInputType;
-  final String textFieldValue;
+  final TextEditingController textFieldController;
   final int textFieldLineSpan;
   final String textFieldLabel;
   final String textFieldHint;
-  final IconData textFieldIcon;
-  final String functionValue;
-  final Color textFieldLabelColor;
+  final dynamic functionValue;
+  final String choosePage;
 
   const GeneralTextField(
-      this.keyInputType,
-      this.textFieldValue,
-      this.textFieldLabel,
-      this.textFieldHint,
-      this.textFieldIcon,
-      this.functionValue,
-      this.textFieldLineSpan,
-      this.textFieldLabelColor);
+    this.choosePage,
+    this.keyInputType,
+    this.textFieldController,
+    this.textFieldLabel,
+    this.textFieldHint,
+    this.functionValue,
+    this.textFieldLineSpan,
+  );
 
-  @override
-  _GeneralTextFieldState createState() => _GeneralTextFieldState();
-}
-
-class _GeneralTextFieldState extends State<GeneralTextField> {
-  bool isValidPhoneNumber(String input) {
-    final RegExp regex = new RegExp(r'^\(\d\d\d\)\d\d\d\-\d\d\d\d$');
-    return regex.hasMatch(input);
+  int isValidPhoneNumber(String input) {
+    var potentialNumber = int.tryParse(input);
+    return potentialNumber;
   }
 
   bool isValidPassword(String value) {
@@ -49,57 +44,77 @@ class _GeneralTextFieldState extends State<GeneralTextField> {
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
-      child: TextFormField(
-        keyboardType: widget.keyInputType,
-        onChanged: (val) {
-          setState(() {
-            val = widget.textFieldValue;
-          });
-        },
-        maxLines: widget.textFieldLineSpan,
-        autofocus: false,
-        validator: (value) {
-          if (widget.functionValue == 'email') {
-            return isValidEmail(value)
-                ? null
-                : 'Please enter a valid email address';
-          } else if (widget.functionValue == 'name') {
-            return value.isEmpty ? 'Value  is required' : null;
-          } else if (widget.functionValue == 'password') {
-            return isValidPassword(value)
-                ? null
-                : 'please enter a valid password';
+      child: Container(
+        height: choosePage=='Login'?dynamicSize.height(54 / 667):dynamicSize.height(58 / 667),
+        width: dynamicSize.width(314 / 375),
+        child: TextFormField(
+          cursorColor: Colors.black,
+          keyboardType: keyInputType,
+          controller: textFieldController,
+          maxLines: textFieldLineSpan,
+          autofocus: false,
+          validator: (value) {
+            if (functionValue == 'email') {
+              return isValidEmail(value)
+                  ? null
+                  : 'Please enter a valid email address';
+
+            }
+            else if (functionValue=='NIN'){
+              var nin = int.tryParse(value);
+              if (nin == null || nin<8){
+                return 'Nin value is invalid';
+              }
+            }
+            else if (functionValue == 'name') {
+              return value.isEmpty ? 'Value  is required' : null;
+            }
+            else if (functionValue=='workPhone' || functionValue=='mobilePhone'){
+              var potentialNumber = int.tryParse(value);
+              if (potentialNumber == null) {
+                return 'Enter a phone number';
+            }
+
+            return null;
           }
-          ;
-          return null;
-        },
-        style: TextStyle(
-            color: Colors.blue,
-            fontSize: dynamicSize.height(14 / 667),
-            fontWeight: FontWeight.w600),
-        autocorrect: true,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            widget.textFieldIcon,
-            color: Colors.blue,
-          ),
-          labelText: '${widget.textFieldLabel}',
-          hintStyle: TextStyle(color: Colors.grey[300]),
-          hintText: '${widget.textFieldHint}',
-          labelStyle: TextStyle(
-              fontSize: dynamicSize.height(12 / 667),
-              color: widget.textFieldLabelColor,
-              fontWeight: FontWeight.w400),
-          contentPadding: EdgeInsets.fromLTRB(
-              dynamicSize.height(12 / 667),
-              dynamicSize.height(2 / 667),
-              dynamicSize.height(2 / 667),
-              dynamicSize.height(2 / 667)),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                  dynamicSize.height (11 / 667))
-                    )),
+            return null;
+            },
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: dynamicSize.height(15 / 667),
+              fontWeight: FontWeight.w600),
+          autocorrect: true,
+          decoration: InputDecoration(
+              labelText: '$textFieldLabel',
+              hintStyle: TextStyle(
+                  fontSize: dynamicSize.height(13 / 667),
+                  color: Color.fromRGBO(170, 170, 170, 0.8)),
+              hintText: '$textFieldHint',
+              labelStyle: TextStyle(
+                  fontSize: dynamicSize.height(14 / 667),
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400),
+              contentPadding: EdgeInsets.fromLTRB(
+                  dynamicSize.width(20 / 357),
+                  dynamicSize.height(30 / 667),
+                  dynamicSize.width(2 / 357),
+                  dynamicSize.height(2 / 667)),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Color.fromRGBO(238, 83, 79, 1.0),
+                      width: 1.0,
+                      style: BorderStyle.solid),
+                  borderRadius:
+                  BorderRadius.circular(dynamicSize.height(11 / 667))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color:Color.fromRGBO(238, 83, 79, 1.0),
+                      width: 1.0,
+                      style: BorderStyle.solid),
+                  borderRadius:
+                      BorderRadius.circular(dynamicSize.height(11 / 667)))),
         ),
+      ),
     );
   }
 }

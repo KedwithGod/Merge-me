@@ -14,4 +14,8 @@ class NavigatorService{
       return navigatorKey.currentState.pop();
     }
 
+    Future nextPage(String routeName){
+      return navigatorKey.currentState.pushNamed(routeName);
+    }
+
 }
