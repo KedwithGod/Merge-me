@@ -4,6 +4,8 @@ import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
+import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
+import 'package:mergeme/Views/Uielements/sizedBox.dart';
 
 import 'BaseModel.dart';
 
@@ -44,9 +46,28 @@ class SignUpViewModel extends BaseModel {
   }
 
   Widget tradeSelection(){
-    dynamic trade=storageService.getData('name');
-    if (trade==''){
+    dynamic trade=storageService.getData(route.trade);
+    if (trade=='Search for work' || trade =='Learn a trade'){
+      return Column(children: <Widget>[
+        AdaptiveSizedBox(height: 5/667,),
+        GeneralDropDownDisplay(
+            'Select trade category',
+            ['',
+              'Local Trade',
+              'Tech Jobs',
+              'Artisans',
+              'Repairs'
+            ],
+            route.tradeCategory,
+            'Choose a Trade',
+            'Trade Category'),
+      ],);
 
     }
+    return Container(
+      height: 2,
+
+    );
+
   }
 }

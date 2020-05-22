@@ -7,6 +7,7 @@ import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
 import 'package:mergeme/Views/Uielements/media_query.dart';
+import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatelessWidget {
@@ -136,9 +137,10 @@ class SignUp extends StatelessWidget {
                               // TODO: how to verify nin number
 
                               1),
-                         /* GeneralDropDownDisplay(
+                          AdaptiveSizedBox(height: 5/667,),
+                         GeneralDropDownDisplay(
                               'what will you like to do',
-                              ['merge',
+                              ['',
                                 'Give a work',
                                 'Learn a trade',
                                 'Search for work'
@@ -146,20 +148,13 @@ class SignUp extends StatelessWidget {
                               route.trade,
                               'what will you like to do',
                               'Trade'),
-                          GeneralDropDownDisplay(
-                              'Select trade category',
-                              ['merge',
-                                'Local Trade',
-                                'Tech Jobs',
-                                'Artisans',
-                                'Repairs'
-                              ],
-                              route.tradeCategory,
-                              'Choose a Trade',
-                              'Trade Category'),
-                          GeneralDropDownDisplay(
+                          model.tradeSelection(),
+
+                          AdaptiveSizedBox(height: 5/667,),
+
+                          /*GeneralDropDownDisplay(
                               'Select a trade',
-                              ['merge',
+                              ['',
                                 'Bead making',
                                 'House painting',
                                 'Cake making',
@@ -170,7 +165,7 @@ class SignUp extends StatelessWidget {
                               'Local trade'),
                           GeneralDropDownDisplay(
                               'Select a trade',
-                              ['merge',
+                              ['',
                                 'Graphic Design',
                                 'Mobile developer',
                                 'Data scientist',
@@ -181,7 +176,7 @@ class SignUp extends StatelessWidget {
                               'Tech jobs'),
                           GeneralDropDownDisplay(
                               'Select a trade',
-                              ['merge',
+                              ['',
                                 'AutoMechanic',
                                 'Tailor/Suenstress',
                                 'Electrician',
@@ -189,7 +184,7 @@ class SignUp extends StatelessWidget {
                               ],
                               route.artisans,
                               'Select a trade',
-                              'Artisans'),*/
+                              'Artisans'),
                           GeneralDropDownDisplay(
                               'Select a trade',
                               ['',
@@ -200,7 +195,7 @@ class SignUp extends StatelessWidget {
                               ],
                               route.artisans,
                               'Select a trade',
-                              'Repairs')
+                              'Repairs')*/
                         ],
                       ),
                     ),
@@ -246,10 +241,15 @@ class SignUp extends StatelessWidget {
                     FontWeight.w500,
                     'Sign IN semantics in login page'),
               ),
-            )
+
+
+            ),
+
           ],
         )),
       ),
     );
   }
 }
+
+
