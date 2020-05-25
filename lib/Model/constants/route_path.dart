@@ -20,5 +20,9 @@ const String localTrade= 'Local Trade';
 const String techJobs= 'Tech Jobs';
 const String repairs= 'Repairs';
 const String artisans= 'Artisans';
+const String onClickGW='onClickGW';
+const String onClickSW='onClickSW';
+const String onClickLT='onClickLT';
+
 
 
