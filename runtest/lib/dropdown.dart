@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'locator.dart';
 import 'mediaquery.dart';
 
 

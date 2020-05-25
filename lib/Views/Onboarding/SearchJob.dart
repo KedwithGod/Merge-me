@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mergeme/Views/Onboarding/OnBoardingTemplate.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 
 class SearchWorkOnBoarding extends StatelessWidget {
   @override
@@ -7,7 +8,6 @@ class SearchWorkOnBoarding extends StatelessWidget {
     return Scaffold(
         body: OnBoardingTemplate(
         '''Get work from trustworthy clients,\nfill your wallet & fund your bank account.\nAvailable for local trades suchs as cake\nmaking, bead making,tech jobs such as\ndata scientist, software engineers,\nArtisans such as mechanics, Electricans,\nRepairs such as Fan repairers, Television\nrepairs.''',
-                (){}, (){},
-                (){}, 'assets/Search work.jpg', 'Search For Work', true,true));
+               route.HomeRoute, 'assets/Search work.jpg', 'Search For Work', true,true));
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'media_query.dart';
+import 'Shared.dart';
 
 class GeneralIconDisplay extends StatelessWidget {
   final IconData icon;

@@ -1,11 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
-  static LocalStorageService _instance;
   static SharedPreferences _preferences;
 
 
-  dynamic _getFromDisk(String key) async{
+   dynamic _getFromDisk(String key) async{
     _preferences = await SharedPreferences.getInstance();
     var value  = _preferences.get(key);
     print('(TRACE) LocalStorageService:_getFromDisk. key: $key value: $value');
@@ -33,7 +32,7 @@ class LocalStorageService {
     }
   }
 
-  Future<dynamic> getData (String userKey) async{
+  dynamic getData (String userKey) async{
     var data = await _getFromDisk(userKey);
     if (data == null) {
       return null;

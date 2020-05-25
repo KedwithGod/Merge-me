@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:mergeme/ViewModel/DropDownButton.dart';
 import 'package:mergeme/ViewModel/SignUpModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
-import 'package:mergeme/Views/Uielements/media_query.dart';
+import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider/provider.dart';
 
@@ -74,131 +76,98 @@ class SignUp extends StatelessWidget {
                           color: Color.fromRGBO(215, 215, 215, 0.5),
                           width: 1.0,
                           style: BorderStyle.solid))),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.text,
-                              fullName,
-                              "Full name",
-                              'Enter your full name',
-                              route.Name,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.emailAddress,
-                              email,
-                              "Email",
-                              'Enter your email Addres',
-                              route.Email,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.number,
-                              mobileNo,
-                              "Phone No (Mobile)",
-                              'Enter your mobile number',
-                              route.mobilePhone,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.number,
-                              workNo,
-                              "Phone No (Work)",
-                              'Enter your Work number',
-                              route.workPhone,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.visiblePassword,
-                              password,
-                              "Password",
-                              'Enter your password',
-                              route.Password,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.visiblePassword,
-                              confirmPassword,
-                              "Confirm Password",
-                              'Confirm your password',
-                              route.Password,
-                              1),
-                          GeneralTextField(
-                              route.SignUpRoute,
-                              TextInputType.text,
-                              nin,
-                              "National Identity No",
-                              'Enter your national identity no',
-                              route.NIN,
-                              // TODO: how to verify nin number
+                  child: StatesBuilder(
+                    stateID: 'TradeSelection',
+                    blocs: [mainBloc],
+                    builder: (_)=>
+                    SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.text,
+                                fullName,
+                                "Full name",
+                                'Enter your full name',
+                                route.Name,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.emailAddress,
+                                email,
+                                "Email",
+                                'Enter your email Addres',
+                                route.Email,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.number,
+                                mobileNo,
+                                "Phone No (Mobile)",
+                                'Enter your mobile number',
+                                route.mobilePhone,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.number,
+                                workNo,
+                                "Phone No (Work)",
+                                'Enter your Work number',
+                                route.workPhone,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.visiblePassword,
+                                password,
+                                "Password",
+                                'Enter your password',
+                                route.Password,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.visiblePassword,
+                                confirmPassword,
+                                "Confirm Password",
+                                'Confirm your password',
+                                route.Password,
+                                1),
+                            GeneralTextField(
+                                route.SignUpRoute,
+                                TextInputType.text,
+                                nin,
+                                "National Identity No",
+                                'Enter your national identity no',
+                                route.NIN,
+                                // TODO: how to verify nin number
 
-                              1),
-                          AdaptiveSizedBox(height: 5/667,),
-                         GeneralDropDownDisplay(
-                              'what will you like to do',
-                              ['',
-                                'Give a work',
-                                'Learn a trade',
-                                'Search for work'
-                              ],
-                              route.trade,
-                              'what will you like to do',
-                              'Trade'),
-                          model.tradeSelection(),
+                                1),
+                            AdaptiveSizedBox(height: 5/667,),
+                           GeneralDropDownDisplay(
+                                'what will you like to do',
+                                ['',
+                                  'Give a work',
+                                  'Learn a trade',
+                                  'Search for work'
+                                ],
+                                route.trade,
+                                'what will you like to do',
+                                'Trade'),
 
-                          AdaptiveSizedBox(height: 5/667,),
 
-                          /*GeneralDropDownDisplay(
-                              'Select a trade',
-                              ['',
-                                'Bead making',
-                                'House painting',
-                                'Cake making',
-                                'Plumbing work'
-                              ],
-                              route.localTrade,
-                              'Select a trade',
-                              'Local trade'),
-                          GeneralDropDownDisplay(
-                              'Select a trade',
-                              ['',
-                                'Graphic Design',
-                                'Mobile developer',
-                                'Data scientist',
-                                'Web developer'
-                              ],
-                              route.techJobs,
-                              'Select a trade',
-                              'Tech jobs'),
-                          GeneralDropDownDisplay(
-                              'Select a trade',
-                              ['',
-                                'AutoMechanic',
-                                'Tailor/Suenstress',
-                                'Electrician',
-                                'Carpenter'
-                              ],
-                              route.artisans,
-                              'Select a trade',
-                              'Artisans'),
-                          GeneralDropDownDisplay(
-                              'Select a trade',
-                              ['',
-                                'Refrigerator repairs',
-                                'Fan repairs',
-                                'Television repairs',
-                                'Bag repairs'
-                              ],
-                              route.artisans,
-                              'Select a trade',
-                              'Repairs')*/
-                        ],
+
+                            AdaptiveSizedBox(height: 5/667,),
+                            mainBloc.tradeSelection(),
+                            AdaptiveSizedBox(height: 5/667,),
+
+                            mainBloc.toggleView==false?mainBloc.onTap():mainBloc.tradeValue()
+                          ],
+                        ),
                       ),
                     ),
+
+
                   ),
                 )),
             AdaptivePositioned(
@@ -212,7 +181,7 @@ class SignUp extends StatelessWidget {
                     route.workPhone: workNo.text,
                     route.mobilePhone: mobileNo.text,
                     route.Password: password.text
-                  });
+                  },email.text,password.text);
                 }, 11, 11, 1, 1, Color.fromRGBO(238, 83, 79, 1.0), Colors.white,
                     5.0)),
             AdaptivePositioned(
@@ -227,7 +196,7 @@ class SignUp extends StatelessWidget {
                   'i am already a member text'),
             ),
             AdaptivePositioned(
-              left: 249,
+              left: 260,
               top: 601,
               child: GestureDetector(
                 onTap: () {

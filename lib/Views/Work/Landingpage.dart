@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
+import 'package:mergeme/Views/Uielements/Shared.dart';
 
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ResponsiveSize dynamicSize = ResponsiveSize(context);
+
     return Scaffold(
-        body:Column(
-          children: <Widget>[
-            Container(height: 200,),
-            GeneralDropDownDisplay('Select trade category',
-                ['',
-                  'Local Trade',
-                  'Tech Jobs',
-                  'Artisans',
-                  'Repairs'
-                ],
-               'tradeCategory',
-                'Choose a Trade',
-                'Trade Category'),
-          ],
-        ),
-
+      body: Stack(
+        children: <Widget>[
+          adaptiveContainer(context,26, 109, 246, 307, 'assets.SearchWorkLp.jpg',
+              'Search for work', () {}),
+          adaptiveContainer(context,
+              24, 90, 292, 308, 'assets/Give workLp.jpg','Give out work', (){})
+        ],
+      ),
     );
-
   }
 }

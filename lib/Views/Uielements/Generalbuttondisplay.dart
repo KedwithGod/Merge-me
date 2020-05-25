@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/media_query.dart';
+import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/Shared.dart';
 import 'Generaltextdisplay.dart';
 
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'file:///C:/Users/user/Documents/Flutter_projects/merge_me/lib/Views/Uielements/Generaltextdisplay.dart';
 
-import 'media_query.dart';
+import 'Shared.dart';
 
 class GeneralListTileDisplay extends StatefulWidget {
   final Key listTilePlaceholderKey;

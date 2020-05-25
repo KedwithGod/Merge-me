@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/Router.dart' as router;
 import 'package:mergeme/Model/constants/route_path.dart' as routes;
+import 'Model/Service/dialog_service.dart';
 import 'Model/Service/locator_setup.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'ViewModel/DropDownButton.dart';
+import 'Views/Uielements/dialog_manager.dart';
 
 void main() async {
    setupLocator();
@@ -12,24 +15,49 @@ void main() async {
 }
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    mainBloc =
+        MainBloc(); // initializing mainBloc. It will be availible to all widgets underdeath; that is All the app.
+  }
+
+  @override
+  void dispose() {
+    mainBloc = null; // destroying the mainBloc object to free resources
+    super.dispose();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    final textTheme = Theme.of(context).textTheme;
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: GoogleFonts.openSansTextTheme(
-          Theme.of(context).textTheme,
-        ),backgroundColor: Colors.white,
-        primarySwatch: Colors.yellow,
+    return  MaterialApp(
+        title: 'Merge Me',
+      builder: (context, child) => Navigator(
+        key: locator<DialogService>().dialogNavigationKey,
+        onGenerateRoute: (settings) => MaterialPageRoute(
+            builder: (context) => DialogManager(child: child)),
       ),
-     navigatorKey: locator<NavigatorService>().navigatorKey,
-     onGenerateRoute: router.generateRoute,
-      initialRoute: routes.HomeRoute,
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          textTheme: GoogleFonts.openSansTextTheme(
+            Theme.of(context).textTheme,
+          ),backgroundColor: Colors.white,
+          primarySwatch: Colors.yellow,
+        ),
+       navigatorKey: locator<NavigatorService>().navigatorKey,
+       onGenerateRoute: router.generateRoute,
+        initialRoute: routes.WrapperRoute,
+      );
   }
 }
 

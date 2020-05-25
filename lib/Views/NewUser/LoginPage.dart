@@ -5,21 +5,21 @@ import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
-import 'package:mergeme/Views/Uielements/media_query.dart';
+import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController emailValue= TextEditingController();
-  final  TextEditingController passwordValue= TextEditingController();
+  final TextEditingController emailValue = TextEditingController();
+  final TextEditingController passwordValue = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return ChangeNotifierProvider(
-      create: (context)=>LoginViewModel(),
+      create: (context) => LoginViewModel(),
       child: Consumer<LoginViewModel>(
-        builder: (context, model, child)=>
-            Scaffold(
+        builder: (context, model, child) => Scaffold(
             body: Stack(
           overflow: Overflow.clip,
           children: <Widget>[
@@ -65,7 +65,15 @@ class LoginPage extends StatelessWidget {
                     FontWeight.w500,
                     50,
                     314,
-                    () {},
+                        (){model.validateForm(
+                        _formKey,
+                        {
+                          route.Name: emailValue.text,
+                          route.Password: passwordValue.text,
+                          route.isLoggedIn: true
+                        },
+                        emailValue.text,
+                        passwordValue.text);},
                     11,
                     11,
                     1,
@@ -74,13 +82,20 @@ class LoginPage extends StatelessWidget {
                     Colors.white,
                     5.0)),
             Form(
+              key: _formKey,
                 child: Stack(
               children: <Widget>[
                 AdaptivePositioned(
                   top: 191,
                   left: 30,
-                  child: GeneralTextField(route.LoginRoute,TextInputType.emailAddress, emailValue,
-                      'Email', 'Enter your email Address', route.Email, 2),
+                  child: GeneralTextField(
+                      route.LoginRoute,
+                      TextInputType.emailAddress,
+                      emailValue,
+                      'Email',
+                      'Enter your email Address',
+                      route.Email,
+                      2),
                 ),
                 AdaptivePositioned(
                   top: 277,
@@ -99,7 +114,7 @@ class LoginPage extends StatelessWidget {
                   left: 222,
                   top: 350,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: (){},
                     child: GeneralTextDisplay(
                         'Forgot Password',
                         Color.fromRGBO(220, 42, 53, 0.5),
@@ -121,15 +136,17 @@ class LoginPage extends StatelessWidget {
                       'i am a new user text'),
                 ),
                 AdaptivePositioned(
-                  left: 220,
+                  left: 225,
                   top: 601,
                   child: GestureDetector(
-                    onTap: () {model.signUp();},
+                    onTap: () {
+                      model.signUp();
+                    },
                     child: GeneralTextDisplay(
                         'Sign Up',
                         Color.fromRGBO(220, 42, 53, 0.7),
                         1,
-                       12,
+                        12,
                         FontWeight.w500,
                         'Sign up semantics in login page'),
                   ),

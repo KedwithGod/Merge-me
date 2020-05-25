@@ -1,20 +1,18 @@
 class User {
+
+  final String uid;
+
+  User({ this.uid });
+
+}
+
+class UserData {
+
+  final String uid;
   final String name;
-  final String surname;
-  final int age;
+  final String sugars;
+  final int strength;
 
-  User({this.name, this.surname, this.age});
+  UserData({ this.uid, this.sugars, this.strength, this.name });
 
-  User.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        surname = json['surname'],
-        age = json['age'];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['surname'] = this.surname;
-    data['age'] = this.age;
-    return data;
-  }
 }

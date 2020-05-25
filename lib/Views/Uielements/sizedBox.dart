@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'media_query.dart';
+import 'Shared.dart';
 
 class AdaptiveSizedBox extends StatelessWidget {
   final double height;

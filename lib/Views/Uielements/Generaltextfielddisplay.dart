@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'media_query.dart';
+import 'Shared.dart';
 
 class GeneralTextField extends StatelessWidget {
   final TextInputType keyInputType;
@@ -45,7 +45,7 @@ class GeneralTextField extends StatelessWidget {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
       child: Container(
-        height: choosePage=='Login'?dynamicSize.height(54 / 667):dynamicSize.height(58 / 667),
+        height: choosePage=='Login'?dynamicSize.height(64 / 667):dynamicSize.height(58 / 667),
         width: dynamicSize.width(314 / 375),
         child: TextFormField(
           cursorColor: Colors.black,
@@ -62,7 +62,7 @@ class GeneralTextField extends StatelessWidget {
             }
             else if (functionValue=='NIN'){
               var nin = int.tryParse(value);
-              if (nin == null || nin<8){
+              if (nin == null && nin<8){
                 return 'Nin value is invalid';
               }
             }
@@ -91,12 +91,12 @@ class GeneralTextField extends StatelessWidget {
                   color: Color.fromRGBO(170, 170, 170, 0.8)),
               hintText: '$textFieldHint',
               labelStyle: TextStyle(
-                  fontSize: dynamicSize.height(14 / 667),
+                  fontSize: dynamicSize.height(13 / 667),
                   color: Colors.black54,
                   fontWeight: FontWeight.w400),
               contentPadding: EdgeInsets.fromLTRB(
                   dynamicSize.width(20 / 357),
-                  dynamicSize.height(30 / 667),
+                  dynamicSize.height(20 / 667),
                   dynamicSize.width(2 / 357),
                   dynamicSize.height(2 / 667)),
               border: OutlineInputBorder(
