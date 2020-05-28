@@ -4,11 +4,17 @@ class LocalStorageService {
   static SharedPreferences _preferences;
 
 
-   dynamic _getFromDisk(String key) async{
+   dynamic getFromDisk(String key) async{
     _preferences = await SharedPreferences.getInstance();
     var value  = _preferences.get(key);
     print('(TRACE) LocalStorageService:_getFromDisk. key: $key value: $value');
     return value;
+  }
+
+  static Future<String> getValue (phone) async {
+    final prefs2=await SharedPreferences.getInstance();
+    phone= prefs2.getString(phone)?? '';
+    return phone;
   }
 
   void _saveToDisk<T>(String key, T content) async{
@@ -33,7 +39,7 @@ class LocalStorageService {
   }
 
   dynamic getData (String userKey) async{
-    var data = await _getFromDisk(userKey);
+    var data = await getFromDisk(userKey);
     if (data == null) {
       return null;
     }

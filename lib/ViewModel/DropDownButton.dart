@@ -1,22 +1,46 @@
 import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/Navigator_service.dart';
+import 'package:mergeme/Model/Service/localStorage_service.dart';
+import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
 
 class MainBloc extends BloCSetting {
 
-  int s=0;
+  final NavigatorService _navigationService = locator<NavigatorService>();
+  final LocalStorageService storageService = locator<LocalStorageService>();
+  var specificTradeVal;
+  var tutorOption;
+
+
+  updateValue() async {
+    await storageService.getData(tradeCategory).then((onValue){
+      specificTradeVal=onValue;
+    });
+    await storageService.getData(route.tutorOption).then((onValue){
+      tutorOption=onValue;
+
+    });
+
+    await rebuildWidgets(ids: ['Sign in']);
+  }
+
+
+  Future navigate(routeName){
+    return _navigationService.nextPage(routeName);
+  }
+
+  int s = 0;
   var tradeName;
   var tradeCategory;
   Function onTapHandler;
-  bool toggleView=false;
+  bool toggleView = false;
+  int indexValue = 0;
 
 
-
-
-
-  Widget tradeSelection(){
-    if (tradeCategory=='Learn a trade' ){
+  Widget tradeSelection() {
+    if (tradeCategory == 'Learn a trade') {
       print(' tradeCategory is $tradeCategory');
       return
         GeneralDropDownDisplay(
@@ -30,29 +54,24 @@ class MainBloc extends BloCSetting {
             route.tradeCategory,
             'Choose a Trade',
             'Trade Category');
-
     }
-    if (tradeCategory=='Search for work'){
+    if (tradeCategory == 'Search for work') {
       return
         GeneralDropDownDisplay(
-            '',
-            ['',
-              'Local Trade',
-              'Tech Jobs',
-              'Artisans',
-              'Repairs'
-            ],
-            route.tradeCategory,
-            'Choose a Trade',
-            'Trade Category',);
-
-
-
+          '',
+          ['',
+            'Local Trade',
+            'Tech Jobs',
+            'Artisans',
+            'Repairs'
+          ],
+          route.tradeCategory,
+          'Choose a Trade',
+          'Trade Category',);
     }
 
 
-
-    if (tradeCategory=='' || tradeCategory == 'Give a work' ){
+    if (tradeCategory == '' || tradeCategory == 'Give a work') {
       return Container(
 
           child: Text('i am rebuilt $s'),
@@ -62,23 +81,20 @@ class MainBloc extends BloCSetting {
       );
     }
 
-      return Container(
+    return Container(
 
-      child: Text('tap on $s'),
-      color: Colors.blue,
-      height: 40
+        child: Text('tap on $s'),
+        color: Colors.blue,
+        height: 40
 
     );
-
   }
 
 
-
-
-  Widget tradeValue () {
+  Widget tradeValue() {
     print('tradeName is $tradeName');
 
-    if (tradeName == route.localTrade  && tradeCategory != 'Give a work' ) {
+    if (tradeName == route.localTrade && tradeCategory != 'Give a work') {
       return GeneralDropDownDisplay(
           '',
           ['',
@@ -90,10 +106,9 @@ class MainBloc extends BloCSetting {
           route.localTrade,
           'Select a trade',
           'Local trade');
-
-
     }
-    else if (tradeName == route.techJobs && tradeName!=''   && tradeCategory != 'Give a work' ) {
+    else if (tradeName == route.techJobs && tradeName != '' &&
+        tradeCategory != 'Give a work') {
       return GeneralDropDownDisplay(
           '',
           ['',
@@ -106,7 +121,8 @@ class MainBloc extends BloCSetting {
           'Select a trade',
           'Tech jobs');
     }
-    else if (tradeName == route.artisans && tradeName!=''  && tradeCategory != 'Give a work') {
+    else if (tradeName == route.artisans && tradeName != '' &&
+        tradeCategory != 'Give a work') {
       return GeneralDropDownDisplay(
           '',
           ['',
@@ -119,7 +135,8 @@ class MainBloc extends BloCSetting {
           'Select a trade',
           'Artisans');
     }
-    else if (tradeName == route.repairs && tradeName!=''  && tradeCategory != 'Give a work' ) {
+    else if (tradeName == route.repairs && tradeName != '' &&
+        tradeCategory != 'Give a work') {
       return GeneralDropDownDisplay(
           '',
           ['',
@@ -133,43 +150,76 @@ class MainBloc extends BloCSetting {
           'Repairs');
     }
 
-    else {return  Container(
+    else {
+      return Container(
 
-        child: Text('i am rebuilt $s'),
-        color: Colors.blue,
-        height: 40);}
+          child: Text('i am rebuilt $s'),
+          color: Colors.blue,
+          height: 40);
+    }
   }
 
-  Widget onTap(){
-    return  Container(
-        child: tradeName!=''?Text('Select $tradeName 1 times more'):Text('rebuild $s'),
+  Widget onTap() {
+    return Container(
+        child: tradeName != '' ? Text('Select $tradeName 1 times more') : Text(
+            'rebuild $s'),
         color: Colors.white,
         height: 80);
   }
 
 
+  onChanged(String userKey, String userValue) async {
+    onTapHandler =
+        () async {
+      if (tradeName != null) {
+        toggleView = !toggleView;
+        print(" ontap: $toggleView");
+      }
+    };
 
-  onChanged(String userKey,String userValue) async{
-
-    onTapHandler=
-        () async{
-      if (tradeName!=null){
-      toggleView=!toggleView;
-      print(" ontap: $toggleView");
-    }};
-
-     if (userKey==route.trade){
-      tradeCategory=userValue;
+    if (userKey == route.trade) {
+      tradeCategory = userValue;
     }
-    else if (userKey==route.tradeCategory){
-      tradeName=userValue;
+    else if (userKey == route.tradeCategory) {
+      tradeName = userValue;
 
     }
+    if (userKey==route.localTrade){
+      specificTradeVal=userValue;
+    }
+    else if (userKey==route.artisans){
+      specificTradeVal=userValue;
+    }
+    else if (userKey==route.repairs){
+      specificTradeVal=userValue;
+    }
+    if (userKey==route.techJobs){
+      specificTradeVal=userValue;
+    }
 
+    else if (userKey== route.tutorOption){
+      tutorOption=userValue;
+    }
 
-    await rebuildWidgets(ids: ['dropdown','TradeSelection']);
+    await rebuildWidgets(ids: ['dropdown', 'TradeSelection','Sign in']);
   }
 
-}
 
+  onSwipeRight() async{
+    indexValue > 0 ? indexValue-- : indexValue = 0;
+    print(indexValue);
+    await rebuildWidgets(ids: ['swipeDetector','indexStack']);
+  }
+
+  onSwipeLeft() async {
+    indexValue < 2 ? indexValue++ : indexValue = 2;
+    await rebuildWidgets(ids: ['swipeDetector','indexStack',]);
+    print(indexValue);
+  }
+
+  indexChange(int index) async {
+    indexValue = index;
+    await rebuildWidgets(ids: ['indexStack','swipeDetector']);
+  }
+}
 MainBloc mainBloc;

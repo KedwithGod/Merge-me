@@ -7,18 +7,22 @@ import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
 
-
 import 'BaseModel.dart';
 
 class SignUpViewModel extends BaseModel {
   final NavigatorService _navigationService = locator<NavigatorService>();
-  final LocalStorageService storageService =locator<LocalStorageService>();
+  final LocalStorageService storageService = locator<LocalStorageService>();
+  final AuthenticationService _authenticationService =
+  locator<AuthenticationService>();
+  final DialogService _dialogService = locator<DialogService>();
 
-  Future loginPage(){
+  bool loading=false;
+
+  Future loginPage() {
     return _navigationService.nextPage(route.LoginRoute);
   }
 
-  Future landingPage(){
+  Future landingPage() {
     return _navigationService.nextPage(route.LandingPageRoute);
   }
 
@@ -29,36 +33,61 @@ class SignUpViewModel extends BaseModel {
     if (!success) {
       setErrorMessage('Error has occured with the login');
     } else {
-      _navigationService.navigateTo(route.HomeRoute, arguments: '\nFilledStacks');
+      _navigationService.navigateTo(route.HomeRoute,
+          arguments: '\nFilledStacks');
       setErrorMessage(null);
     }
 
     setState(ViewState.Idle);
   }
 
-  void validateForm(GlobalKey<FormState> formKey, Map<String,dynamic> inputValues,email,password) async{
-    if(formKey.currentState.validate()) {
-      signUp(email: email, password: password);
-      inputValues.forEach((key, value) async { await storageService.setUser(key, value);});
-    }
+  void validateForm(
+      GlobalKey<FormState> formKey,
+      Map<String, dynamic> inputValues,
+      email,
+      password,
+      fullName,
+      mobileNo,
+      workNumber,nin,tradeName,tradeCategory,tutorOption,specificTrade) async {
+    if (formKey.currentState.validate()) {
+      signUp( email, password,fullName,
+          mobileNo,
+          workNumber,nin,tradeName,tutorOption,tradeCategory,specificTrade);
+      await storageService.setUser(route.isLoggedIn, true);
+      inputValues.forEach((key, value) async {
+        await storageService.setUser(key, value);
+      });
 
+
+    }
   }
 
-  final AuthenticationService _authenticationService =
-  locator<AuthenticationService>();
-  final DialogService _dialogService = locator<DialogService>();
 
-
-  Future signUp({
-    @required String email,
-    @required String password,
-  }) async {
+  Future signUp(
+      String email,
+      String password,
+      String fullName,
+      String mobileNo,
+      String workNumber,
+      String nin,
+      String tradeName,
+      String tutorOption,
+      String tradeCategory,
+      String specificTrade,
+      ) async {
     setState(ViewState.Busy);
 
     var result = await _authenticationService.signUpWithEmail(
-      email: email,
-      password: password,
-    );
+        email: email,
+        password: password,
+        fullName: fullName,
+        mobileNo: mobileNo,
+        workNumber: workNumber,
+        tradeName: tradeName,
+        nin: nin,
+        tutorOption: tutorOption,
+        tradeCategory: tradeCategory,
+        specificTrade: specificTrade);
 
     setState(ViewState.Idle);
 
@@ -66,18 +95,18 @@ class SignUpViewModel extends BaseModel {
       if (result) {
         _navigationService.navigateTo(route.LandingPageRoute);
       } else {
+        loading=false;
         await _dialogService.showDialog(
           title: 'Sign Up Failure',
           description: 'General sign up failure. Please try again later',
         );
       }
     } else {
+      loading=false;
       await _dialogService.showDialog(
         title: 'Sign Up Failure',
         description: result,
       );
     }
   }
-
-
 }

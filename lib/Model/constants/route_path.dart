@@ -15,7 +15,7 @@ const String mobilePhone = 'mobilePhone';
 const String workPhone = 'workPhone';
 const String trade= 'TradeName';
 const String tradeCategory= 'TradeCategory';
-const String tutorOption = 'TradeOption';
+const String tutorOption = 'TutorOption';
 const String localTrade= 'Local Trade';
 const String techJobs= 'Tech Jobs';
 const String repairs= 'Repairs';
@@ -23,6 +23,12 @@ const String artisans= 'Artisans';
 const String onClickGW='onClickGW';
 const String onClickSW='onClickSW';
 const String onClickLT='onClickLT';
+const String GiveWork='Give Work page';
+const String SearchWork='Search Work page';
+const String LearnTrade='Learn Trade';
+const String UserID= 'UserID';
+const String specificTrade='SpecificTrade';
+const String welcomeBack='Welcome Back';
 
 
 

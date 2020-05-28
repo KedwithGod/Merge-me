@@ -1,3 +1,4 @@
+/*
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mergeme/Model/UserModel/brew.dart';
 import 'package:mergeme/Model/UserModel/userModel.dart';
@@ -59,4 +60,4 @@ class DatabaseService {
         .map(_userDataFromSnapshot);
   }
 
-}
+}*/

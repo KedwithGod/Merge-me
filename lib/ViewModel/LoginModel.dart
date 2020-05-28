@@ -14,7 +14,9 @@ import 'BaseModel.dart';
 class LoginViewModel extends BaseModel {
   final NavigatorService _navigationService = locator<NavigatorService>();
   final LocalStorageService storageService =locator<LocalStorageService>();
-
+  final AuthenticationService _authenticationService =
+  locator<AuthenticationService>();
+  bool loading=false;
 
   Future signUp(){
     return _navigationService.nextPage(route.SignUpRoute);
@@ -25,8 +27,7 @@ class LoginViewModel extends BaseModel {
   }
 
 
-  final AuthenticationService _authenticationService =
-  locator<AuthenticationService>();
+
   final DialogService _dialogService = locator<DialogService>();
   Future loginUser({
     @required String email,
@@ -45,12 +46,14 @@ class LoginViewModel extends BaseModel {
       if (result) {
         _navigationService.navigateTo(route.LandingPageRoute);
       } else {
+        loading=false;
         await _dialogService.showDialog(
           title: 'Login Failure',
           description: 'General login failure. Please try again later',
         );
       }
     } else {
+      loading=false;
       await _dialogService.showDialog(
         title: 'Login Failure',
         description: result,
@@ -60,8 +63,12 @@ class LoginViewModel extends BaseModel {
 
   void validateForm(GlobalKey<FormState> formKey, Map<String,dynamic> inputValues,email,password) async{
     if(formKey.currentState.validate()) {
+      loading=true;
       loginUser(email: email, password: password);
-      inputValues.forEach((key, value) async { await storageService.setUser(key, value);});
+      storageService.setUser(route.isLoggedIn, true);
+      inputValues.forEach((key, value) async {
+        await storageService.setUser(key, value);
+      });
 
     }
 

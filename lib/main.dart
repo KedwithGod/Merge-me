@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/Router.dart' as router;
 import 'package:mergeme/Model/constants/route_path.dart' as routes;
+import 'package:provider/provider.dart';
+import 'Model/Service/Auth_service.dart';
 import 'Model/Service/dialog_service.dart';
+import 'Model/Service/location_service.dart';
 import 'Model/Service/locator_setup.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'Model/UserModel/userModel.dart';
 import 'ViewModel/DropDownButton.dart';
 import 'Views/Uielements/dialog_manager.dart';
 
@@ -40,7 +44,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return  MaterialApp(
+    return  MultiProvider(providers: [
+    StreamProvider<UserLocation>(
+    create:(context)=>LocationService().locationStream),
+    StreamProvider<UserId>.value(
+    value:AuthenticationService().userValue),
+    ],
+            child:MaterialApp(
         title: 'Merge Me',
       builder: (context, child) => Navigator(
         key: locator<DialogService>().dialogNavigationKey,
@@ -51,13 +61,13 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           textTheme: GoogleFonts.openSansTextTheme(
             Theme.of(context).textTheme,
-          ),backgroundColor: Colors.white,
+          ),backgroundColor: Colors.pink,
           primarySwatch: Colors.yellow,
         ),
        navigatorKey: locator<NavigatorService>().navigatorKey,
        onGenerateRoute: router.generateRoute,
         initialRoute: routes.WrapperRoute,
-      );
+      ));
   }
 }
 

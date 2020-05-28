@@ -11,6 +11,8 @@ class GeneralTextField extends StatelessWidget {
   final String textFieldHint;
   final dynamic functionValue;
   final String choosePage;
+  final IconData icon;
+  final bool isIcon;
 
   const GeneralTextField(
     this.choosePage,
@@ -19,7 +21,7 @@ class GeneralTextField extends StatelessWidget {
     this.textFieldLabel,
     this.textFieldHint,
     this.functionValue,
-    this.textFieldLineSpan,
+    this.textFieldLineSpan, this.icon, this.isIcon,
   );
 
   int isValidPhoneNumber(String input) {
@@ -45,8 +47,8 @@ class GeneralTextField extends StatelessWidget {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
       child: Container(
-        height: choosePage=='Login'?dynamicSize.height(64 / 667):dynamicSize.height(58 / 667),
-        width: dynamicSize.width(314 / 375),
+        height: choosePage=='Login'?dynamicSize.height(64 / 667):choosePage=='tradePage'?dynamicSize.height(28 / 667):dynamicSize.height(58 / 667),
+        width: choosePage=='tradePage'?dynamicSize.width(142 / 375):dynamicSize.width(314 / 375),
         child: TextFormField(
           cursorColor: Colors.black,
           keyboardType: keyInputType,
@@ -81,34 +83,35 @@ class GeneralTextField extends StatelessWidget {
             },
           style: TextStyle(
               color: Colors.black,
-              fontSize: dynamicSize.height(15 / 667),
+              fontSize: choosePage== 'tradePage'?dynamicSize.height(13 / 667):dynamicSize.height(15 / 667),
               fontWeight: FontWeight.w600),
           autocorrect: true,
           decoration: InputDecoration(
               labelText: '$textFieldLabel',
               hintStyle: TextStyle(
-                  fontSize: dynamicSize.height(13 / 667),
-                  color: Color.fromRGBO(170, 170, 170, 0.8)),
+                  fontSize:  choosePage== 'tradePage'?dynamicSize.height(11 / 667):dynamicSize.height(13 / 667),
+                  color: choosePage== 'tradePage'?Colors.white70:Color.fromRGBO(170, 170, 170, 0.8)),
               hintText: '$textFieldHint',
+              prefixIcon: isIcon==true?Icon(icon,color: Colors.white,size:dynamicSize.height(13/667) ,):null,
               labelStyle: TextStyle(
                   fontSize: dynamicSize.height(13 / 667),
                   color: Colors.black54,
                   fontWeight: FontWeight.w400),
               contentPadding: EdgeInsets.fromLTRB(
-                  dynamicSize.width(20 / 357),
-                  dynamicSize.height(20 / 667),
-                  dynamicSize.width(2 / 357),
+                  choosePage== 'tradePage'?dynamicSize.width(2 / 357):dynamicSize.width(20 / 357),
+                  choosePage== 'tradePage'?dynamicSize.width(10 / 357):dynamicSize.height(20 / 667),
+                  choosePage== 'tradePage'?dynamicSize.width(2 / 357):dynamicSize.width(2 / 357),
                   dynamicSize.height(2 / 667)),
               border: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: Color.fromRGBO(238, 83, 79, 1.0),
+                      color: choosePage== 'tradePage'?Colors.black:Color.fromRGBO(238, 83, 79, 1.0),
                       width: 1.0,
                       style: BorderStyle.solid),
                   borderRadius:
                   BorderRadius.circular(dynamicSize.height(11 / 667))),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color:Color.fromRGBO(238, 83, 79, 1.0),
+                      color: choosePage== 'tradePage'?Colors.black:Color.fromRGBO(238, 83, 79, 1.0),
                       width: 1.0,
                       style: BorderStyle.solid),
                   borderRadius:
