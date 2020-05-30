@@ -5,6 +5,8 @@ const String SignUpRoute = 'SignUp';
 const String OnBoardingGiveWork = 'OnBoardingGiveWork';
 const String OnBoardingSearchWork = 'OnBoardingSearchWork';
 const String OnBoardingLearnTrade = 'OnBoardingLearnTrade';
+const String welcomeBack='Welcome Back';
+const String JobTemplate='Job Template';
 const String Email='email';
 const String isLoggedIn= 'isLoggedIn';
 const String WrapperRoute= 'WrapperRoute';
@@ -28,7 +30,9 @@ const String SearchWork='Search Work page';
 const String LearnTrade='Learn Trade';
 const String UserID= 'UserID';
 const String specificTrade='SpecificTrade';
-const String welcomeBack='Welcome Back';
-
+const String tutors='Tutors';
+const String NoOfUser= 'No of Users';
+const String NoOfTrader='No of Traders';
+const String NoOfClient= "No of Clients";
 
 

@@ -16,6 +16,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return ChangeNotifierProvider(
       create: (context) => LoginViewModel(),
@@ -45,13 +46,16 @@ class LoginPage extends StatelessWidget {
               AdaptivePositioned(
                 left: 336,
                 top: 32,
-                child: Container(
-                  width: dynamicSize.width(30 / 357),
-                  height: dynamicSize.height(30 / 667),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/Merge.PNG'),
-                          fit: BoxFit.contain)),
+                child: Hero(
+                  tag: 'Merge me',
+                  child: Container(
+                    width: dynamicSize.width(30 / 357),
+                    height: dynamicSize.height(30 / 667),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/Merge.PNG'),
+                            fit: BoxFit.contain)),
+                  ),
                 ),
               ),
               AdaptivePositioned(

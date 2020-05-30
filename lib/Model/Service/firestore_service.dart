@@ -40,6 +40,8 @@ class FireStoreService {
     }
   }
 
+
+
   Future addPost(Post post) async {
     try {
       await _postsCollectionReference.add(post.toMap());

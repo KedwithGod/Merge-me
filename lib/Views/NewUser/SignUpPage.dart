@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/Service/Bloc_settings.dart';
-import 'package:mergeme/Model/constants/loading.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/ViewModel/DropDownButton.dart';
 import 'package:mergeme/ViewModel/SignUpModel.dart';
@@ -53,13 +52,16 @@ class SignUp extends StatelessWidget {
               AdaptivePositioned(
                 left: 336,
                 top: 32,
-                child: Container(
-                  width: dynamicSize.width(30 / 375),
-                  height: dynamicSize.height(30 / 667),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/Merge.PNG'),
-                          fit: BoxFit.contain)),
+                child: Hero(
+                  tag: 'Merge me',
+                  child: Container(
+                    width: dynamicSize.width(30 / 375),
+                    height: dynamicSize.height(30 / 667),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/Merge.PNG'),
+                            fit: BoxFit.contain)),
+                  ),
                 ),
               ),
               AdaptivePositioned(

@@ -14,14 +14,13 @@ class DrawerModel extends BaseModel{
 
   // Sign out user
   signOut() async {
-   var result= await _authenticationService.signOut();
-    if (result){
-      _navigationService.nextPage(route.HomeRoute);
-    }
-    else{
+   try{var result= await _authenticationService.signOut();
+
+      _navigationService.nextPage(route.HomeRoute);}
+     catch(e){
     await _dialogService.showDialog(
       title: 'Sign out Failure',
-      description: 'General sign out failure. Please try again later',
+      description: '$e. Please try again later',
     );}
   }
 

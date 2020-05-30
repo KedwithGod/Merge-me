@@ -29,7 +29,7 @@ class ResponsiveSize {
 BorderRadius adaptiveBorderRadius(context, {double radius}) {
   return BorderRadius.all(
     Radius.circular(
-      MediaQuery.of(context).size.height * (radius / 375),
+      MediaQuery.of(context).size.height * (radius / 667),
     ),
   );
 }

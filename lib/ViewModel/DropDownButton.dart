@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/Service/Navigator_service.dart';
@@ -12,8 +13,21 @@ class MainBloc extends BloCSetting {
   final LocalStorageService storageService = locator<LocalStorageService>();
   var specificTradeVal;
   var tutorOption;
+  var noOfUser;
 
+  // no of user retrieval
+  update(){
+    updateNoOfUser();
+  }
+  updateNoOfUser() async {
 
+    Firestore.instance.collection("Merge me").document('Users').get().then((value){
+      noOfUser=(value.data['No of Users']);
+    });
+    await rebuildWidgets(ids: [route.NoOfUser]);
+  }
+
+  // local storage data retrieval
   updateValue() async {
     await storageService.getData(tradeCategory).then((onValue){
       specificTradeVal=onValue;
@@ -26,7 +40,7 @@ class MainBloc extends BloCSetting {
     await rebuildWidgets(ids: ['Sign in']);
   }
 
-
+// route navigation
   Future navigate(routeName){
     return _navigationService.nextPage(routeName);
   }
@@ -38,10 +52,10 @@ class MainBloc extends BloCSetting {
   bool toggleView = false;
   int indexValue = 0;
 
+  // Dropdown selections
 
   Widget tradeSelection() {
     if (tradeCategory == 'Learn a trade') {
-      print(' tradeCategory is $tradeCategory');
       return
         GeneralDropDownDisplay(
             '',
@@ -92,7 +106,6 @@ class MainBloc extends BloCSetting {
 
 
   Widget tradeValue() {
-    print('tradeName is $tradeName');
 
     if (tradeName == route.localTrade && tradeCategory != 'Give a work') {
       return GeneralDropDownDisplay(
@@ -204,6 +217,8 @@ class MainBloc extends BloCSetting {
     await rebuildWidgets(ids: ['dropdown', 'TradeSelection','Sign in']);
   }
 
+
+  // index stack selection handler
 
   onSwipeRight() async{
     indexValue > 0 ? indexValue-- : indexValue = 0;

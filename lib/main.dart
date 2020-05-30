@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mergeme/Model/Service/Navigator_service.dart';
@@ -45,10 +46,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return  MultiProvider(providers: [
-    StreamProvider<UserLocation>(
-    create:(context)=>LocationService().locationStream),
-    StreamProvider<UserId>.value(
-    value:AuthenticationService().userValue),
+      StreamProvider<UserLocation>(
+          create: (context) => LocationService().locationStream),
+      StreamProvider<UserId>.value(
+          value: AuthenticationService().userValue),
+
     ],
             child:MaterialApp(
         title: 'Merge Me',

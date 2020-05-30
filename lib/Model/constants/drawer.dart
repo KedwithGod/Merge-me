@@ -18,7 +18,7 @@ class CustomDrawer extends StatelessWidget {
 
 // drawer item widget
   Widget drawerItems(double iconTop, icon, iconKeyString, double textTop, text,
-      textSemantics, onTap) {
+      textSemantics ){
     return Stack(
 
       children: <Widget>[
@@ -28,15 +28,14 @@ class CustomDrawer extends StatelessWidget {
           child: GeneralIconDisplay(icon, Color.fromRGBO(238, 83, 79, 1.0),
               Key(iconKeyString), 20 / 667),
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: AdaptivePositioned(
+
+           AdaptivePositioned(
             left: 78,
             top: textTop,
             child: GeneralTextDisplay(
                 text, Colors.black, 1, 17, FontWeight.w400, textSemantics),
           ),
-        ),
+
       ],
     );
   }
@@ -74,11 +73,14 @@ class CustomDrawer extends StatelessWidget {
                             AdaptivePositioned(
                               left: 47,
                               top: 96,
-                              child: GeneralIconDisplay(
-                                  Icons.location_on,
-                                  Colors.white,
-                                  Key('drawer icon location'),
-                                  20 / 667),
+                              child: Hero(
+                                tag: 'location',
+                                child: GeneralIconDisplay(
+                                    Icons.location_on,
+                                    Colors.white,
+                                    Key('drawer icon location'),
+                                    20 / 667),
+                              ),
                             ),
                             AdaptivePositioned(
                                 left: 32,
@@ -109,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                                   20 / 667),
                             ),
                             AdaptivePositioned(
-                              left: 125,
+                              left: 121,
                               top: 128,
                               child: GeneralTextDisplay(
                                   '17 Projects',
@@ -120,7 +122,7 @@ class CustomDrawer extends StatelessWidget {
                                   'drawer projects/job subtitle'),
                             ),
                             AdaptivePositioned(
-                                left: 145,
+                                left: 141,
                                 top: 148,
                                 child: GeneralTextDisplay(
                                     '3 Jobs',
@@ -189,16 +191,14 @@ class CustomDrawer extends StatelessWidget {
                             ),
                             AdaptivePositioned(
                               left: 96,
-                              top: 24,
+                              top: 27,
                               child: Container(
                                 width: dynamicSize.width(158 / 357),
                                 alignment: Alignment.center,
                                 child: GeneralTextDisplay(
-                                    _authenticationService.currentUser.fullName==null?'Name':
-                                    _authenticationService.currentUser.fullName,
-                                    Colors.white,
+                                   '',Colors.white,
                                     1,
-                                    18,
+                                    15,
                                     FontWeight.bold,
                                     'drawer name'),
                               ),
@@ -218,53 +218,63 @@ class CustomDrawer extends StatelessWidget {
                     ),
 
 
+                            GestureDetector(
+                              onTap: (){model.landingPage();},
+                              child: drawerItems(198, Icons.home, 'Home_icon', 196, 'Home',
+                                  'home_subtitle'),
+                            ),
+                            drawerItems(
+                                237,
+                                Icons.account_balance_wallet,
+                                'wallet_icon',
+                                235,
+                                'Wallet',
+                                'Wallet_subtitle'),
+                            drawerItems(276, Icons.person, 'person_icon', 273,
+                                'Profile', 'profile_subtitle'),
+                            drawerItems(315, Icons.group_work, 'project_icon', 315,
+                                'Projects', 'Projects_subtitle'),
+                            drawerItems(357, Icons.work, 'Job_icon', 354, 'Job',
+                                'Job_subtitle'),
+                            drawerItems(397, Icons.book, 'learning_icon', 396,
+                                'Learning page', 'Learning_subtitle'),
+                            drawerItems(439, Icons.phonelink_setup, "Job_icon", 436,
+                                'Job updates', 'job_subtitle'),
+                            drawerItems(481, Icons.feedback, 'feedback_icon', 478,
+                                'Feedback', 'Feedback_subttitle in drawer'),
+                            GestureDetector(
+                              onTap: (){model.signOut();},
+                              child: drawerItems(
+                                  523,
+                                  Icons.transfer_within_a_station,
+                                  "SignOut_icon",
+                                  520,
+                                  'Sign out',
+                                  'Signout_subtitle', ),
+                            ),
+
+
+
+
                     // drawer item lists
-                    drawerItems(198, Icons.home, 'Home_icon', 196, 'Home',
-                        'home_subtitle', () {
-                      model.landingPage();
-                        }),
-                    drawerItems(
-                        237,
-                        Icons.account_balance_wallet,
-                        'wallet_icon',
-                        235,
-                        'Wallet',
-                        'Wallet_subtitle',
-                        () {}),
-                    drawerItems(276, Icons.person, 'person_icon', 273,
-                        'Profile', 'profile_subtitle', () {}),
-                    drawerItems(315, Icons.group_work, 'project_icon', 315,
-                        'Projects', 'Projects_subtitle', () {}),
-                    drawerItems(357, Icons.work, 'Job_icon', 354, 'Job',
-                        'Job_subtitle', () {}),
-                    drawerItems(397, Icons.book, 'learning_icon', 396,
-                        'Learning page', 'Learning_subtitle', () {}),
-                    drawerItems(439, Icons.phonelink_setup, "Job_icon", 436,
-                        'Job updates', 'job_subtitle', () {}),
-                    drawerItems(481, Icons.feedback, 'feedback_icon', 478,
-                        'Feedback', 'Feedback_subttitle in drawer', () {}),
-                    drawerItems(
-                        523,
-                        Icons.transfer_within_a_station,
-                        "SignOut_icon",
-                        520,
-                        'Sign out',
-                        'Signout_subtitle', () {
-                      model.signOut();
-                    }),
+                    /*,*/
+
 
                     // The merge me logo underneath every thing
 
                     AdaptivePositioned(
                       left: 22,
                       top: 600,
-                      child: Container(
-                        width: dynamicSize.width(30 / 375),
-                        height: dynamicSize.height(30 / 667),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/Merge.PNG'),
-                                fit: BoxFit.contain)),
+                      child: Hero(
+                        tag: 'Merge me',
+                        child: Container(
+                          width: dynamicSize.width(30 / 375),
+                          height: dynamicSize.height(30 / 667),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('assets/Merge.PNG'),
+                                  fit: BoxFit.contain)),
+                        ),
                       ),
                     ),
                     AdaptivePositioned(

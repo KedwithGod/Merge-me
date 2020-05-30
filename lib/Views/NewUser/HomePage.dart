@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/ViewModel/HomeModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
@@ -6,18 +7,17 @@ import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:provider/provider.dart';
 
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   @override
-  _HomeState createState() => _HomeState();
-}
 
-class _HomeState extends State<Home> {
   onErrorCall() {
     return Image.asset(
       "assets/onError.png",
       fit: BoxFit.contain,
     );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +90,12 @@ class _HomeState extends State<Home> {
             AdaptivePositioned(
               top: 128,
               left: 105.0,
-              child: Image.asset(
-                'assets/Merge.PNG',
-                fit: BoxFit.contain,
+              child: Hero(
+                tag:'Merge me',
+                child: Image.asset(
+                  'assets/Merge.PNG',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             AdaptivePositioned(

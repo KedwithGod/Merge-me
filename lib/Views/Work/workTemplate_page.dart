@@ -2,6 +2,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
+import 'package:mergeme/Views/Job/jobTemplate.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
@@ -15,7 +16,7 @@ class WorkTemplate extends StatelessWidget {
   final locationEntry= TextEditingController();
   final String pageTitle;
   final String tileTradeRegistry;
-  final int number;
+  final List number;
   final GlobalKey _scaffoldKey = new GlobalKey();
 
   WorkTemplate( this.pageTitle, this.tileTradeRegistry, this.number);
@@ -32,26 +33,26 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/beads.jpg', 'Bead Making',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[0]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/cake.jpg', 'Cake Making',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[1]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/house painting.jpg', 'House painting',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[2]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/plumbing.jpg', 'plumbing',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[3]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -76,26 +77,28 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/graphics.jpg', 'Graphic Design',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[4]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/mobile.jpg', 'Mobile developer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[5]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/Data science.jpg', 'Data Scientist',
-                          (){}, tileTradeRegistry, number),
+                          (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>JobTemplate()));
+                          }, tileTradeRegistry, number[6]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/web dev.jpg', 'Web developer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[7]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -119,26 +122,26 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/mechanic.jpg', 'AutoMechanic',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[8]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/Tailor.jpg', 'Tailor/Seimstress',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[9]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/electrician.jpg', 'Electrician',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[10]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/capenter.jpg', 'Carpenter',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[11]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -162,26 +165,26 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/refrigerator.jpg', 'Refrigerator repairer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[12]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/fam repairer.jpg', 'Fan repairer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[13]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/te;evosopm repairer.jpg', 'Television repairer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[14]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/bag repair.jpg', 'Bag repairer',
-                          (){}, tileTradeRegistry, number),
+                          (){}, tileTradeRegistry, number[15]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -225,7 +228,7 @@ class WorkTemplate extends StatelessWidget {
                       AdaptivePositioned(
                         left: 21,
                         top: 13,
-                        child: Builder(builder: (BuildContext context) {
+                        child: Builder(builder: (context) {
                           return GestureDetector(
                             onTap: () {
                               Scaffold.of(context).openDrawer();
@@ -247,7 +250,7 @@ class WorkTemplate extends StatelessWidget {
                             1,
                             25,
                             FontWeight.bold,
-                            'Learn page title'),
+                            '$tileTradeRegistry'),
                       ),
                       AdaptivePositioned(
                         left: 289,
@@ -255,7 +258,8 @@ class WorkTemplate extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){},
                           child: GeneralIconDisplay(
-                              Icons.notifications, Colors.white, Key('notification on learn page'), 22 / 667),
+                              Icons.notifications, Colors.white,
+                              Key('notification on $tileTradeRegistry'), 22 / 667),
                         ),
                       ),
                       AdaptivePositioned(
@@ -270,7 +274,7 @@ class WorkTemplate extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           child: GeneralTextDisplay('0', Colors.white, 1, 7,
-                              FontWeight.w600, '0 tile in landing page'),
+                              FontWeight.w600, '0 tile in $tileTradeRegistry'),
                         ),
 
                       ),
@@ -280,7 +284,8 @@ class WorkTemplate extends StatelessWidget {
                         child: GestureDetector(
                           onTap: (){},
                           child: GeneralIconDisplay(
-                              Icons.email, Colors.white, Key('message on learn page'), 22 / 667),
+                              Icons.email, Colors.white,
+                              Key('message icon $tileTradeRegistry'), 22 / 667),
                         ),
                       ),
                       AdaptivePositioned(

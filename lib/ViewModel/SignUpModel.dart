@@ -4,8 +4,10 @@ import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/dialog_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
+import 'package:mergeme/Model/UserModel/userModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
+import 'package:provider/provider.dart';
 
 import 'BaseModel.dart';
 
@@ -59,6 +61,7 @@ class SignUpViewModel extends BaseModel {
       });
 
 
+
     }
   }
 
@@ -89,20 +92,23 @@ class SignUpViewModel extends BaseModel {
         tradeCategory: tradeCategory,
         specificTrade: specificTrade);
 
+
     setState(ViewState.Idle);
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(route.LandingPageRoute);
+        if(tradeCategory=='Give a work') return _navigationService.navigateTo(route.GiveWork);
+        if(tradeCategory=='Search for work') return _navigationService.navigateTo(route.SearchWork);
+        if(tradeCategory=='Learn a trade') return _navigationService.navigateTo(route.LearnTrade);
       } else {
-        loading=false;
+
         await _dialogService.showDialog(
           title: 'Sign Up Failure',
           description: 'General sign up failure. Please try again later',
         );
       }
     } else {
-      loading=false;
+
       await _dialogService.showDialog(
         title: 'Sign Up Failure',
         description: result,
