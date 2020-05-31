@@ -19,6 +19,7 @@ class User {
   final String tutorOption;
   final String tradeCategory;
   final String specificTrade;
+  final String location;
 
   User(
       this.password,
@@ -31,7 +32,7 @@ class User {
       this.id,
       this.fullName,
       this.email,
-     this.specificTrade);
+     this.specificTrade, this.location);
 
   User.fromData(Map<String, dynamic> data)
       : id = data[route.UserID],
@@ -44,7 +45,8 @@ class User {
         nin = data[route.NIN],
         tutorOption = data[route.tutorOption],
         tradeCategory = data[route.tradeCategory],
-        specificTrade=data[route.specificTrade];
+        specificTrade=data[route.specificTrade],
+        location = data[route.Location];
 
   Map<String, dynamic> toJson() {
     return {
@@ -58,7 +60,8 @@ class User {
       route.NIN:nin,
       route.tutorOption:tutorOption,
       route.tradeCategory:tradeCategory,
-      route.specificTrade:specificTrade
+      route.specificTrade:specificTrade,
+      route.Location:location
     };
   }
 }

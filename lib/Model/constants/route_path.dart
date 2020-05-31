@@ -32,7 +32,22 @@ const String UserID= 'UserID';
 const String specificTrade='SpecificTrade';
 const String tutors='Tutors';
 const String NoOfUser= 'No of Users';
-const String NoOfTrader='No of Traders';
+const String NoOfTrader='No of traders';
 const String NoOfClient= "No of Clients";
-
-
+const String BeadMaking= 'Bead making';
+const String HousePainting='House painting';
+const String CakeMaking= 'Cake making';
+const String PlumbingWork= 'Plumbing work';
+const String GraphicDesign='Graphic Design';
+const String MobileDeveloper= 'Mobile developer';
+const String DataScientist='Data scientist';
+const String WebDeveloper= 'Web developer';
+const String AutoMechanic='AutoMechanic';
+const String Tailor= 'Tailor';
+const String Electrician=  'Electrician';
+const String Carpenter= 'Carpenter';
+const String RefrigeratorRepair='Refrigerator repairs';
+const String FanRepair='Fan repairs';
+const String TelevisionRepair='Television repairs';
+const String BagRepair='Bag repairs';
+const String Location='location';

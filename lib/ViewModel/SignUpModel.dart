@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'BaseModel.dart';
 
+
 class SignUpViewModel extends BaseModel {
   final NavigatorService _navigationService = locator<NavigatorService>();
   final LocalStorageService storageService = locator<LocalStorageService>();
@@ -50,11 +51,13 @@ class SignUpViewModel extends BaseModel {
       password,
       fullName,
       mobileNo,
-      workNumber,nin,tradeName,tradeCategory,tutorOption,specificTrade) async {
+      workNumber,nin,tradeName,tradeCategory,tutorOption,specificTrade,context) async {
     if (formKey.currentState.validate()) {
       signUp( email, password,fullName,
           mobileNo,
           workNumber,nin,tradeName,tutorOption,tradeCategory,specificTrade);
+      final userLocation = Provider.of<UserLocation>(context);
+      await storageService.setUser(route.Location, userLocation==null?'Default':userLocation.locality);
       await storageService.setUser(route.isLoggedIn, true);
       inputValues.forEach((key, value) async {
         await storageService.setUser(key, value);

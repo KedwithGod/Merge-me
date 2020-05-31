@@ -34,12 +34,14 @@ class LoginViewModel extends BaseModel {
   Future loginUser({
     @required String email,
     @required String password,
+    String location
   }) async {
     setState(ViewState.Busy);
 
     var result = await _authenticationService.loginWithEmail(
       email: email,
       password: password,
+      location: location
     );
 
     setState(ViewState.Idle);
@@ -63,11 +65,13 @@ class LoginViewModel extends BaseModel {
     }
   }
 
-  void validateForm(GlobalKey<FormState> formKey, Map<String,dynamic> inputValues,email,password) async{
+  void validateForm(GlobalKey<FormState> formKey, Map<String,dynamic> inputValues,email,password,context) async{
     if(formKey.currentState.validate()) {
       loading=true;
-      loginUser(email: email, password: password);
-      storageService.setUser(route.isLoggedIn, true);
+      final userLocation = Provider.of<UserLocation>(context,listen: false);
+      await loginUser(email: email, password: password,location:userLocation==null?'Default':userLocation.locality);
+      await storageService.setUser(route.Location, userLocation.locality);
+      await storageService.setUser(route.isLoggedIn, true);
       inputValues.forEach((key, value) async {
         await storageService.setUser(key, value);
       });

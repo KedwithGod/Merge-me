@@ -79,7 +79,7 @@ class LoginPage extends StatelessWidget {
                             route.isLoggedIn: true
                           },
                           emailValue.text,
-                          passwordValue.text);},
+                          passwordValue.text,context);},
                       11,
                       11,
                       1,

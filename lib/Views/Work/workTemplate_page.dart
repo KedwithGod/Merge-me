@@ -2,7 +2,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
-import 'package:mergeme/Views/Job/jobTemplate.dart';
+import 'package:mergeme/Views/Job/findTrader.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
@@ -10,6 +10,8 @@ import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:mergeme/Views/Uielements/work_utilites.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:random_string/random_string.dart';
 
 class WorkTemplate extends StatelessWidget {
   final searchEntry =TextEditingController();
@@ -25,6 +27,8 @@ class WorkTemplate extends StatelessWidget {
     return AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
+            key: Key(randomString(7)),
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
@@ -33,14 +37,29 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/beads.jpg', 'Bead Making',
-                          (){}, tileTradeRegistry, number[0]),
+                          (){
+                          }, tileTradeRegistry, number[0]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/cake.jpg', 'Cake Making',
-                          (){}, tileTradeRegistry, number[1]),
+                          (){
+                            if (pageTitle == 'Give out work') {
+                              return Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      FindTrader(
+                                          route.BeadMaking, route.GiveWork)));
+                            }
+                            else if (pageTitle=='Learn a Trade') return FindTrader(route.BeadMaking, route.LearnTrade);
+                            else if (pageTitle=='Search work')  return Navigator.push(context, MaterialPageRoute(
+                                builder: (context) =>
+                                    FindTrader(
+                                        route.CakeMaking, route.SearchWork)));
+                            return Container();
+
+                          }, tileTradeRegistry, number[1]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
@@ -69,6 +88,8 @@ class WorkTemplate extends StatelessWidget {
     return  AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
+            key: Key(randomString(9)),
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
@@ -77,21 +98,29 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/graphics.jpg', 'Graphic Design',
-                          (){}, tileTradeRegistry, number[4]),
+                          (){
+                            if (pageTitle=='Search work')  return Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  FindTrader(
+                                      route.DataScientist, route.SearchWork),
+                            ));
+                            return Container();
+                          }, tileTradeRegistry, number[4]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/mobile.jpg', 'Mobile developer',
-                          (){}, tileTradeRegistry, number[5]),
+                          (){
+                             }, tileTradeRegistry, number[5]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/Data science.jpg', 'Data Scientist',
                           (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>JobTemplate()));
+
                           }, tileTradeRegistry, number[6]),
                   AdaptiveSizedBox(
                     height: 10/667,
@@ -114,6 +143,8 @@ class WorkTemplate extends StatelessWidget {
     return AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
+            key: Key(randomString(11)),
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
@@ -157,6 +188,8 @@ class WorkTemplate extends StatelessWidget {
     return  AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
+            key: Key(randomString(6)),
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
@@ -235,7 +268,7 @@ class WorkTemplate extends StatelessWidget {
                             },
                             child: GeneralIconDisplay(
                                 Icons.menu, Colors.white, Key('drawerKey'),
-                                20 / 667),
+                                26 / 667),
                           );
 
                         }),

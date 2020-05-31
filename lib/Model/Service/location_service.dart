@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
+import 'package:mergeme/Model/Service/dialog_service.dart';
 import 'package:mergeme/Model/UserModel/userModel.dart';
+
+import 'locator_setup.dart';
 
 final Geolocator geoLocator = Geolocator()
   ..forceAndroidLocationManager;
 UserLocation _currentAddress;
+final DialogService _dialogService = locator<DialogService>();
 
 
 class LocationService {
@@ -54,6 +60,7 @@ class LocationService {
                   country: place.country,subLocality: place.subLocality);
             } catch (e) {
               print(e);
+
             }
             _locationController.add(_currentAddress);
           }

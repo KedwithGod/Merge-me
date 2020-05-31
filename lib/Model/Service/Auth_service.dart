@@ -59,6 +59,7 @@ class AuthenticationService {
   Future loginWithEmail({
     @required String email,
     @required String password,
+    String location
   }) async {
     try {
       var authUser = await _firebaseAuth.signInWithEmailAndPassword(
@@ -66,6 +67,7 @@ class AuthenticationService {
         password: password,
       );
       await _populateCurrentUser(authUser.user);
+      await Firestore.instance.collection('DataBase').document(authUser.user.uid).setData({route.Location:location},merge: true);
       return authUser != null;
     } catch (e) {
       return e.message;
@@ -84,6 +86,7 @@ class AuthenticationService {
     String tutorOption,
     String tradeCategory,
     String specificTrade,
+    String location,
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -103,15 +106,16 @@ class AuthenticationService {
           authResult.user.uid,
           fullName,
           email,
-          specificTrade
+          specificTrade,
+          location
       );
       // to save data for trader-to display trade page
 
       // give work
       if (tradeCategory=='Give a work'){
         await Firestore.instance.collection(route.GiveWork+''+specificTrade).document(
-            authResult.user.uid).setData({
-          authResult.user.uid: route.UserID,
+            'UserData').setData({
+          route.UserID:authResult.user.uid,
         });
         await Firestore.instance.collection(route.GiveWork+''+specificTrade).document(
             'User').setData({
@@ -122,18 +126,25 @@ class AuthenticationService {
       // Learn trade
       if (tradeCategory=='Learn a trade'){
         await Firestore.instance.collection(route.LearnTrade +''+specificTrade).document(
-            authResult.user.uid).setData({
-          authResult.user.uid: route.UserID,
+            'UserData').setData({
+          route.UserID:authResult.user.uid,
         });
 
       }
-      // Search work
+      await Firestore.instance.collection(route.LearnTrade+''+specificTrade).document(
+          'User').setData({
+        'No of traders':FieldValue.increment(1),
+      },merge: true);
+
+
+
+    // Search work
       if (tradeCategory== 'Search for work'){
         await Firestore.instance.collection(route.SearchWork +''+specificTrade).document(
-            authResult.user.uid).setData({
-          authResult.user.uid: route.UserID,
+            'UserData').setData({
+          route.UserID:authResult.user.uid,
         });
-        await Firestore.instance.collection(route.GiveWork+''+specificTrade).document(
+        await Firestore.instance.collection(route.SearchWork+''+specificTrade).document(
             'User').setData({
           'No of traders':FieldValue.increment(1),
         },merge: true);
@@ -146,9 +157,14 @@ class AuthenticationService {
       // save tutors file-to display learn page
       if (tutorOption == 'Yes') {
         await Firestore.instance.collection(specificTrade +route.tutors).document(
-            authResult.user.uid).setData({
-          authResult.user.uid: route.UserID,
+            'UserData').setData({
+          route.UserID:authResult.user.uid,
         });
+
+        await Firestore.instance.collection(specificTrade +route.tutors).document(
+            'User').setData({
+          'No of tutors':FieldValue.increment(1)
+        },merge: true);
 
         await Firestore.instance.collection(route.tutors).document(
             'Tutors').updateData({

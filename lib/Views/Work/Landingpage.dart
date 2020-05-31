@@ -9,13 +9,15 @@ import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
-import 'package:provider/provider.dart';
+import 'package:random_string/random_string.dart';
+
 
 class LandingPage extends StatelessWidget {
   final listController = ScrollController();
 
 
-  @override
+
+    @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return  Scaffold(
@@ -50,7 +52,7 @@ class LandingPage extends StatelessWidget {
                     },
                     child: GeneralIconDisplay(
                         Icons.menu, Colors.white, Key('drawerKey'),
-                        20 / 667),
+                        26 / 667),
                   );
 
                 }),
@@ -104,6 +106,8 @@ class LandingPage extends StatelessWidget {
                   height:260/667 ,
                   child:
                        ListView(
+                         key: Key(randomString(8)),
+                         physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                         children: <Widget>[
@@ -136,7 +140,7 @@ class LandingPage extends StatelessWidget {
                                       return Container();
                                     }
                                     if (snapshot.hasData)
-                                    return GeneralTextDisplay('${snapshot.data['No of Users']}', Colors.black,1, 13, FontWeight.bold, 'no of user');
+                                    return GeneralTextDisplay('${snapshot.data[route.NoOfUser]}', Colors.black,1, 13, FontWeight.bold, 'no of user');
                                     return Container();
                                   }
                                 ) ,

@@ -140,7 +140,7 @@ class MainBloc extends BloCSetting {
           '',
           ['',
             'AutoMechanic',
-            'Tailor/Seamstress',
+            'Tailor',
             'Electrician',
             'Carpenter'
           ],

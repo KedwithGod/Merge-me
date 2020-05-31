@@ -11,6 +11,7 @@ import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider/provider.dart';
+import 'package:random_string/random_string.dart';
 
 class SignUp extends StatelessWidget {
   final TextEditingController fullName = TextEditingController();
@@ -85,6 +86,8 @@ class SignUp extends StatelessWidget {
                       blocs: [mainBloc],
                       builder: (_)=>
                       SingleChildScrollView(
+                        key: Key(randomString(12)),
+                        physics: BouncingScrollPhysics(),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -173,7 +176,8 @@ class SignUp extends StatelessWidget {
                               AdaptiveSizedBox(height: 10/667,),
                               mainBloc.tradeSelection(),
                               AdaptiveSizedBox(height: 10/667,),
-                              mainBloc.toggleView==false?mainBloc.onTap():mainBloc.tradeValue()
+                              mainBloc.toggleView==false?mainBloc.onTap():mainBloc.tradeValue(),
+                              AdaptiveSizedBox(height: 15/667,),
                             ],
                           ),
                         ),
@@ -202,7 +206,7 @@ class SignUp extends StatelessWidget {
                           mainBloc.tradeName,
                           mainBloc.tradeCategory,
                           mainBloc.tutorOption,
-                          mainBloc.specificTradeVal);
+                          mainBloc.specificTradeVal,context);
                     }, 11, 11, 1, 1, Color.fromRGBO(238, 83, 79, 1.0), Colors.white,
                         5.0),
                   )),
