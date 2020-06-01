@@ -17,6 +17,48 @@ class FindTrader extends StatelessWidget {
 
 
   const FindTrader(this.specificTrade, this.tradePage);
+  getValue(document,index){
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection('DataBase').document(document[route.UserID])
+            .snapshots(),
+        builder: (context, snapshot1) {
+          if(!snapshot1.hasData) return Center(heightFactor: 0.7,
+            child: GeneralTextDisplay(
+                'Database not available', Colors.black54, 4, 14,
+                FontWeight.w500,
+                'no data for $tradePage on $specificTrade'),);
+          if (snapshot1.connectionState==ConnectionState.waiting) {
+            return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Loading(),
+                    GeneralTextDisplay(
+                        'Fetching User data',
+                        Colors.black,
+                        2,
+                        15,
+                        FontWeight.w600,
+                        'awaiting User data from $tradePage and $specificTrade')
+                  ],
+                ));
+          }
+
+          if(snapshot1.hasData) return  populatePage(context,snapshot1.data,index);
+          return ListView.builder(
+            itemCount: 10,
+// Important code
+            itemBuilder: (context, index) =>
+                Shimmer.fromColors(
+                    baseColor: Color.fromRGBO(238, 83, 79, 1.0),
+                    highlightColor: Colors.yellow,
+                    child: ListItem(index: -1)),
+          );
+        });
+  }
+
+
 
 
   @override
@@ -111,7 +153,7 @@ class FindTrader extends StatelessWidget {
                               borderRadius:
                               adaptiveBorderRadius(context, radius: 11)),
                           alignment: Alignment.center,
-                          child: GeneralTextDisplay('Available traders', Colors.black54,
+                          child: GeneralTextDisplay(tradePage==route.SearchWork?'Available traders':'Available tutors', Colors.black54,
                               1, 15, FontWeight.w600, 'Available trade'),
                         ),
                       )
@@ -120,13 +162,16 @@ class FindTrader extends StatelessWidget {
             ),
 
 
-                FutureBuilder<DocumentSnapshot>(
-                    future: Firestore.instance.collection(
-                        route.SearchWork + '' +
-                            route.GraphicDesign).document('UserData').get(),
-                    builder: (context, snapshot) {
+                StreamBuilder<QuerySnapshot>(
+                    stream: tradePage==route.SearchWork?Firestore.instance.collection(
+                        tradePage + '' +
+                            specificTrade + route.UserID).snapshots()
+                        : Firestore.instance.collection(
+                        specificTrade + route.tutors + route.UserID).snapshots(),
+                    builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                      print (snapshot.data);
                       if(snapshot.hasError) return Center(child:Text('${snapshot.error}'));
-                      if (!snapshot.hasData) {
+                      if(snapshot.connectionState==ConnectionState.waiting) {
                         return Center(
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,115 +187,113 @@ class FindTrader extends StatelessWidget {
                           ],
                         ));
                       }
-                      if(snapshot.hasData)
-                        print(snapshot.data[route.UserID]);
+
+                      if (!snapshot.hasData) return Center(
+                        child: GeneralTextDisplay( tradePage==route.SearchWork?
+                            'No registered trader yet': 'No registered tutors yet' , Colors.black54, 4, 14,
+                            FontWeight.w500,
+                            'no data for $tradePage on $specificTrade'),);
+                      if(snapshot.hasData){
+                        var document1=snapshot.data.documents;
+                        print(document1);
                       return Positioned(
-                        left:11,
+                        left:6,
                         top: 155,
                         bottom: 0,
-                        right: 11,
+                        right: 5,
                         child: AdaptiveSizedBox(
                           height: height(450/667),
-                          child: ListView(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            children: <Widget>[
-
-                              StreamBuilder(
-                                  stream: Firestore.instance
-                                      .collection('DataBase').document(snapshot.data[route.UserID])
-                                      .snapshots(),
-                                  builder: (context, snapshot1) {
-                                    if (!snapshot1.hasData) {
-                                      return Center(
-                                          child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Loading(),
-                                          GeneralTextDisplay(
-                                              'Fetching User data',
-                                              Colors.black,
-                                              2,
-                                              15,
-                                              FontWeight.w600,
-                                              'awaiting User data from $tradePage and $specificTrade')
-                                        ],
-                                      ));
-                                    }
-                                    if(snapshot1.hasData) return  populatePage(context,snapshot1.data,  height, width,true);
-                                    return ListView.builder(
-                                      itemCount: 10,
-                                      // Important code
-                                      itemBuilder: (context, index) =>
-                                          Shimmer.fromColors(
-                                              baseColor: Color.fromRGBO(238, 83, 79, 1.0),
-                                              highlightColor: Colors.yellow,
-                                              child: ListItem(index: -1)),
-                                    );
-                                  }),
-
-                            ],
-                          ),
+                          width:width(355/375) ,
+                          child: snapshot.data.documents.length==0? Center(
+                            child: GeneralTextDisplay(
+                                tradePage==route.SearchWork?
+                                'No registered trader yet': 'No registered tutors yet', Colors.black54, 4, 14,
+                                FontWeight.w500,
+                                'no data for $tradePage on $specificTrade'),):
+                          ListView.separated(
+                            separatorBuilder: (context, index)=>Container(
+                              color: Colors.transparent,height: height(10),
+                            ),
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder:(context, index){
+                                return Padding(
+                                    padding: EdgeInsets.all(height(20/667)),
+                                child: getValue(snapshot.data.documents[index],index),);
+                              })
                         ),
-                      );
-                      return Container();
+                      );}
+                      return Center(
+                      child: GeneralTextDisplay(
+                      'No registered trader yet', Colors.black54, 4, 14,
+    FontWeight.w500,
+    'no data for $tradePage on $specificTrade'),);
+
                     }),
               ],
             )));
   }
 }
 
-populatePage(context,DocumentSnapshot document, height,width,bool first) {
-  return AdaptiveSizedBox(
-    height: 82 / 667,
-    width: 355 / 375,
+
+
+populatePage(context,DocumentSnapshot document,index) {
+  ResponsiveSize dynamicSize = ResponsiveSize(context);
+  // custom width
+  double width(value) {
+    return dynamicSize.width(value / 375);
+  }
+
+  // custom height
+  double height(value) {
+    return dynamicSize.height(value / 667);
+  }
+  return  AdaptiveSizedBox(
+    height: 87/667,
+    width: 360/375,
     child: Material(
-      elevation: first==true?12.0:0.0,
-      borderRadius: adaptiveBorderRadius(context, radius: 8),
-      shadowColor: Color.fromRGBO(170, 170, 170, 1.0),
-      color: Colors.white,
-      animationDuration: Duration(seconds: 3),
-      child: Stack(
-        children: <Widget>[
-          AdaptivePositioned(
-            left: 5,
-            top: 6,
-            child: Container(
-              width: height(70),
-              height: height(70),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('assets/office.jpg'),
-                      fit: BoxFit.cover)),
+      borderRadius: adaptiveBorderRadius(context,radius: 11),
+        elevation: index==0?12.0:0.0,
+        shadowColor: Color.fromRGBO(170, 170, 170, 1.0),
+        color: index==0?Colors.white:Colors.transparent,
+        child: Stack(
+          children: <Widget>[
+            AdaptivePositioned(
+              left: 5,
+              top: 6,
+              child: Container(
+                width: height(70),
+                height: height(70),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage('assets/office.jpg'),
+                        fit: BoxFit.cover)),
+              ),
             ),
-          ),
-          AdaptivePositioned(
-            left: 106,
-            top: 15,
-            child: GeneralTextDisplay(document == null
-                ? 'Default name'
-                : document['name'], Colors.black, 1,
-                15, FontWeight.w400, 'Trader name'),
-          ),
-          AdaptivePositioned(
-            left: 106,
-            top: 40,
-            child: Container(
-              width: width(69),
-              height: height(2),
-              decoration:
-                  BoxDecoration(color: Color.fromRGBO(238, 83, 79, 1.0)),
+            AdaptivePositioned(
+              left: 106,
+              top: 15,
+              child: GeneralTextDisplay(document == null
+                  ? 'Default name'
+                  : document['name'], Colors.black, 1,
+                  15, FontWeight.w400, 'Trader name'),
             ),
-          ),
-          AdaptivePositioned(
-            left: 102,
-            top: 50,
-            child: Container(
-              width: width(10),
-              height: height(12),
-              child: Hero(
-                tag: 'location123',
+            AdaptivePositioned(
+              left: 106,
+              top: 40,
+              child: Container(
+                width: width(69),
+                height: height(2),
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(238, 83, 79, 1.0)),
+              ),
+            ),
+            AdaptivePositioned(
+              left: 102,
+              top: 50,
+              child: Container(
+                width: width(10),
+                height: height(12),
                 child: GeneralIconDisplay(
                     Icons.location_on,
                     Color.fromRGBO(127, 127, 127, 1.0),
@@ -258,50 +301,49 @@ populatePage(context,DocumentSnapshot document, height,width,bool first) {
                     12 / 667),
               ),
             ),
-          ),
-          AdaptivePositioned(
-            left: 120,
-            top: 47,
-            child: GeneralTextDisplay(
-                document[route.Location]==null?'Unspecified':document[route.Location],
-                Color.fromRGBO(51, 51, 51, 1.0),
-                1,
-                12,
-                FontWeight.w400,
-                'location name'),
-          ),
-          AdaptivePositioned(
-            left: 253,
-            top: first==true?38:47,
-            child: Container(
-              width: width(15),
-              height: height(12),
-              child: GeneralIconDisplay(
-                  Icons.star,
-                  Color.fromRGBO(238, 83, 79, 1.0),
-                  Key('Star'),
-                  12 / 667),
+            AdaptivePositioned(
+              left: 120,
+              top: 47,
+              child: GeneralTextDisplay(
+                  document[route.Location]==null?'Unspecified':document[route.Location],
+                  Color.fromRGBO(51, 51, 51, 1.0),
+                  1,
+                  12,
+                  FontWeight.w400,
+                  'location name'),
             ),
-          ),
-          AdaptivePositioned(
-            left: 277,
-            top: first==true?38:47,
-            child: GeneralTextDisplay('4.3 Rating', Colors.black, 1, 10,
-                FontWeight.bold, 'Rating'),
-          ),
-          first==false?Container():AdaptivePositioned(
-            left: 268,
-            top: 63,
-            child: GeneralTextDisplay(
-                'Recommended',
-                Color.fromRGBO(163, 0, 20, 1.0),
-                1,
-                8,
-                FontWeight.w400,
-                'location name'),
-          ),
-        ],
+            AdaptivePositioned(
+              left: 253,
+              top: index==0?38:47,
+              child: Container(
+                width: width(15),
+                height: height(12),
+                child: GeneralIconDisplay(
+                    Icons.star,
+                    Color.fromRGBO(238, 83, 79, 1.0),
+                    Key('Star'),
+                    12 / 667),
+              ),
+            ),
+            AdaptivePositioned(
+              left: 277,
+              top: index==0?38:47,
+              child: GeneralTextDisplay('4.3 Rating', Colors.black, 1, 10,
+                  FontWeight.bold, 'Rating'),
+            ),
+            index==0?AdaptivePositioned(
+              left: 268,
+              top: 63,
+              child: GeneralTextDisplay(
+                  'Recommended',
+                  Color.fromRGBO(163, 0, 20, 1.0),
+                  1,
+                  8,
+                  FontWeight.w400,
+                  'location name'),
+            ):Container(),
+          ],
+        ),
       ),
-    ),
   );
 }

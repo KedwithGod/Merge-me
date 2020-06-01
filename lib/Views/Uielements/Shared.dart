@@ -237,7 +237,7 @@ Widget index1(){
             'Give out work', () {mainBloc.indexChange(0);giveWidth=307.0;
             learnWidth=0.0;
             print(mainBloc.indexValue);
-            searchWidth=0.0;},13,175),
+            searchWidth=0.0;},38,175),
         AdaptiveContainer( 60, 109, 246, 307, 'assets/LearntradeLp.jpg',
             'Learn a trade', (){mainBloc.indexChange(2);
             print(mainBloc.indexValue);

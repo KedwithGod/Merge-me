@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/Bloc_settings.dart';
+import 'package:mergeme/ViewModel/DropDownButton.dart';
+import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
+import 'package:mergeme/Views/Uielements/work_utilites.dart';
 import 'package:mergeme/Views/Work/workTemplate_page.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:shimmer/shimmer.dart';
 
 class LearnTrade extends StatefulWidget {
 
@@ -30,23 +35,20 @@ class _LearnTradeState extends State<LearnTrade> {
   };
 
   List updatedList=List.generate(16, (index) => 0);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+
+
+
+
+  listUpdate(){
     map1.forEach((i,j) async {
       await Firestore.instance.collection(i +route.tutors).document(
-          'Tutors').get().then((value) {
-        setState(() {
-          value.data == null ? updatedList[j]=0:
-          updatedList[j]=value.data[route.NoOfTrader];
-          print(updatedList);
-        });
+          'User').get().then((value) {
+        value.data == null ? updatedList[j]=0:
+        updatedList[j]=value.data['No of tutors'];
+        print(updatedList);
+        print (i);
       });
-
     });
-
-    print(updatedList);
   }
 
   @override
@@ -56,8 +58,42 @@ class _LearnTradeState extends State<LearnTrade> {
 
 
     return Scaffold(
-        body: SafeArea(child: WorkTemplate('Learn a Trade', 'tutor',
-            updatedList == null ? list2 : updatedList))
+        body: SafeArea(
+            child:StatesBuilder(
+              stateID: 'workTemplate',
+              blocs: [mainBloc],
+              initState: listUpdate(),
+              builder: (_)=> FutureBuilder(
+                // perform the future delay to simulate request
+                  future: Future.delayed(Duration(seconds:1)),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState==ConnectionState.waiting) {
+                      return ListView.builder(
+                        itemCount: 10,
+                        // Important code
+                        itemBuilder: (context, index) => Shimmer.fromColors(
+                            baseColor: Color.fromRGBO(238, 83, 79, 1.0),
+                            highlightColor: Colors.yellow,
+                            child: ListItem(index: -1)),
+                      );
+                    }
+                    if(snapshot.connectionState==ConnectionState.done)
+                      return WorkTemplate('Learn a Trade', 'tutors',updatedList);
+                    if (snapshot.hasError) return Center(
+                      child: GeneralTextDisplay(
+                          snapshot.error, Color.fromRGBO(127, 127, 127, 1.0),
+                          4, 15, FontWeight.w400,
+                          '${snapshot.error}'),);
+                    return Container();
+                  }),
+
+
+
+
+
+
+            )
+        )
     ,
     );
   }

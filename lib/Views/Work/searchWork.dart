@@ -48,16 +48,6 @@ class SearchWork extends StatelessWidget {
   }
 
 
- listUpdate2()  {
-      Firestore.instance.collection(
-         route.SearchWork + '' +
-             route.GraphicDesign).document(
-         'UserData').get().then((value) {
-       value.data == null ? print('No data found'): print(value.data[route.UserID]);
-     });
-
- }
-
 
   @override
   Widget build(BuildContext context) {

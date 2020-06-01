@@ -113,8 +113,8 @@ class AuthenticationService {
 
       // give work
       if (tradeCategory=='Give a work'){
-        await Firestore.instance.collection(route.GiveWork+''+specificTrade).document(
-            'UserData').setData({
+        await Firestore.instance.collection(route.GiveWork+''+specificTrade+route.UserID).document(
+            authResult.user.uid).setData({
           route.UserID:authResult.user.uid,
         });
         await Firestore.instance.collection(route.GiveWork+''+specificTrade).document(
@@ -140,8 +140,8 @@ class AuthenticationService {
 
     // Search work
       if (tradeCategory== 'Search for work'){
-        await Firestore.instance.collection(route.SearchWork +''+specificTrade).document(
-            'UserData').setData({
+        await Firestore.instance.collection(route.SearchWork +''+specificTrade+route.UserID).document(
+            authResult.user.uid).setData({
           route.UserID:authResult.user.uid,
         });
         await Firestore.instance.collection(route.SearchWork+''+specificTrade).document(
@@ -156,8 +156,8 @@ class AuthenticationService {
 
       // save tutors file-to display learn page
       if (tutorOption == 'Yes') {
-        await Firestore.instance.collection(specificTrade +route.tutors).document(
-            'UserData').setData({
+        await Firestore.instance.collection(specificTrade +route.tutors+route.UserID).document(
+            authResult.user.uid).setData({
           route.UserID:authResult.user.uid,
         });
 

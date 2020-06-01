@@ -86,7 +86,6 @@ class SignUp extends StatelessWidget {
                       blocs: [mainBloc],
                       builder: (_)=>
                       SingleChildScrollView(
-                        key: Key(randomString(12)),
                         physics: BouncingScrollPhysics(),
                         child: Form(
                           key: _formKey,

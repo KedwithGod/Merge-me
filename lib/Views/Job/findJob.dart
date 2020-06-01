@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/DateTime_service.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
@@ -19,6 +21,73 @@ class FindJob extends StatelessWidget {
       return dynamicSize.height(value / 667);
     }
 
+
+
+    jobTile(){
+      return AdaptivePositioned(
+        left: 17,
+        top:130,
+        child: Container(
+          height: height(93),
+          width: width(341),
+          decoration: (BoxDecoration(color: Colors.white,
+              borderRadius: adaptiveBorderRadius(
+                  context, radius: 11),
+              boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.35),offset: Offset(5.0,5.0),
+                  blurRadius: 5.0)])),
+          child: Stack(children: <Widget>[
+            AdaptivePositioned(
+              left: 20,
+              top: 5,
+              child: GeneralTextDisplay(
+                  '${currentDate(route.day_Month)}',
+                  Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
+                  FontWeight.bold, 'Date time'),
+            ),
+            AdaptivePositioned(
+              left: 255,
+              top: 5,
+              child: GeneralTextDisplay(
+                  '${currentTime()}',
+                  Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
+                  FontWeight.bold, 'time date'),
+            ),
+            AdaptivePositioned(
+              left:20 ,
+              top: 36,
+              child: Container(
+                height: height(46),
+                width: width(60),
+                decoration: BoxDecoration(image: DecorationImage(
+                  image: AssetImage('assets/office.jpg'),fit:BoxFit.cover ,
+                ),borderRadius: adaptiveBorderRadius(context,radius: 11)),
+              ),
+            ),
+
+            AdaptivePositioned(
+              left: 90,
+              top: 39,
+              child: GeneralTextDisplay(
+                  'Ajazira Kumai', Colors.black, 2, 14, FontWeight.bold, 'job giver'),
+            ),
+            AdaptivePositioned(
+              left: 90,
+              top: 62,
+              child: GeneralTextDisplay(
+                  'Abuja', Color.fromRGBO(127, 127, 127, 1.0), 1, 12, FontWeight.w400, 'Job giver location'),
+            ),
+            AdaptivePositioned(
+              left: 254,
+              top: 39,
+              child: GeneralTextDisplay(
+                  '#3000', Colors.black, 1, 14, FontWeight.bold, 'job giver price'),
+            ),
+          ],),
+
+        ),
+      );
+
+    }
     return Scaffold(
       drawer: CustomDrawer(),
     body: SafeArea(
@@ -29,7 +98,7 @@ class FindJob extends StatelessWidget {
             top: 0,
             child: Container(
                 width: width(375),
-                height: height(155),
+                height: height(120),
                 decoration: BoxDecoration(color: Color.fromRGBO(238, 83, 79, 1.0)),
                 child: Stack(
                   children: <Widget>[
@@ -47,13 +116,13 @@ class FindJob extends StatelessWidget {
                       }),
                     ),
                     AdaptivePositioned(
-                      left: 80,
+                      left: 60,
                       top: 12,
                       child: Container(
-                        width: width(179),
+                        width: width(230),
                         height: height(35),
                         alignment: Alignment.center,
-                        child: GeneralTextDisplay('Data Science', Colors.white, 1, 23,
+                        child: GeneralTextDisplay('DataScience,', Colors.white, 1, 20,
                             FontWeight.bold, 'trade page title'),
                       ),
                     ),
@@ -89,22 +158,24 @@ class FindJob extends StatelessWidget {
                     ),
                     AdaptivePositioned(
                       left: 11,
-                      top: 59,
+                      top: 70,
                       child: Container(
                         width: width(355),
-                        height: height(48),
+                        height: height(40),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white30,
                             borderRadius:
                             adaptiveBorderRadius(context, radius: 11)),
                         alignment: Alignment.center,
-                        child: GeneralTextDisplay('Available Jobs', Colors.black,
-                            1, 20, FontWeight.w600, 'Available Jobs'),
+                        child: GeneralTextDisplay('Available Jobs', Colors.black54,
+                            1, 15, FontWeight.w600, 'Available Jobs'),
                       ),
-                    )
+                    ),
+
                   ],
                 )),
           ),
+          jobTile()
 
         ],
     )

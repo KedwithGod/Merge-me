@@ -1,7 +1,7 @@
-
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
+import 'package:mergeme/Views/Job/findJob.dart';
 import 'package:mergeme/Views/Job/findTrader.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
@@ -23,7 +23,33 @@ class WorkTemplate extends StatelessWidget {
 
   WorkTemplate( this.pageTitle, this.tileTradeRegistry, this.number);
 
-  localTrade(context,dynamicSize){
+  //Material page route navigation to findTrade page
+  navigation(context,specificTrade, tradePage){
+    return Navigator.push(context, MaterialPageRoute(
+        builder: (context) =>
+            FindTrader(
+                specificTrade, tradePage)));
+  }
+
+  // onTap function for specific trade to navigate to findtrader page
+  specificTradeTap(context,specificTrade){
+    if (pageTitle == 'Give out work') {
+      return Navigator.push(context, MaterialPageRoute(
+          builder: (context) =>
+              FindJob()));
+    }
+    else if (pageTitle == 'Learn a Trade')
+      return navigation(
+          context, specificTrade, route.LearnTrade);
+    else if (pageTitle == 'Search work')
+      return navigation(
+          context, specificTrade, route.SearchWork);
+    return Container();
+  }
+
+  // Snippet Widget for local trade, with gesture detectors for all three pages
+
+  localTrade(context){
     return AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
@@ -37,41 +63,25 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/beads.jpg', 'Bead Making',
-                          (){
-                          }, tileTradeRegistry, number[0]),
-
+                          (){specificTradeTap(context, route.BeadMaking);}, tileTradeRegistry, number[0]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/cake.jpg', 'Cake Making',
-                          (){
-                            if (pageTitle == 'Give out work') {
-                              return Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) =>
-                                      FindTrader(
-                                          route.BeadMaking, route.GiveWork)));
-                            }
-                            else if (pageTitle=='Learn a Trade') return FindTrader(route.BeadMaking, route.LearnTrade);
-                            else if (pageTitle=='Search work')  return Navigator.push(context, MaterialPageRoute(
-                                builder: (context) =>
-                                    FindTrader(
-                                        route.CakeMaking, route.SearchWork)));
-                            return Container();
-
-                          }, tileTradeRegistry, number[1]),
+                          (){specificTradeTap(context, route.CakeMaking);}, tileTradeRegistry, number[1]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/house painting.jpg', 'House painting',
-                          (){}, tileTradeRegistry, number[2]),
+                          (){specificTradeTap(context,route.HousePainting);}, tileTradeRegistry, number[2]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/plumbing.jpg', 'plumbing',
-                          (){}, tileTradeRegistry, number[3]),
+                          (){specificTradeTap(context,route.PlumbingWork );}, tileTradeRegistry, number[3]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -83,8 +93,9 @@ class WorkTemplate extends StatelessWidget {
 
   }
 
+// Snippet Widget for tech Jobs, with gesture detectors for all three pages
 
-  techJobs(context,dynamicSize){
+  techJobs(context){
     return  AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
@@ -98,36 +109,27 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/graphics.jpg', 'Graphic Design',
-                          (){
-                            if (pageTitle=='Search work')  return Navigator.push(context, MaterialPageRoute(
-                              builder: (context) =>
-                                  FindTrader(
-                                      route.DataScientist, route.SearchWork),
-                            ));
-                            return Container();
-                          }, tileTradeRegistry, number[4]),
+                          (){specificTradeTap(context, route.GraphicDesign);}, tileTradeRegistry, number[4]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/mobile.jpg', 'Mobile developer',
-                          (){
+                          (){specificTradeTap(context, route.MobileDeveloper);
                              }, tileTradeRegistry, number[5]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/Data science.jpg', 'Data Scientist',
-                          (){
-
-                          }, tileTradeRegistry, number[6]),
+                          (){specificTradeTap(context, route.DataScientist);}, tileTradeRegistry, number[6]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/web dev.jpg', 'Web developer',
-                          (){}, tileTradeRegistry, number[7]),
+                          (){specificTradeTap(context, route.WebDeveloper);}, tileTradeRegistry, number[7]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -139,7 +141,8 @@ class WorkTemplate extends StatelessWidget {
 
   }
 
-  artisans(context,dynamicSize){
+  // Snippet Widget for artisans, with gesture detectors for all three pages
+  artisans(context){
     return AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
@@ -153,26 +156,26 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/mechanic.jpg', 'AutoMechanic',
-                          (){}, tileTradeRegistry, number[8]),
+                          (){specificTradeTap(context, route.AutoMechanic);}, tileTradeRegistry, number[8]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/Tailor.jpg', 'Tailor/Seimstress',
-                          (){}, tileTradeRegistry, number[9]),
+                          (){specificTradeTap(context, route.Tailor);}, tileTradeRegistry, number[9]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/electrician.jpg', 'Electrician',
-                          (){}, tileTradeRegistry, number[10]),
+                          (){specificTradeTap(context, route.Electrician);}, tileTradeRegistry, number[10]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/capenter.jpg', 'Carpenter',
-                          (){}, tileTradeRegistry, number[11]),
+                          (){specificTradeTap(context, route.Carpenter);}, tileTradeRegistry, number[11]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -183,8 +186,8 @@ class WorkTemplate extends StatelessWidget {
 
   }
 
-
-  repairs(context,dynamicSize){
+  // Snippet Widget for repairs, with gesture detectors for all three pages
+  repairs(context){
     return  AdaptiveSizedBox(
         height:501/667 ,
         child: ListView(
@@ -198,26 +201,26 @@ class WorkTemplate extends StatelessWidget {
 
                   tradeTile(
                       context, 'assets/refrigerator.jpg', 'Refrigerator repairer',
-                          (){}, tileTradeRegistry, number[12]),
+                          (){specificTradeTap(context, route.RefrigeratorRepair);}, tileTradeRegistry, number[12]),
 
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/fam repairer.jpg', 'Fan repairer',
-                          (){}, tileTradeRegistry, number[13]),
+                          (){specificTradeTap(context, route.FanRepair);}, tileTradeRegistry, number[13]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/te;evosopm repairer.jpg', 'Television repairer',
-                          (){}, tileTradeRegistry, number[14]),
+                          (){specificTradeTap(context, route.TelevisionRepair);}, tileTradeRegistry, number[14]),
                   AdaptiveSizedBox(
                     height: 10/667,
                   ),
                   tradeTile(
                       context, 'assets/bag repair.jpg', 'Bag repairer',
-                          (){}, tileTradeRegistry, number[15]),
+                          (){specificTradeTap(context, route.BagRepair);}, tileTradeRegistry, number[15]),
                   AdaptiveSizedBox(
                     height: 15/667,
                   ),
@@ -233,7 +236,19 @@ class WorkTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // imported Responsive widget
     ResponsiveSize dynamicSize =ResponsiveSize(context);
+    // custom width
+    double width(value) {
+      return dynamicSize.width(value / 375);
+    }
+
+    // custom height
+    double height(value) {
+      return dynamicSize.height(value / 667);
+    }
+
+
     return DefaultTabController(length: 4,
         child:Scaffold(
         drawer: CustomDrawer(),
@@ -244,8 +259,8 @@ class WorkTemplate extends StatelessWidget {
                 left: 0,
                 top: 0,
                 child: Container(
-                  height:dynamicSize.height(94/667),
-                  width: dynamicSize.width(375/375),
+                  height:height(94),
+                  width: width(375),
                   decoration: BoxDecoration(color: Color.fromRGBO(238, 83, 79, 1.0),
                     boxShadow: [
                       BoxShadow(
@@ -260,7 +275,7 @@ class WorkTemplate extends StatelessWidget {
 
                       AdaptivePositioned(
                         left: 21,
-                        top: 13,
+                        top: 15,
                         child: Builder(builder: (context) {
                           return GestureDetector(
                             onTap: () {
@@ -268,26 +283,31 @@ class WorkTemplate extends StatelessWidget {
                             },
                             child: GeneralIconDisplay(
                                 Icons.menu, Colors.white, Key('drawerKey'),
-                                26 / 667),
+                                22 / 667),
                           );
 
                         }),
                       ),
 
                       AdaptivePositioned(
-                        left: 75,
-                        top: 3,
-                        child: GeneralTextDisplay(
-                           pageTitle,
-                            Colors.white,
-                            1,
-                            25,
-                            FontWeight.bold,
-                            '$tileTradeRegistry'),
+                        left: 70,
+                        top: 6,
+                        child: Container(
+                          width: width(210),
+                          height: height(32),
+                          alignment: Alignment.center,
+                          child: GeneralTextDisplay(
+                             pageTitle,
+                              Colors.white,
+                              1,
+                              25,
+                              FontWeight.bold,
+                              '$tileTradeRegistry'),
+                        ),
                       ),
                       AdaptivePositioned(
                         left: 289,
-                        top: 10,
+                        top: 15,
                         child: GestureDetector(
                           onTap: (){},
                           child: GeneralIconDisplay(
@@ -297,11 +317,11 @@ class WorkTemplate extends StatelessWidget {
                       ),
                       AdaptivePositioned(
                         left: 303,
-                        top: 10,
+                        top: 15,
                         child: Container(
                           alignment: Alignment.center,
-                          height:dynamicSize.height(10 / 667),
-                          width: dynamicSize.width(10 / 375),
+                          height:height(10),
+                          width: width(10),
                           decoration: new BoxDecoration(
                             color: Colors.black,
                             shape: BoxShape.circle,
@@ -313,7 +333,7 @@ class WorkTemplate extends StatelessWidget {
                       ),
                       AdaptivePositioned(
                         left: 326,
-                        top: 10,
+                        top: 15,
                         child: GestureDetector(
                           onTap: (){},
                           child: GeneralIconDisplay(
@@ -406,10 +426,10 @@ class WorkTemplate extends StatelessWidget {
                       flex: 1,
                       child: TabBarView(
                         children: [
-                          localTrade(context, dynamicSize),
-                          techJobs(context, dynamicSize),
-                          artisans(context, dynamicSize),
-                          repairs(context, dynamicSize)
+                          localTrade(context),
+                          techJobs(context),
+                          artisans(context),
+                          repairs(context)
                         ],
                       ),
                     )
