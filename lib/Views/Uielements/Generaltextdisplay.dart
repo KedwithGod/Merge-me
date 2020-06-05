@@ -27,6 +27,7 @@ class GeneralTextDisplay extends StatelessWidget {
         ),
         maxLines: noOfTextLine,
         semanticsLabel: textSemanticLabel,
+        textAlign: TextAlign.left,
       ),
     );
   }

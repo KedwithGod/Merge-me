@@ -9,7 +9,7 @@ import 'package:mergeme/Views/Work/workTemplate_page.dart';
 import 'package:shimmer/shimmer.dart';
 
 
-class GiveWork extends StatelessWidget {
+class GiveWorkPage extends StatelessWidget {
 
 
   final Map map1 = {
@@ -40,7 +40,7 @@ class GiveWork extends StatelessWidget {
   listUpdate() {
     return map1.forEach((i,j) async {
       await Firestore.instance.collection(
-          route.GiveWork + '' +
+          route.SearchWork + '' +
               i).document(
           'User').get().then((value) {
           value.data == null ? updatedList[j]=0:

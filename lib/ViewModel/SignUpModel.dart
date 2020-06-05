@@ -25,9 +25,7 @@ class SignUpViewModel extends BaseModel {
     return _navigationService.nextPage(route.LoginRoute);
   }
 
-  Future landingPage() {
-    return _navigationService.nextPage(route.LandingPageRoute);
-  }
+
 
   Future login({bool success = true}) async {
     setState(ViewState.Busy);
@@ -53,14 +51,14 @@ class SignUpViewModel extends BaseModel {
       mobileNo,
       workNumber,nin,tradeName,tradeCategory,tutorOption,specificTrade,context) async {
     if (formKey.currentState.validate()) {
-      signUp( email, password,fullName,
-          mobileNo,
-          workNumber,nin,tradeName,tutorOption,tradeCategory,specificTrade);
-      final userLocation = Provider.of<UserLocation>(context);
+
+      final userLocation =Provider.of<UserLocation>(context,listen: false);
       await storageService.setUser(route.Location, userLocation==null?'Default':userLocation.locality);
-      await storageService.setUser(route.isLoggedIn, true);
       inputValues.forEach((key, value) async {
         await storageService.setUser(key, value);
+        await signUp( email, password,fullName,
+            mobileNo,
+            workNumber,nin,tradeName,tutorOption,tradeCategory,specificTrade);
       });
 
 

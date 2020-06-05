@@ -41,6 +41,7 @@ dependencies:
   location: ^2.3.5
   bubble_tab_indicator: "^0.1.4"
   shimmer: ^1.1.1
+  provider_architecture: ^1.1.1+1
 
 
 

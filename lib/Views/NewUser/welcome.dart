@@ -1,29 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Service/Auth_service.dart';
-import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/loading.dart';
-import 'package:mergeme/ViewModel/LoginModel.dart';
+import 'package:mergeme/ViewModel/HomeModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
-import 'package:provider/provider.dart';
+import 'package:provider_architecture/_viewmodel_provider.dart';
 
 class WelcomeBack extends StatelessWidget {
-  final AuthenticationService _authenticationService =
-      locator<AuthenticationService>();
+
   final bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
-    _authenticationService.welcomeBack();
 
-    return ChangeNotifierProvider(
-        create: (context) => LoginViewModel(),
-        child: Consumer<LoginViewModel>(
+    return ViewModelProvider<HomeViewModel>.withConsumer(
+      onModelReady: (model){model.userLocation(context,);
+      model.updateUser();
+      },
+        viewModelBuilder: ()=>HomeViewModel(),
           builder: (context, model, child) => Scaffold(
               body: SafeArea(
             child: Stack(children: <Widget>[
@@ -42,23 +40,24 @@ class WelcomeBack extends StatelessWidget {
                   ),
                 ),
               ),
-              AdaptivePositioned(
-                  left: 60,
-                  top: 70,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(238, 83, 79, 1.0),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          dynamicSize.width(100 / 375),
+                AdaptivePositioned(
+                    left: 60,
+                    top: 70,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(238, 83, 79, 1.0),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            dynamicSize.width(100 / 375),
+                          ),
+                          bottomRight:
+                              Radius.circular(dynamicSize.width(100 / 375)),
                         ),
-                        bottomRight:
-                            Radius.circular(dynamicSize.width(100 / 375)),
                       ),
-                    ),
-                    height: dynamicSize.height(190 / 667),
-                    width: dynamicSize.width(220 / 375),
-                  )),
+                      height: dynamicSize.height(190 / 667),
+                      width: dynamicSize.width(220 / 375),
+                    )),
+
               AdaptivePositioned(
                   left: 100,
                   top: 110,
@@ -84,36 +83,33 @@ class WelcomeBack extends StatelessWidget {
                   maxRadius: dynamicSize.width(80 / 375),
                 ),
               ),
-              AdaptivePositioned(
-                left: 0,
-                top: 290,
-                child: _authenticationService.currentUser == null
-                    ? Container()
-                    : StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('DataBase')
-                            .document(_authenticationService.currentUser == null
-                                ? ''
-                                : _authenticationService.currentUser.id)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return Loading();
-                          if (snapshot.hasData)
-                            return Container(
-                              width: dynamicSize.width(375 / 375),
-                              height: dynamicSize.height(110 / 667),
-                              alignment: Alignment.center,
-                              child: GeneralTextDisplay(
-                                  'Hi, ${snapshot.data['name'] == null ? '' : snapshot.data['name']}!',
-                                  Colors.black,
-                                  1,
-                                  20,
-                                  FontWeight.bold,
-                                  'Welcome back ${route.Name}'),
-                            );
-                          return Container();
-                        }),
-              ),
+               AdaptivePositioned(
+                  left: 0,
+                  top: 290,
+                  child: StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('DataBase')
+                              .document(model.currentUser==null?'':model.currentUser.id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) return Loading();
+                            if (snapshot.hasData)
+                              return Container(
+                                width: dynamicSize.width(375 / 375),
+                                height: dynamicSize.height(110 / 667),
+                                alignment: Alignment.center,
+                                child: GeneralTextDisplay(
+                                    'Hi, ${snapshot.data['name'] == null ? '' : snapshot.data['name']}!',
+                                    Colors.black,
+                                    1,
+                                    20,
+                                    FontWeight.bold,
+                                    'Welcome back ${route.Name}'),
+                              );
+                            return Container();
+                          }),
+                ),
+
               AdaptivePositioned(
                 left: 0,
                 top: 359,
@@ -157,6 +153,6 @@ class WelcomeBack extends StatelessWidget {
               )
             ]),
           )),
-        ));
+        );
   }
 }

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mergeme/Model/UserModel/userModel.dart';
 import 'firestore_service.dart';
+import 'localStorage_service.dart';
 import 'locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 
@@ -14,7 +15,7 @@ import 'package:mergeme/Model/constants/route_path.dart' as route;
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FireStoreService _fireStoreService = locator<FireStoreService>();
-  final int counter = 0;
+  final LocalStorageService _storageService = locator<LocalStorageService>();
 
   User _currentUser;
 
@@ -94,7 +95,7 @@ class AuthenticationService {
         password: password,
       );
 
-      // create a new user profile on firestore
+      // create a new user profile on fireStore
       _currentUser = User(
           password,
           mobileNo,
@@ -109,6 +110,8 @@ class AuthenticationService {
           specificTrade,
           location
       );
+    // save user id locally
+      await _storageService.setUser(route.UserID, authResult.user.uid);
       // to save data for trader-to display trade page
 
       // give work
@@ -151,7 +154,7 @@ class AuthenticationService {
       }
 
 
-      // get user documents
+      // create user
       await _fireStoreService.createUser(_currentUser);
 
       // save tutors file-to display learn page
@@ -190,7 +193,7 @@ class AuthenticationService {
   // sign out
   Future signOut() async {
     try {
-      return await FirebaseAuth.instance.signOut();;
+      return await FirebaseAuth.instance.signOut();
     } catch (error) {
       print(error.toString());
       return null;

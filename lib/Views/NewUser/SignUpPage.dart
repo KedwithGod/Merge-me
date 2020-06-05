@@ -11,7 +11,7 @@ import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider/provider.dart';
-import 'package:random_string/random_string.dart';
+
 
 class SignUp extends StatelessWidget {
   final TextEditingController fullName = TextEditingController();
@@ -98,7 +98,8 @@ class SignUp extends StatelessWidget {
                                   "Full name",
                                   'Enter your full name',
                                   route.Name,
-                                  1,null,false),
+                                  1,null,false,dynamicSize.height(58 / 667),
+                            dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.emailAddress,
@@ -106,7 +107,8 @@ class SignUp extends StatelessWidget {
                                   "Email",
                                   'Enter your email Addres',
                                   route.Email,
-                                  1,null,false),
+                                  1,null,false,dynamicSize.height(58 / 667),
+                            dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.number,
@@ -114,7 +116,8 @@ class SignUp extends StatelessWidget {
                                   "Phone No (Mobile)",
                                   'Enter your mobile number',
                                   route.mobilePhone,
-                                  1,null,false),
+                                  1,null,false, dynamicSize.height(58 / 667),
+                                  dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.number,
@@ -122,7 +125,8 @@ class SignUp extends StatelessWidget {
                                   "Phone No (Work)",
                                   'Enter your Work number',
                                   route.workPhone,
-                                  1,null,false),
+                                  1,null,false, dynamicSize.height(58 / 667),
+                                  dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.visiblePassword,
@@ -130,7 +134,8 @@ class SignUp extends StatelessWidget {
                                   "Password",
                                   'Enter your password',
                                   route.Password,
-                                  1,null,false),
+                                  1,null,false, dynamicSize.height(58 / 667),
+                                  dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.visiblePassword,
@@ -138,7 +143,8 @@ class SignUp extends StatelessWidget {
                                   "Confirm Password",
                                   'Confirm your password',
                                   route.Password,
-                                  1,null,false),
+                                  1,null,false, dynamicSize.height(58 / 667),
+                                  dynamicSize.width(314 / 375)),
                               GeneralTextField(
                                   route.SignUpRoute,
                                   TextInputType.text,
@@ -148,7 +154,8 @@ class SignUp extends StatelessWidget {
                                   route.NIN,
                                   // TODO: how to verify nin number
 
-                                  1,null,false),
+                                  1,null,false, dynamicSize.height(58 / 667),
+                                  dynamicSize.width(314 / 375)),
                               AdaptiveSizedBox(height: 10/667,),
                              GeneralDropDownDisplay(
                                   'what will you like to do',

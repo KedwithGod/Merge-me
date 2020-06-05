@@ -66,8 +66,10 @@ class GeneralDropDownDisplay extends StatelessWidget {
                             value: builderValue.state,
                             isDense: true,
                             onChanged: (String newValue) {
-                               userKey==route.tradeCategory?mainBloc.onTapHandler():null;
-                                builderValue.state = newValue;
+                              userKey == route.tradeCategory
+                              ? mainBloc.onTapHandler()
+                              : mainBloc.nullField();
+                          builderValue.state = newValue;
                                 storageService.setUser(userKey, newValue);
                                 mainBloc.onChanged(userKey,builderValue.state);
 //                        state.didChange(newValue);

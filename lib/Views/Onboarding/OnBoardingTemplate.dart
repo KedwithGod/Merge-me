@@ -66,7 +66,7 @@ class OnBoardingTemplate extends StatelessWidget {
                       left: 25.0,
                       top: 327,
                       child: GeneralTextDisplay(title, Colors.black, 1, 25,
-                          FontWeight.w900, '${title} onboarding text')),
+                          FontWeight.w900, '$title onBoarding text')),
                   AdaptivePositioned(
                       left: 22.0,
                       top: 377,
@@ -76,7 +76,7 @@ class OnBoardingTemplate extends StatelessWidget {
                           8,
                           14,
                           FontWeight.w200,
-                          '$title onboarding subtitle')),
+                          '$title onBoarding subtitle')),
                   AdaptivePositioned(
                       top: 555,
                       left: 16,

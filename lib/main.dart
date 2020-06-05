@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mergeme/Model/Service/Navigator_service.dart';
-import 'package:mergeme/Model/Service/Router.dart' as router;
-import 'package:mergeme/Model/constants/route_path.dart' as routes;
+import './Model/Service/Navigator_service.dart';
+import './Model/Service/Router.dart' as router;
+import './Model/constants/route_path.dart' as routes;
 import 'package:provider/provider.dart';
 import 'Model/Service/Auth_service.dart';
 import 'Model/Service/dialog_service.dart';

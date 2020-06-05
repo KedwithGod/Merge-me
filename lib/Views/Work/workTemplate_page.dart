@@ -1,5 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/localStorage_service.dart';
+import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Views/Job/findJob.dart';
 import 'package:mergeme/Views/Job/findTrader.dart';
@@ -19,7 +21,7 @@ class WorkTemplate extends StatelessWidget {
   final String pageTitle;
   final String tileTradeRegistry;
   final List number;
-  final GlobalKey _scaffoldKey = new GlobalKey();
+  final LocalStorageService storageService =locator<LocalStorageService>();
 
   WorkTemplate( this.pageTitle, this.tileTradeRegistry, this.number);
 
@@ -27,23 +29,24 @@ class WorkTemplate extends StatelessWidget {
   navigation(context,specificTrade, tradePage){
     return Navigator.push(context, MaterialPageRoute(
         builder: (context) =>
-            FindTrader(
+            FindTraderPage(
                 specificTrade, tradePage)));
   }
 
-  // onTap function for specific trade to navigate to findtrader page
-  specificTradeTap(context,specificTrade){
-    if (pageTitle == 'Give out work') {
+  // onTap function for specific trade to navigate to findTrader page
+  specificTradeTap(context,specificTrade)async {
+    if (pageTitle == 'Search work') {
+      await storageService.setUser(route.SelectedTrade, specificTrade);
       return Navigator.push(context, MaterialPageRoute(
           builder: (context) =>
-              FindJob()));
-    }
+              FindJobPage(specificTrade)));}
+
     else if (pageTitle == 'Learn a Trade')
       return navigation(
           context, specificTrade, route.LearnTrade);
-    else if (pageTitle == 'Search work')
+    else if (pageTitle == 'Give out work')
       return navigation(
-          context, specificTrade, route.SearchWork);
+          context, specificTrade, route.GiveWork);
     return Container();
   }
 
@@ -353,7 +356,8 @@ class WorkTemplate extends StatelessWidget {
                             '',
                             1,
                             Icons.search,
-                            true),
+                            true, dynamicSize.height(28 / 667),
+                            dynamicSize.width(142 / 375)),
                       ),
                       AdaptivePositioned(
                         left: 211,
@@ -367,7 +371,8 @@ class WorkTemplate extends StatelessWidget {
                             '',
                             1,
                             Icons.location_on,
-                            true),
+                            true, dynamicSize.height(28 / 667),
+                            dynamicSize.width(142 / 375)),
                       ),
 
                     ],

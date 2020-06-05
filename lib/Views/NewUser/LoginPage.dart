@@ -101,7 +101,7 @@ class LoginPage extends StatelessWidget {
                         'Email',
                         'Enter your email Address',
                         route.Email,
-                        2,null,false),
+                        2,null,false,dynamicSize.height(64 / 667),dynamicSize.width(314 / 375)),
                   ),
                   AdaptivePositioned(
                     top: 277,
@@ -113,7 +113,7 @@ class LoginPage extends StatelessWidget {
                       'Password',
                       'Enter your password',
                       route.Password,
-                      2,null,false
+                      2,null,false,dynamicSize.height(64 / 667),dynamicSize.width(314 / 375)
                     ),
                   ),
                   AdaptivePositioned(

@@ -75,3 +75,41 @@ class UserLocation {
 
 
 }
+
+class PostJobDetails{
+  final String jobType;
+  final String location;
+  final String budget;
+  final String duration;
+  final dynamic time;
+  final dynamic date;
+  final String jobDescription;
+  final dynamic jobPosterId;
+
+  PostJobDetails(
+      {this.jobPosterId, this.jobType, this.location, this.budget,
+        this.duration, this.time, this.date, this.jobDescription});
+
+  Map<String, dynamic> toJson() {
+    return {
+      route.JobPosterId: jobPosterId,
+      route.JobType: jobType,
+      route.JobPosterLocation: location,
+      route.JobBudget:budget,
+      route.JobDuration:duration,
+      route.TimeJobWasPosted:time,
+      route.DateJobWasPosted:date,
+      route.JobDescription:jobDescription,
+    };
+  }
+
+  PostJobDetails.fromData(Map<String, dynamic> data,String documentId)
+      : jobPosterId = data[route.JobPosterId],
+        jobType = data[route.JobType],
+        location = data[route.JobPosterLocation],
+        budget = data[route.JobBudget],
+        duration= data[route.JobDuration],
+        time = data[route.TimeJobWasPosted],
+        date = data[route.DateJobWasPosted],
+        jobDescription = data[route.JobDescription];
+}

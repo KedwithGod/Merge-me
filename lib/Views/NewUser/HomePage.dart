@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mergeme/ViewModel/HomeModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 
 class Home extends StatelessWidget {
-  @override
 
   onErrorCall() {
     return Image.asset(

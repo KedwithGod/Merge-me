@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Model/constants/loading.dart';
+import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
+import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
@@ -11,12 +13,12 @@ import 'package:mergeme/Views/Uielements/work_utilites.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 
-class FindTrader extends StatelessWidget {
+class FindTraderPage extends StatelessWidget {
   final String specificTrade;
   final String tradePage;
 
 
-  const FindTrader(this.specificTrade, this.tradePage);
+  const FindTraderPage(this.specificTrade, this.tradePage);
   getValue(document,index){
     return StreamBuilder(
         stream: Firestore.instance
@@ -153,7 +155,7 @@ class FindTrader extends StatelessWidget {
                               borderRadius:
                               adaptiveBorderRadius(context, radius: 11)),
                           alignment: Alignment.center,
-                          child: GeneralTextDisplay(tradePage==route.SearchWork?'Available traders':'Available tutors', Colors.black54,
+                          child: GeneralTextDisplay(tradePage==route.GiveWork?'Available traders':'Available tutors', Colors.black54,
                               1, 15, FontWeight.w600, 'Available trade'),
                         ),
                       )
@@ -189,7 +191,7 @@ class FindTrader extends StatelessWidget {
                       }
 
                       if (!snapshot.hasData) return Center(
-                        child: GeneralTextDisplay( tradePage==route.SearchWork?
+                        child: GeneralTextDisplay( tradePage==route.GiveWork?
                             'No registered trader yet': 'No registered tutors yet' , Colors.black54, 4, 14,
                             FontWeight.w500,
                             'no data for $tradePage on $specificTrade'),);
@@ -206,7 +208,8 @@ class FindTrader extends StatelessWidget {
                           width:width(355/375) ,
                           child: snapshot.data.documents.length==0? Center(
                             child: GeneralTextDisplay(
-                                tradePage==route.SearchWork?
+                              // working option if there is no data in the list
+                                tradePage==route.GiveWork?
                                 'No registered trader yet': 'No registered tutors yet', Colors.black54, 4, 14,
                                 FontWeight.w500,
                                 'no data for $tradePage on $specificTrade'),):
@@ -229,6 +232,30 @@ class FindTrader extends StatelessWidget {
     'no data for $tradePage on $specificTrade'),);
 
                     }),
+                AdaptivePositioned(
+                  left:120,
+                  top: 552,
+                  child: GeneralButton(
+                  'Raised',
+                  1,
+                  'Post job at findTrader page',
+                  'Post Job',
+                  Color.fromRGBO(217, 0, 27, 1.0),
+                  20,
+                  FontWeight.bold,
+                  40,
+                  140,
+                          (){Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  PostJobPage(specificTrade)));},
+                  11,
+                  11,
+                  11,
+                  11,
+                  Colors.white,
+                  Colors.red,
+                  10.0),
+            )
               ],
             )));
   }

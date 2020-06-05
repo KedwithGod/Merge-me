@@ -14,8 +14,7 @@ class DrawerModel extends BaseModel{
 
   // Sign out user
   signOut() async {
-   try{var result= await _authenticationService.signOut();
-
+   try{await _authenticationService.signOut();
       _navigationService.nextPage(route.HomeRoute);}
      catch(e){
     await _dialogService.showDialog(

@@ -236,5 +236,9 @@ class MainBloc extends BloCSetting {
     indexValue = index;
     await rebuildWidgets(ids: ['indexStack','swipeDetector']);
   }
+
+  nullField(){
+    return null;
+  }
 }
 MainBloc mainBloc;

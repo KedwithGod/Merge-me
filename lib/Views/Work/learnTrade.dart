@@ -8,14 +8,9 @@ import 'package:mergeme/Views/Work/workTemplate_page.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:shimmer/shimmer.dart';
 
-class LearnTrade extends StatefulWidget {
+class LearnTradePage extends StatelessWidget {
 
-  @override
-  _LearnTradeState createState() => _LearnTradeState();
-}
-
-class _LearnTradeState extends State<LearnTrade> {
-  Map map1 = {
+  final Map map1 = {
     route.BeadMaking: 0,
     route.CakeMaking: 1,
     route.HousePainting: 2,
@@ -34,7 +29,7 @@ class _LearnTradeState extends State<LearnTrade> {
     route.BagRepair:15
   };
 
-  List updatedList=List.generate(16, (index) => 0);
+  final List updatedList=List.generate(16, (index) => 0);
 
 
 
@@ -53,9 +48,6 @@ class _LearnTradeState extends State<LearnTrade> {
 
   @override
   Widget build(BuildContext context) {
-    List list2=List.generate(16, (index) => index++);
-
-
 
     return Scaffold(
         body: SafeArea(

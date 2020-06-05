@@ -13,6 +13,8 @@ class GeneralTextField extends StatelessWidget {
   final String choosePage;
   final IconData icon;
   final bool isIcon;
+  final double height;
+  final double width;
 
   const GeneralTextField(
     this.choosePage,
@@ -21,7 +23,7 @@ class GeneralTextField extends StatelessWidget {
     this.textFieldLabel,
     this.textFieldHint,
     this.functionValue,
-    this.textFieldLineSpan, this.icon, this.isIcon,
+    this.textFieldLineSpan, this.icon, this.isIcon, this.height, this.width,
   );
 
   int isValidPhoneNumber(String input) {
@@ -47,8 +49,8 @@ class GeneralTextField extends StatelessWidget {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return SafeArea(
       child: Container(
-        height: choosePage=='Login'?dynamicSize.height(64 / 667):choosePage=='tradePage'?dynamicSize.height(28 / 667):dynamicSize.height(58 / 667),
-        width: choosePage=='tradePage'?dynamicSize.width(142 / 375):dynamicSize.width(314 / 375),
+        height:height, /*choosePage=='Login'?dynamicSize.height(64 / 667):choosePage=='tradePage'?dynamicSize.height(28 / 667):dynamicSize.height(58 / 667),*/
+        width:width, /*choosePage=='tradePage'?dynamicSize.width(142 / 375):dynamicSize.width(314 / 375),*/
         child: TextFormField(
           cursorColor: Colors.black,
           keyboardType: keyInputType,

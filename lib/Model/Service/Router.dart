@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as routes;
+import 'package:mergeme/Views/Job/findJob.dart';
+import 'package:mergeme/Views/Job/postJob.dart';
+import 'package:mergeme/Views/History/MyJobPage.dart';
+import 'package:mergeme/Views/Job/Job_description.dart';
 import 'package:mergeme/Views/NewUser/HomePage.dart';
 import 'package:mergeme/Views/NewUser/LoginPage.dart';
 import 'package:mergeme/Views/NewUser/SignUpPage.dart';
@@ -24,13 +28,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.SignUpRoute:
       return MaterialPageRoute(builder: (context) => SignUp());
     case routes.GiveWork:
-      return MaterialPageRoute(builder: (context) => GiveWork());
+      return MaterialPageRoute(builder: (context) => GiveWorkPage());
     case routes.welcomeBack:
       return MaterialPageRoute(builder: (context) => WelcomeBack());
     case routes.LearnTrade:
-      return MaterialPageRoute(builder: (context) => LearnTrade());
+      return MaterialPageRoute(builder: (context) => LearnTradePage());
     case routes.SearchWork:
-      return MaterialPageRoute(builder: (context) => SearchWork());
+      return MaterialPageRoute(builder: (context) => SearchWorkPage());
     case routes.LandingPageRoute:
       return MaterialPageRoute(builder: (context) => LandingPage());
     case routes.OnBoardingGiveWork:
@@ -39,6 +43,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => SearchWorkOnBoarding());
     case routes.OnBoardingLearnTrade:
       return MaterialPageRoute(builder: (context) => LearnTradeOnBoarding());
+    case routes.MyJobPageRoute:
+      return MaterialPageRoute(builder: (context) => MyJobPage());
+    case routes.JobDescriptionPageRoute:
+    case routes.PostJobPageRoute:
+    var specificTrade = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => PostJobPage(specificTrade));
+    case routes.FindJobPageRoute:
+      var specificTrade = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => FindJobPage(specificTrade));
+
+
+
 
     default:
       return MaterialPageRoute(

@@ -8,7 +8,7 @@ import 'package:mergeme/Views/Work/workTemplate_page.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:shimmer/shimmer.dart';
 
-class SearchWork extends StatelessWidget {
+class SearchWorkPage extends StatelessWidget {
 
  final  Map map1 = {
     route.BeadMaking: 0,
@@ -36,7 +36,7 @@ class SearchWork extends StatelessWidget {
   listUpdate(){
     map1.forEach((i,j) async {
       await Firestore.instance.collection(
-          route.SearchWork + '' +
+          route.GiveWork + '' +
               i).document(
           'User').get().then((value) {
         value.data == null ? updatedList[j]=0:
