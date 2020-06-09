@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as routes;
 import 'package:mergeme/Views/Job/findJob.dart';
+import 'package:mergeme/Views/Job/jobAttachment.dart';
 import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/History/MyJobPage.dart';
 import 'package:mergeme/Views/Job/Job_description.dart';
@@ -45,6 +46,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => LearnTradeOnBoarding());
     case routes.MyJobPageRoute:
       return MaterialPageRoute(builder: (context) => MyJobPage());
+    case routes.FilePickerPageRoute:
+      return MaterialPageRoute(builder: (context) => FilePicker());
     case routes.JobDescriptionPageRoute:
     case routes.PostJobPageRoute:
     var specificTrade = settings.arguments as String;

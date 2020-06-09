@@ -392,7 +392,7 @@ class WorkTemplate extends StatelessWidget {
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
                       indicator: new BubbleTabIndicator(
-                        indicatorHeight: 25.0,
+                        indicatorHeight: height(25),
                         indicatorColor: Color.fromRGBO(238, 83, 79, 1.0),
                         tabBarIndicatorSize: TabBarIndicatorSize.tab,
                       ),

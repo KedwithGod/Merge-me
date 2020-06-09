@@ -282,7 +282,7 @@ class MainView extends ProviderWidget<JobViewModel>{
                             child: GeneralIconButton(
                                 Colors.black45, 30, Icon(Icons.attach_file),
                                 Colors.transparent, 30,
-                                    (){}),
+                                    (){model.filePicker();}),
                           ),
                           Tooltip(
                             message: 'Attach documents',
@@ -292,7 +292,7 @@ class MainView extends ProviderWidget<JobViewModel>{
                             child: GeneralIconButton(
                                 Colors.black45, 30, Icon(Icons.picture_as_pdf),
                                 Colors.transparent, 30,
-                                    (){}),
+                                    (){model.filePicker();}),
                           ),
                           Tooltip(
                             message: 'Attach pictures',
@@ -302,7 +302,7 @@ class MainView extends ProviderWidget<JobViewModel>{
                             child: GeneralIconButton(
                                 Colors.black45, 30, Icon(Icons.picture_in_picture),
                                 Colors.transparent, 30,
-                                    (){}),
+                                    (){model.filePicker();}),
                           ),
                         ],
                       ),

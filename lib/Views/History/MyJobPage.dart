@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mergeme/Views/History/shared_header.dart';
 
 class MyJobPage extends StatelessWidget {
   @override
@@ -7,7 +8,8 @@ class MyJobPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children:[
-        
+        SharedHeader('My Jobs'),
+            
           ]
         ),
       ),

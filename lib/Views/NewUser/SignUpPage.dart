@@ -198,23 +198,26 @@ class SignUp extends StatelessWidget {
                   child: StatesBuilder(
                     stateID: 'Sign in' ,
                     blocs: [mainBloc],
-                    builder: (_)=>  GeneralButton('', 1, 'Sign up at Sign up page',
-                        'Sign Up', Colors.white, 20, FontWeight.w500, 50, 314, () {
-                      model.validateForm(_formKey, {
-                        route.Name: fullName.text,
-                        route.Email: email.text,
-                        route.workPhone: workNo.text,
-                        route.mobilePhone: mobileNo.text,
-                        route.Password: password.text
-                      },email.text,password.text,fullName.text,mobileNo.text,
-                          workNo.text,
-                          nin.text,
-                          mainBloc.tradeName,
-                          mainBloc.tradeCategory,
-                          mainBloc.tutorOption,
-                          mainBloc.specificTradeVal,context);
-                    }, 11, 11, 1, 1, Color.fromRGBO(238, 83, 79, 1.0), Colors.white,
-                        5.0),
+                    builder: (_)=>  Hero(
+                      tag: "Sign up",
+                      child: GeneralButton('', 1, 'Sign up at Sign up page',
+                          'Sign Up', Colors.white, 20, FontWeight.w500, 50, 314, () {
+                        model.validateForm(_formKey, {
+                          route.Name: fullName.text,
+                          route.Email: email.text,
+                          route.workPhone: workNo.text,
+                          route.mobilePhone: mobileNo.text,
+                          route.Password: password.text
+                        },email.text,password.text,fullName.text,mobileNo.text,
+                            workNo.text,
+                            nin.text,
+                            mainBloc.tradeName,
+                            mainBloc.tradeCategory,
+                            mainBloc.tutorOption,
+                            mainBloc.specificTradeVal,context);
+                      }, 11, 11, 1, 1, Color.fromRGBO(238, 83, 79, 1.0), Colors.white,
+                          5.0),
+                    ),
                   )),
               AdaptivePositioned(
                 left: 90,

@@ -5,6 +5,11 @@ import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 
 class SharedHeader extends StatelessWidget {
+  final String _pageTitle;
+
+  const SharedHeader( this._pageTitle);
+
+
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
@@ -56,7 +61,7 @@ class SharedHeader extends StatelessWidget {
                       width: width(230),
                       height: height(35),
                       alignment: Alignment.center,
-                      child: GeneralTextDisplay('My Projects' , Colors.white, 1, 20,
+                      child: GeneralTextDisplay(_pageTitle , Colors.white, 1, 20,
                           FontWeight.bold, 'trade page title'),
                     ),
                   ),

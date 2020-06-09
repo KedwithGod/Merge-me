@@ -71,3 +71,7 @@ const String TimeJobWasPosted='timeJobWasPosted';
 const String DateJobWasPosted='DateJobWasPosted';
 const String MyJobPageRoute='MyJobPage';
 const String SelectedTrade='selectedTrade';
+const String PostJobFilePath='postJobFilePath';
+const String PostJobMultiplePaths='postJobMultiplePaths';
+const String FilePickerPageRoute='filePickerPageRoute';
+const String LengthOfFileUploaded='lengthOfFileUploaded';

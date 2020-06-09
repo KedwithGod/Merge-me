@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:mergeme/ViewModel/postJobViewModel.dart';
+import 'package:mergeme/Model/Database/FirebaseStorage.dart';
 import 'Auth_service.dart';
 import 'Navigator_service.dart';
 import 'dialog_service.dart';
@@ -15,5 +15,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => AuthenticationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => FireStoreService());
+  locator.registerLazySingleton(() => Firebase());
 
 }

@@ -16,12 +16,21 @@ class Firebase {
     return uploadedFileURL;
   }
 
-  static Future downloadFile(uploadedFileURL) async {
-    StorageReference storageReference = FirebaseStorage().ref();
-    var uploadedFileURL = await storageReference
-        .child("Views.Onboarding screen images")
-        .child("Search work")
-        .getDownloadURL();
-    return uploadedFileURL;
+   Future uploadAnyFile(String fileFolder, File file) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child(fileFolder);
+    StorageUploadTask uploadTask = storageReference.putFile(file);
+    return await uploadTask.onComplete;
+  }
+
+   Future downloadAnyFile(String fileFolder, File file, uploadedFileURL) async {
+     StorageReference storageReference = FirebaseStorage.instance
+         .ref()
+         .child('$fileFolder/$file');
+    await storageReference.getDownloadURL().then((fileURL) {
+      uploadedFileURL = fileURL;
+    });
+    return await uploadedFileURL;
   }
 }
