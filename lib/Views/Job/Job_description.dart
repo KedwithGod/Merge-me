@@ -116,7 +116,7 @@ class BodyContent extends StatelessWidget{
                     left: 53,
                     top: 63,
                     child: GeneralTextDisplay(
-                        'Posted on\n ${document.date}',
+                        'Posted on\n${document.date}',
                         Color.fromRGBO(215, 215, 215, 1.0),
                         2, 10, FontWeight.w600,
                         'date of job posting'),

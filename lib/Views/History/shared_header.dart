@@ -43,22 +43,22 @@ class SharedHeader extends StatelessWidget {
 
                   AdaptivePositioned(
                     left: 4,
-                    top: 24,
+                    top: 17,
                     child: Builder(builder: (BuildContext context) {
                       return GestureDetector(
                         onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
                         child: GeneralIconDisplay(Icons.menu, Colors.white,
-                            Key('drawer_icon on trade page'), 26 / 667),
+                            Key('drawer_icon on trade page'), 23 / 667),
                       );
                     }),
                   ),
                   AdaptivePositioned(
                     left: 40,
-                    top: 11,
+                    top: 9,
                     child: Container(
-                      width: width(230),
+                      width: width(258),
                       height: height(35),
                       alignment: Alignment.center,
                       child: GeneralTextDisplay(_pageTitle , Colors.white, 1, 20,
@@ -67,13 +67,13 @@ class SharedHeader extends StatelessWidget {
                   ),
                   AdaptivePositioned(
                     left: 294,
-                    top: 19,
+                    top: 17,
                     child: GeneralIconDisplay(Icons.notifications, Colors.white,
                         Key('notification'), 24 / 667),
                   ),
                   AdaptivePositioned(
                     left: 311,
-                    top: 19,
+                    top: 17,
                     child: Container(
                       alignment: Alignment.center,
                       height: height(10),
@@ -88,7 +88,7 @@ class SharedHeader extends StatelessWidget {
                   ),
                   AdaptivePositioned(
                     left: 333,
-                    top: 19,
+                    top: 17,
                     child: GestureDetector(
                       onTap: () {},
                       child: GeneralIconDisplay(Icons.email, Colors.white,

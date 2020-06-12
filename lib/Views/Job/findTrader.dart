@@ -169,7 +169,7 @@ class FindTraderPage extends StatelessWidget {
                         tradePage + '' +
                             specificTrade + route.UserID).snapshots()
                         : Firestore.instance.collection(
-                        specificTrade + route.tutors + route.UserID).snapshots(),
+                        specificTrade + route.tutors + route.UserID ).snapshots(),
                     builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
                       print (snapshot.data);
                       if(snapshot.hasError) return Center(child:Text('${snapshot.error}'));
@@ -232,7 +232,7 @@ class FindTraderPage extends StatelessWidget {
     'no data for $tradePage on $specificTrade'),);
 
                     }),
-                AdaptivePositioned(
+                tradePage==route.GiveWork?AdaptivePositioned(
                   left:120,
                   top: 552,
                   child: GeneralButton(
@@ -241,7 +241,7 @@ class FindTraderPage extends StatelessWidget {
                   'Post job at findTrader page',
                   'Post Job',
                   Color.fromRGBO(217, 0, 27, 1.0),
-                  20,
+                  14,
                   FontWeight.bold,
                   40,
                   140,
@@ -255,7 +255,7 @@ class FindTraderPage extends StatelessWidget {
                   Colors.white,
                   Colors.red,
                   10.0),
-            )
+            ):Container()
               ],
             )));
   }

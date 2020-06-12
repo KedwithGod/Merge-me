@@ -7,7 +7,6 @@ import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
 import 'package:mergeme/Views/Job/Job_description.dart';
-import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
@@ -24,16 +23,24 @@ class FindJobPage extends StatelessWidget {
   FindJobPage( this.specificTrade);
   @override
   Widget build(BuildContext context) {
+
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     // custom width
+
+
     double width(value) {
       return dynamicSize.width(value / 375);
     }
 
     // custom height
     double height(value) {
+
       return dynamicSize.height(value / 667);
     }
+
+
+
+
 
     return ViewModelProvider<JobViewModel>.withoutConsumer(
       onModelReady: (model) {model.listenToPosts();
@@ -137,7 +144,7 @@ class FindJobPage extends StatelessWidget {
                         return
                           Positioned(
                           left:6,
-                          top: 120,
+                          top: 145,
                           bottom: 0,
                           right: 5,
                           child: AdaptiveSizedBox(
@@ -148,16 +155,15 @@ class FindJobPage extends StatelessWidget {
                                     'No available Jobs', Colors.black54, 4, 14,
                                     FontWeight.w500,
                                     'no data for on ${model.selectedTrade}'),):
-                              ListView.separated(
+                              ListView.builder(
                                 controller: model.hideLabelController,
-                                  separatorBuilder: (context, index)=>Container(
-                                    color: Colors.transparent,height: height(10),
-                                  ),
                                   itemCount: model.jobDetails.length,
                                   itemBuilder:(context, index){
                                     return Padding(
-                                      padding: EdgeInsets.all(height(20/667)),
-                                      child: JobTile(model.jobDetails[index],specificTrade));
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: JobTile(model.jobDetails[index],specificTrade),
+                                    );
                                   })
                           ));
 
@@ -182,6 +188,7 @@ class JobTile extends ProviderWidget<JobViewModel>{
   final String specificTrade;
   JobTile(this.documents,this.specificTrade);
 
+
   @override
   Widget build(BuildContext context, JobViewModel model) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
@@ -196,116 +203,82 @@ class JobTile extends ProviderWidget<JobViewModel>{
     }
     // TODO: implement build
 
-      return Container(
-        height: height(143),
-        width: width(341),
-        child: Stack(
-          children: <Widget>[
-            AdaptivePositioned(
-              left: 85,
-              top: 20,
-              child: Visibility(
-                visible:model.visible,
-                child: Container(
-                  height: height(20),
-                  width:width(205),
-                  decoration: BoxDecoration(color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(color: Color.fromRGBO(127, 127, 127, 1.0),
-                            blurRadius: 5.0,
-                            offset: Offset(5.0, 5.0)),
-                      ]),
-                  child: Center(
+      return AdaptivePositioned(
+            left: 10,
+            top: 70,
+            child: GestureDetector(
+              onTap: (){Navigator.push(context, MaterialPageRoute(
+                  builder: (context) =>
+                      JobDescriptionPage(specificTrade,documents)));},
+              child: Container(
+                height: height(93),
+                width: width(341),
+                decoration: (BoxDecoration(color: Colors.white,
+                    borderRadius: adaptiveBorderRadius(
+                        context, radius: 11),
+                    boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.35),offset: Offset(5.0,5.0),
+                        blurRadius: 5.0)])),
+                child: Stack(children: <Widget>[
+                  AdaptivePositioned(
+                    left: 20,
+                    top: 5,
                     child: GeneralTextDisplay(
                         documents.date,
-                        Colors.black54, 1, 13,
-                        FontWeight.w500, 'year indication'),
+                        Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
+                        FontWeight.bold, 'Date time'),
                   ),
-                ),
+                  AdaptivePositioned(
+                    left: 255,
+                    top: 5,
+                    child: GeneralTextDisplay(
+                        documents.time,
+                        Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
+                        FontWeight.bold, 'time date'),
+                  ),
+                  AdaptivePositioned(
+                    left:20 ,
+                    top: 36,
+                    child: Container(
+                      height: height(46),
+                      width: width(60),
+                      decoration: BoxDecoration(image: DecorationImage(
+                        image: AssetImage('assets/office.jpg'),fit:BoxFit.cover ,
+                      ),borderRadius: adaptiveBorderRadius(context,radius: 11)),
+                    ),
+                  ),
+
+                  AdaptivePositioned(
+                    left: 90,
+                    top: 39,
+                    child: StreamBuilder(
+                          stream: Firestore.instance.collection('DataBase')
+                          .document(documents.jobPosterId).snapshots(),
+                      builder: (context, snapshot) {
+                        if(snapshot.hasData)
+                        return GeneralTextDisplay(
+                            snapshot.data==null? 'NO name':snapshot.data[route.Name], Colors.black, 2, 14, FontWeight.bold, 'job giver');
+                        return Container();
+                      }
+                    ),
+                  ),
+                  AdaptivePositioned(
+                    left: 90,
+                    top: 62,
+                    child: GeneralTextDisplay(
+                        documents.location, Color.fromRGBO(127, 127, 127, 1.0), 1, 12, FontWeight.w400, 'Job giver location'),
+                  ),
+                  AdaptivePositioned(
+                    left: 254,
+                    top: 39,
+                    child: GeneralTextDisplay(
+                       ' #${documents.budget}', Colors.black, 1, 14, FontWeight.bold, 'job giver price'),
+                  ),
+                ],),
+
+
               ),
             ),
-
-
-
-            AdaptivePositioned(
-              left: 10,
-              top: 50,
-              child: GestureDetector(
-                onTap: (){Navigator.push(context, MaterialPageRoute(
-                    builder: (context) =>
-                        JobDescriptionPage(specificTrade,documents)));},
-                child: Container(
-                  height: height(93),
-                  width: width(341),
-                  decoration: (BoxDecoration(color: Colors.white,
-                      borderRadius: adaptiveBorderRadius(
-                          context, radius: 11),
-                      boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.35),offset: Offset(5.0,5.0),
-                          blurRadius: 5.0)])),
-                  child: Stack(children: <Widget>[
-                    AdaptivePositioned(
-                      left: 20,
-                      top: 5,
-                      child: GeneralTextDisplay(
-                          documents.date,
-                          Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
-                          FontWeight.bold, 'Date time'),
-                    ),
-                    AdaptivePositioned(
-                      left: 255,
-                      top: 5,
-                      child: GeneralTextDisplay(
-                          documents.time,
-                          Color.fromRGBO(127, 127, 127, 1.0), 1, 12,
-                          FontWeight.bold, 'time date'),
-                    ),
-                    AdaptivePositioned(
-                      left:20 ,
-                      top: 36,
-                      child: Container(
-                        height: height(46),
-                        width: width(60),
-                        decoration: BoxDecoration(image: DecorationImage(
-                          image: AssetImage('assets/office.jpg'),fit:BoxFit.cover ,
-                        ),borderRadius: adaptiveBorderRadius(context,radius: 11)),
-                      ),
-                    ),
-
-                    AdaptivePositioned(
-                      left: 90,
-                      top: 39,
-                      child: StreamBuilder(
-                            stream: Firestore.instance.collection('DataBase')
-                            .document(documents.jobPosterId).snapshots(),
-                        builder: (context, snapshot) {
-                          if(snapshot.hasData)
-                          return GeneralTextDisplay(
-                              snapshot.data==null? 'NO name':snapshot.data[route.Name], Colors.black, 2, 14, FontWeight.bold, 'job giver');
-                          return Container();
-                        }
-                      ),
-                    ),
-                    AdaptivePositioned(
-                      left: 90,
-                      top: 62,
-                      child: GeneralTextDisplay(
-                          documents.location, Color.fromRGBO(127, 127, 127, 1.0), 1, 12, FontWeight.w400, 'Job giver location'),
-                    ),
-                    AdaptivePositioned(
-                      left: 254,
-                      top: 39,
-                      child: GeneralTextDisplay(
-                          documents.budget, Colors.black, 1, 14, FontWeight.bold, 'job giver price'),
-                    ),
-                  ],),
-
-
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+          );
 
     }
   }

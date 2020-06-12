@@ -68,9 +68,10 @@ class LoginViewModel extends BaseModel {
   void validateForm(GlobalKey<FormState> formKey, Map<String,dynamic> inputValues,email,password,context) async{
     if(formKey.currentState.validate()) {
       loading=true;
-      final userLocation = Provider.of<UserLocation>(context,listen: false);
-      await loginUser(email: email, password: password,location:userLocation==null?'Default':userLocation.locality);
-      await storageService.setUser(route.Location, userLocation.locality);
+    /*  final userLocation = Provider.of<UserLocation>(context,listen: false);*/
+      await loginUser(email: email, password: password
+          /*,location:userLocation==null?'Default':userLocation.locality*/);
+     /* await storageService.setUser(route.Location, userLocation.locality);*/
       await storageService.setUser(route.isLoggedIn, true);
       inputValues.forEach((key, value) async {
         await storageService.setUser(key, value);

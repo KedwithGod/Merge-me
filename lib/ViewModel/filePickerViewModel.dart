@@ -18,8 +18,8 @@ class FilePickerViewModel extends BaseModel{
   bool loadingPath = false;
   bool multiPick = false;
   FileType pickingType = FileType.any;
-  File file;
-  int length;
+  dynamic length=0;
+  List<String> fileList=List();
 
 
   bool get mounted => path != null || paths!=null;
@@ -35,13 +35,8 @@ class FilePickerViewModel extends BaseModel{
             allowedExtensions: (extension?.isNotEmpty ?? false)
                 ? extension?.replaceAll(' ', '')?.split(',')
                 : null);
-        // Storing file in Storage service
-        paths!=null? paths.forEach((key, value) async {file=File(value);
-        length++;
-        notifyListeners();
-        await _storageService.setUser('${route.PostJobMultiplePaths}+$length', file);
-        }):null;
-        await _storageService.setUser(route.LengthOfFileUploaded, length);
+       notifyListeners();
+
 
       } else {
         paths = null;
@@ -50,8 +45,10 @@ class FilePickerViewModel extends BaseModel{
             allowedExtensions: (extension?.isNotEmpty ?? false)
                 ? extension?.replaceAll(' ', '')?.split(',')
                 : null);
-         path!=null? file=File(path):file=null;
-         await _storageService.setUser(route.PostJobFilePath, file);
+        notifyListeners();
+
+
+
 
       }
     } on PlatformException catch (e) {
@@ -60,6 +57,16 @@ class FilePickerViewModel extends BaseModel{
     if (!mounted) return;
       loadingPath = false;
       fileName = path != null ? path.split('/').last : paths != null ? paths.keys.toString() : '...';
+      path!=null?
+      await _storageService.setUser(route.PostJobFilePath, '$path'): null;
+      paths!=null? paths.forEach((key, value) async {
+      length++;
+      fileList.add(value);
+      await _storageService.setUser('${route.PostJobMultiplePaths}+$length', fileList);
+      print (length);
+      notifyListeners();
+      }):null;
+      await _storageService.setUser(route.LengthOfFileUploaded, length);
       notifyListeners();
   }
 
@@ -103,6 +110,11 @@ class FilePickerViewModel extends BaseModel{
     notifyListeners();
   }
 
+
+  // go back to the post job page
+  navigation(){
+    return _navigationService.nextPage(route.PostJobPageRoute);
+  }
 
 }
 

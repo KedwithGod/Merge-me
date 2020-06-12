@@ -17,11 +17,18 @@ class Firebase {
   }
 
    Future uploadAnyFile(String fileFolder, File file) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child(fileFolder);
-    StorageUploadTask uploadTask = storageReference.putFile(file);
-    return await uploadTask.onComplete;
+    try{
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child(fileFolder);
+      StorageUploadTask uploadTask = storageReference.putFile(file);
+      await uploadTask.onComplete;
+      uploadTask.isComplete==true?print('\n Uploading task completed \n'):
+      print('\n Uploading task Not completed \n');
+      return true;
+    }catch(e){
+      print(e.toString());
+    }
   }
 
    Future downloadAnyFile(String fileFolder, File file, uploadedFileURL) async {

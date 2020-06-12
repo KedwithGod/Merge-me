@@ -35,8 +35,7 @@ class WorkTemplate extends StatelessWidget {
 
   // onTap function for specific trade to navigate to findTrader page
   specificTradeTap(context,specificTrade)async {
-    if (pageTitle == 'Search work') {
-      await storageService.setUser(route.SelectedTrade, specificTrade);
+    if (pageTitle=='Search work') {
       return Navigator.push(context, MaterialPageRoute(
           builder: (context) =>
               FindJobPage(specificTrade)));}
@@ -45,6 +44,7 @@ class WorkTemplate extends StatelessWidget {
       return navigation(
           context, specificTrade, route.LearnTrade);
     else if (pageTitle == 'Give out work')
+      await storageService.setUser(route.SelectedTrade, specificTrade);
       return navigation(
           context, specificTrade, route.GiveWork);
     return Container();

@@ -76,8 +76,8 @@ class WelcomeBack extends StatelessWidget {
                     width: dynamicSize.width(200 / 375),
                   )),
               AdaptivePositioned(
-                left: 117,
-                top: 124,
+                left: 120,
+                top: 134,
                 child: CircleAvatar(
                   backgroundImage: AssetImage('assets/office.jpg'),
                   maxRadius: dynamicSize.width(80 / 375),

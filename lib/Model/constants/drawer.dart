@@ -255,8 +255,13 @@ class CustomDrawer extends StatelessWidget {
                               'Profile', 'profile_subtitle'),
                           drawerItems(315, Icons.group_work, 'project_icon',
                               315, 'Projects', 'Projects_subtitle'),
-                          drawerItems(357, Icons.work, 'Job_icon', 354, 'Job',
-                              'Job_subtitle'),
+                          GestureDetector(
+                            onTap: () {
+                              model.jobPage();
+                            },
+                            child: drawerItems(357, Icons.work, 'Job_icon', 354, 'Job',
+                                'Job_subtitle'),
+                          ),
                           drawerItems(397, Icons.book, 'learning_icon', 396,
                               'Learning page', 'Learning_subtitle'),
                           drawerItems(439, Icons.phonelink_setup, "Job_icon",

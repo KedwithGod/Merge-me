@@ -26,4 +26,8 @@ class DrawerModel extends BaseModel{
   Future landingPage() {
     return _navigationService.nextPage(route.LandingPageRoute);
   }
+
+  Future jobPage() {
+    return _navigationService.nextPage(route.MyJobPageRoute);
+  }
   }

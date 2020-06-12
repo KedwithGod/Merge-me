@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,8 +14,9 @@ import 'package:mergeme/Model/enums/viewstate.dart';
 import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/UserModel/userModel.dart';
+import 'package:random_string/random_string.dart';
 
-class JobViewModel extends BaseModel {
+class JobViewModel extends BaseModel  {
   // field instance
   final String collectionName;
 
@@ -31,11 +33,9 @@ class JobViewModel extends BaseModel {
   var selectedTrade;
   var locationValue;
   var jobPosterName;
-  var postJobFilePath;
-  var postJobMultipleFilePath;
   var noOfFileUploaded;
   var singleFileUploaded;
-  Map<dynamic, dynamic> multipleFileUploaded;
+  var multipleFileUploaded=Map();
   bool _visible = false;
   ScrollController hideLabelController;
   List<PostJobDetails> _jobDetails;
@@ -49,7 +49,7 @@ class JobViewModel extends BaseModel {
 
 
 // getting PostJob value
-  List<PostJobDetails> jobDetail(QuerySnapshot snapshot) {
+  List<PostJobDetails> jobDetail( snapshot) {
     return snapshot.documents.map((doc) {
       //print(doc.data);
       return PostJobDetails(
@@ -81,11 +81,7 @@ class JobViewModel extends BaseModel {
       var timeCurrently = await currentTime();
       await _storageService.setUser('Date', dateCurrently);
       await _storageService.setUser('Time', timeCurrently);
-      await _storageService.getFromDisk(route.UserID).then((onValue) {
-        idFromStorage = onValue;
-        print(idFromStorage);
-        notifyListeners();
-      });
+      idFromStorage= await _storageService.getString(route.UserID);
 
       // get userId from currentUser in the baseModel
       final jobPosterId = _authenticationService.currentUser != null
@@ -93,34 +89,48 @@ class JobViewModel extends BaseModel {
           : idFromStorage != null ? idFromStorage : null;
 
       // get length of file uploaded
-      await _storageService.getData(route.LengthOfFileUploaded).then((value) {
+      await _storageService.getInt(route.LengthOfFileUploaded).then((value) {
         noOfFileUploaded = value;
         notifyListeners();
         // get single file uploaded
       });
-      await _storageService.getData(route.PostJobFilePath).then((value) {
-        value == null ? singleFileUploaded = 'no data' : singleFileUploaded =
-            value;
-        notifyListeners();
-      });
+      singleFileUploaded= await _storageService.getString(route.PostJobFilePath);
 
       // to get multiple file uploaded
-      if (noOfFileUploaded != null) {
-        for (int i in noOfFileUploaded)  {
-          await _storageService.getData('${route.PostJobMultiplePaths}+$i').then((
+      if (noOfFileUploaded > 0) {
+          await _storageService.getList('${route.PostJobMultiplePaths}+$noOfFileUploaded').then((
               value) {
-            multipleFileUploaded['${currentUser.id}+$i'] = value;
+            for (var i=0;i<noOfFileUploaded;i++ ){
+              print('val in multipleFileUploaded: $value');
+              int countValue=noOfFileUploaded;
+              print(currentUser.id);
+            try{
+              value != null
+                  ?
+              multipleFileUploaded['${currentUser.id}'+'${i+1}'] = value[i]
+                  : multipleFileUploaded = null;
+            }catch(e){
+              print(e.toString());
+            }
+            print('multipleFileUploaded: $multipleFileUploaded');
             notifyListeners();
+            }
+
           });
-        }
+
       }
+      var fileNameForSingle='${route.GiveWork}/${currentUser.id}\+ ${randomNumeric(3)}';
 
       // saving files to shared preference for the job page use
       await _storageService.setUser(route.JobBudget, budget);
+      await _storageService.setUser(route.SelectedTrade, tradePage);
       await _storageService.setUser(route.JobPosterLocation, location);
       await _storageService.setUser(route.JobDescription, jobDescription);
-      await _storageService.setUser(duration, route.JobDuration);
-      await _storageService.setUser(location, route.JobPosterLocation);
+      await _storageService.setUser(route.JobDuration,duration);
+      await _storageService.setUser(route.JobPosterLocation,location);
+      await _storageService.setUser(route.PostJobFilePath,fileNameForSingle);
+      await _storageService.setUser(route.PostJobMultiplePaths,multipleFileUploaded);
+
 
       final jobDetails = PostJobDetails(
           jobType: jobType,
@@ -142,28 +152,26 @@ class JobViewModel extends BaseModel {
         await _storageService.setUser(key, value);
       });
 
-      if (singleFileUploaded != null) return await _firebase.uploadAnyFile(
-          route.GiveWork + currentUser.id, singleFileUploaded);
-      if (noOfFileUploaded != null) {
+      if (noOfFileUploaded == 0) { await _firebase.uploadAnyFile(
+          fileNameForSingle, File(singleFileUploaded));
+      return await _navigationService.nextPage(route.MyJobPageRoute);
+     }
+     else if (noOfFileUploaded > 0) {
         multipleFileUploaded.forEach((key, value) {
           _firebase.uploadAnyFile(
-              route.GiveWork + currentUser.id +'/$key', value);
+              route.GiveWork + currentUser.id +'/$key', File(value));
         });
+        await _navigationService.nextPage(route.MyJobPageRoute);
       }
-      await _navigationService.nextPage(route.MyJobPageRoute);
+
     }
   }
 
   // get saved data
   getSelected() async{
-    await _storageService.getFromDisk(route.SelectedTrade).then((value) {
-      selectedTrade = value;
-      notifyListeners();
-    });
-    await _storageService.getFromDisk(route.JobPosterLocation).then((value) {
-      locationValue = value;
-      notifyListeners();
-    });
+    selectedTrade=await _storageService.getString(route.SelectedTrade)?? 'dare';
+    locationValue=await _storageService.getString(route.JobPosterLocation);
+    notifyListeners();
   }
 
 // get jobPoster database from his uid
@@ -186,6 +194,7 @@ class JobViewModel extends BaseModel {
     }
   }
 
+  QuerySnapshot query;
   // to wait for page to load
 
 // get data from fireStore to find Job page
@@ -195,7 +204,7 @@ class JobViewModel extends BaseModel {
       print(data);
       if (updatedData != null && updatedData.length > 0) {
         _jobDetails = updatedData;
-        print(_jobDetails);
+        print('_jobDetails: $_jobDetails');
         notifyListeners();
       }
 

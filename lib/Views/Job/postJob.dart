@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';

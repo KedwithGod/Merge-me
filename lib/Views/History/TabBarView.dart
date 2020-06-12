@@ -32,7 +32,7 @@ class Tabs extends StatelessWidget {
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Tab(text: 'Active',)),
-              width: dynamicSize.width(71/360),
+              width: dynamicSize.width(40/360),
             ),
             Container(
 
@@ -46,7 +46,7 @@ class Tabs extends StatelessWidget {
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Tab(text: 'Closed',)),
-              width: dynamicSize.width(71/360),
+              width: dynamicSize.width(40/360),
             ),
 
           ],

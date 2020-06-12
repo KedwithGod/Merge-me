@@ -16,12 +16,11 @@ class HomeViewModel extends BaseModel {
   final AuthenticationService _authenticationService =
   locator<AuthenticationService>();
   userLocation(context) async{
-    await _authenticationService.welcomeBack();
     return  Provider.of<UserLocation>(context,listen:false);
   }
 
-  updateUser(){
-    return _authenticationService.currentUser;
+  updateUser() async {
+    return await _authenticationService.welcomeBack();;
   }
 
   get update => _authenticationService.welcomeBack();
