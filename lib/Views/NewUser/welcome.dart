@@ -1,13 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/Network_connection.dart';
 import 'package:mergeme/Model/constants/loading.dart';
 import 'package:mergeme/ViewModel/HomeModel.dart';
+import 'package:mergeme/ViewModel/WelcomeViewmodel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
+import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
+import 'package:random_string/random_string.dart';
 
 class WelcomeBack extends StatelessWidget {
 
@@ -16,13 +22,63 @@ class WelcomeBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
+    double width(value) {
+      return dynamicSize.width(value / 375);
+    }
 
-    return ViewModelProvider<HomeViewModel>.withConsumer(
+    // custom height
+    double height(value) {
+      return dynamicSize.height(value / 667);
+    }
+
+
+
+    return ViewModelProvider<WelcomeViewModel>.withConsumer(
       onModelReady: (model){model.userLocation(context,);
-      model.updateUser();
+      model.updateUser();model.networkConnection();
       },
-        viewModelBuilder: ()=>HomeViewModel(),
-          builder: (context, model, child) => Scaffold(
+        viewModelBuilder: ()=>WelcomeViewModel(),
+          builder: (context, model, child) => model.netStat==false?
+          SafeArea(
+            child:  Scaffold(
+              body: Container(
+                color: Colors.white,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                      GeneralIconDisplay(
+                          Icons.network_check,
+                          Color.fromRGBO(217, 0, 42, 1.0),
+                          Key(randomAlphaNumeric(5)),
+                          40 / 667),
+                      AdaptiveSizedBox(
+                        height: 20/667,
+                      ),
+                      GeneralTextDisplay('Kindly switch on your data', Colors.black87, 2,
+                          14, FontWeight.w600, 'data connection')
+                    ],
+                ),
+              ),
+            ),
+
+          ):model.currentUser==null?
+          SafeArea(
+            child:  Container(
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Loading(
+                  ),
+
+                ],
+              ),
+            ),
+
+          )
+          :Scaffold(
               body: SafeArea(
             child: Stack(children: <Widget>[
               AdaptivePositioned(
@@ -89,17 +145,17 @@ class WelcomeBack extends StatelessWidget {
                   child: StreamBuilder(
                           stream: Firestore.instance
                               .collection('DataBase')
-                              .document(model.currentUser==null?'':model.currentUser.id)
+                              .document(model.currentUser.id)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData) return Loading();
+                            if (snapshot.connectionState==ConnectionState.waiting) return Loading();
                             if (snapshot.hasData)
                               return Container(
                                 width: dynamicSize.width(375 / 375),
                                 height: dynamicSize.height(110 / 667),
                                 alignment: Alignment.center,
                                 child: GeneralTextDisplay(
-                                    'Hi, ${snapshot.data['name'] == null ? '' : snapshot.data['name']}!',
+                                    '${model.greet}, ${snapshot.data['name'] == null ? '' : snapshot.data['name']}!',
                                     Colors.black,
                                     1,
                                     20,

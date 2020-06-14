@@ -75,3 +75,4 @@ const String PostJobFilePath='postJobFilePath';
 const String PostJobMultiplePaths='postJobMultiplePaths';
 const String FilePickerPageRoute='filePickerPageRoute';
 const String LengthOfFileUploaded='lengthOfFileUploaded';
+const String Rating='rating';

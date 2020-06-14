@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:mergeme/Model/enums/viewstate.dart';
 import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/UserModel/userModel.dart';
+import 'package:quiver/async.dart';
 import 'package:random_string/random_string.dart';
 
 class JobViewModel extends BaseModel  {
@@ -36,16 +38,44 @@ class JobViewModel extends BaseModel  {
   var noOfFileUploaded;
   var singleFileUploaded;
   var multipleFileUploaded=Map();
+  var userIdentity;
+  int _elapsed=0;
   bool _visible = false;
   ScrollController hideLabelController;
   List<PostJobDetails> _jobDetails;
+  var uploadFile;
+  Timer _timer;
+  int start = 0;
+
+   startTimer() async {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+            if (start > 9) {
+              timer.cancel();
+              notifyListeners();
+            } else {
+              start = start +1;
+              notifyListeners();
+            }
+            return start;
+          }
+
+    );
+    return _timer;
+  }
+
+
+
 
   bool get visible => _visible;
-
+  int get elapsed=>_elapsed==16?_elapsed=0:_elapsed=_elapsed;
 
   JobViewModel(this.collectionName);
 
   List<PostJobDetails> get jobDetails => _jobDetails;
+
 
 
 // getting PostJob value
@@ -107,7 +137,7 @@ class JobViewModel extends BaseModel  {
             try{
               value != null
                   ?
-              multipleFileUploaded['${currentUser.id}'+'${i+1}'] = value[i]
+              multipleFileUploaded[route.GiveWork +'${currentUser.id}'+'${i+1}'] = value[i]
                   : multipleFileUploaded = null;
             }catch(e){
               print(e.toString());
@@ -159,8 +189,10 @@ class JobViewModel extends BaseModel  {
      else if (noOfFileUploaded > 0) {
         multipleFileUploaded.forEach((key, value) {
           _firebase.uploadAnyFile(
-              route.GiveWork + currentUser.id +'/$key', File(value));
+              '$key', File(value));
         });
+        userIdentity=true;
+        notifyListeners();
         await _navigationService.nextPage(route.MyJobPageRoute);
       }
 
@@ -254,5 +286,69 @@ class JobViewModel extends BaseModel  {
     return  await _navigationService.nextPage(route.FilePickerPageRoute);
   }
 
+  // navigation for page
+  Future postJob() async {
+    return  await _navigationService.nextPage(route.PostJobPageRoute);
+  }
 
+  // get uploaded document to display in the attachment
+  getUploadedDocuments(singleFileFolder,multiFileFolder,length)async {
+    try{
+      var file=[];
+      length==0?  await _firebase.downloadAnyFile(singleFileFolder,).then((value) { file.add(value);
+      }):
+
+      multiFileFolder.forEach((key,value) async{
+        await _firebase.downloadAnyFile(key).then((value) { file.add(value);
+        });
+
+      });
+      file==null?file=[]: file=file;
+      return file;
+    }catch(e){
+      print(e);
+    }
+
+  }
+
+  // to know if it is the owner that is accessing the post
+  setUseIdentity(value){
+    userIdentity=value;
+    notifyListeners();
+  }
+
+
+
+  final StreamController
+       _timerStream = StreamController.broadcast(sync: true);
+  Stream get timerStream=>_timerStream.stream;
+
+
+ Stream loadingWidget(){
+    final cd = CountdownTimer(Duration(seconds: 15), Duration(seconds: 1));
+    cd.listen((data) {
+        _elapsed = cd.elapsed.inSeconds;
+        _timerStream.add(_elapsed);
+        notifyListeners();
+    }, onDone: () {
+      cd.cancel();
+    });
+    return _timerStream.stream;
+  }
+
+  listenToTimer(){
+   loadingWidget().listen((data){
+     _elapsed=data;
+     notifyListeners();
+   });
+   print('$elapsed');
+  }
+
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _timerStream.close();
+    super.dispose();
+  }
 }

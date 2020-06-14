@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
+import 'package:quiver/async.dart';
 
 class MainBloc extends BloCSetting {
 
@@ -239,6 +242,58 @@ class MainBloc extends BloCSetting {
 
   nullField(){
     return null;
+  }
+ int _elapsed=0;
+  int get elapsed=>_elapsed*6==90?_elapsed=0:_elapsed=_elapsed;
+
+
+
+
+ loadingWidget(){
+   try{
+     final cd = CountdownTimer(Duration(seconds: 15), Duration(seconds: 1));
+     cd.listen((data) async{
+       _elapsed = cd.elapsed.inSeconds;
+       await rebuildWidgets(ids: ['timer']);
+     }, onDone: () {
+       cd.cancel();
+     }, onError: (e){
+       print(e.toString());
+     });
+   }catch(e){
+     print(e.toString());
+   }
+  }
+
+  Timer _timer;
+  int _start = 0;
+  int get start=>_start;
+
+  startTimer() async {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+        oneSec,
+            (Timer timer)  {
+          if (_start ==15) {
+            timer.cancel();
+            _start=0;
+          } else {
+            _start = _start +1;
+             rebuildWidgets(ids: ['timer']);
+          }
+        }
+
+    );
+    print('start: $_start');
+
+  }
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 }
 MainBloc mainBloc;

@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Model/constants/loading.dart';
+import 'package:mergeme/ViewModel/DropDownButton.dart';
+import 'package:mergeme/ViewModel/JobDescriptionViewModel.dart';
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
+import 'package:mergeme/Views/FeedBack/Rating.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
 import 'package:random_string/random_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobDescriptionPage extends StatelessWidget {
   final String specificTrade;
   final dynamic document;
+
 
   JobDescriptionPage(this.specificTrade, this.document) ;
   @override
@@ -28,6 +35,8 @@ class JobDescriptionPage extends StatelessWidget {
     double height(value) {
       return dynamicSize.height(value / 667);
     }
+
+
 
 
     return
@@ -51,6 +60,117 @@ class BodyContent extends StatelessWidget{
   final Function height;
   final Function width;
 
+  _launchURL(String url) async {;
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+  }
+
+  _showMaterialDialog(file,model,context) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: GeneralTextDisplay('File attachment', Colors.black, 1,
+              17,FontWeight.bold, 'title at job description page'),
+          content: StreamBuilder(
+            initialData: model.listenToTimer(),
+            stream:model.loadingWidget(),
+            builder: (context,snapshot){
+              if(snapshot.connectionState==ConnectionState.active)
+              {
+
+              return Center(child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Loading(),
+                  GeneralTextDisplay(
+                      model.elapsed<6?'Download in progress..':model.elapsed>6 && model.elapsed<12?
+                      'Download is almost done': model.elapsed>12?"Almost ready":'', Colors.black54, 1, 12,
+                      FontWeight.w400, 'downloading progress button'),
+                  AnimatedOpacity(
+                    opacity: model.elapsed*0.3,
+                    child: GeneralTextDisplay(
+                        '${model.elapsed*33}%',
+                              Colors.black,
+                              1,
+                              15,
+                             FontWeight.bold,
+                              'loading percent'),
+                          key: Key(randomString(5)),
+                    duration: Duration(seconds: 2),
+                  )
+                ],
+              ));}
+              if(snapshot.connectionState==ConnectionState.done)
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                        width: 150,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: file==null ||file==[null] ?0:file.length,
+                            itemBuilder: (context, index){
+                              print (file);
+                              return file==null || file[index]==null?
+                              GeneralTextDisplay(
+                                  'No file attachment', Colors.black, 1,14,
+                                  FontWeight.w500, 'No file attachment')
+
+                                  :ListTile(
+                                leading: CircleAvatar(
+                                  radius:file[index]!=null?height(10):height(0),
+                                  backgroundColor: Colors.red[index*50],
+                                  child: GeneralTextDisplay(
+                                      file[index]!=null?'${index+1}':'',
+                                      Colors.black,
+                                      1,
+                                      15,
+                                      FontWeight.w400,
+                                      'index value'),
+                                ),
+                                title: GestureDetector(
+                                    onTap:(){
+                                      _launchURL(file[index].toString());
+                                    },
+                                    child: Text(file[index]==null? '':
+                                    'File $index:')),
+
+                              );
+                            }),
+                      ),
+                    ),
+                  ],
+                );
+              return  GeneralTextDisplay(
+                  'Loading...', Colors.black, 1,14,
+                  FontWeight.w500, 'No file attachment');
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: GeneralTextDisplay(
+                  'Close me',
+                  Colors.black,
+                  1,
+                  13,
+                  FontWeight.w400,
+                  'Close button'),
+              onPressed: () {
+
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) =>
+                        JobDescriptionPage(specificTrade,document)));
+              },
+            )
+          ],
+        ));
+  }
 
   final String specificTrade;
 
@@ -58,16 +178,51 @@ class BodyContent extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-      return  ViewModelProvider<JobViewModel>.withConsumer(
-        onModelReady: (model) async{ await model.getJobPosterData(document);
-        model.waitingFunction();},
 
-        viewModelBuilder: ()=>JobViewModel(route.GiveWork+specificTrade),
+
+
+
+
+    return  ViewModelProvider<JobDescriptionViewModel>.withConsumer(
+        onModelReady: (model) async{ await model.getJobPosterData(document);
+        model.waitingFunction();
+        if(model.currentUser.id==document.jobPosterId)
+        {model.setUseIdentity(true);}
+        if(model.currentUser.id!=document.jobPosterId)
+        {model.setUseIdentity(false);}
+        model.initLoading();
+        model.initTimer();
+        },
+
+        viewModelBuilder: ()=>JobDescriptionViewModel(),
         disposeViewModel: false,
-        builder: (context, model,_)=>model.loading==true && document!=null ? Center(
-          child: Loading(
+        builder: (context, model,_)=>model.loading==true && document!=null ? SafeArea(
+          child:  Container(
+            padding: EdgeInsets.symmetric(vertical: height(330)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Loading(
+                ),
+                AdaptiveSizedBox(
+                  height: 20/667,
+                ),
+                AnimatedOpacity(
+                  opacity: model.init*0.3,
+                  child: GeneralTextDisplay(
+                      'Job Description Page',
+                      Colors.black,
+                      3,
+                      15,
+                      FontWeight.bold,
+                      'loading percent'),
+                  key: Key(randomString(5)),
+                  duration: Duration(seconds: 2),
+                )
+              ],
+            ),
           ),
+
         ):
          Container(
           height: height(667),
@@ -155,7 +310,9 @@ class BodyContent extends StatelessWidget{
                 left: 315,
                 top: 53,
                 child: GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                   child: GeneralIconDisplay(
                       Icons.email, Color.fromRGBO(215, 0, 27, 1.0),
                       Key('message icon Post job'), 24 / 667),
@@ -271,10 +428,23 @@ class BodyContent extends StatelessWidget{
               AdaptivePositioned(
                 left: 40,
                 top: 496,
-                child: GeneralTextDisplay(
-                    'view attachment', Color.fromRGBO(238, 83, 79, 1.0),
-                    1, 11,
-                    FontWeight.w600, 'attachment'),
+                child: GestureDetector(
+                  onTap: () async{
+                    try{var fileUploaded=[];
+                    fileUploaded=await model.getUploadedDocuments(
+                        document.postJobFilePath, document.postJobMultiplePaths,
+                        document.noOfFilePosted);
+                    if(fileUploaded!=[]) print('fileuploaded: $fileUploaded');
+                    _showMaterialDialog(fileUploaded,model,context);
+                    }catch(e){
+                      print(e.toString());
+                    }
+                  },
+                  child: GeneralTextDisplay(
+                      'view attachment', Color.fromRGBO(238, 83, 79, 1.0),
+                      1, 11,
+                      FontWeight.w600, 'attachment'),
+                ),
 
               ),
               AdaptivePositioned(
@@ -321,13 +491,23 @@ class BodyContent extends StatelessWidget{
                     'Raised',
                     1,
                     'Raised',
-                    'Bid',
-                    Colors.white,
+                    model.userIdentity==null ||
+                        model.userIdentity == false ||
+                                model.currentUser.id != document.jobPosterId
+                            ? 'Bid'
+                            : 'Edit',
+                        Colors.white,
                     13,
                     FontWeight.w600,
                     40,
                     140,
-                        (){},
+                        (){
+                          if(model.currentUser.id==document.jobPosterId &&
+                          model.userIdentity==true){
+
+                          }
+
+                        },
                     11,
                     11,
                     11,
@@ -344,3 +524,4 @@ class BodyContent extends StatelessWidget{
       );
     }
   }
+

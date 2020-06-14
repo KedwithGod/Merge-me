@@ -3,10 +3,8 @@ import 'package:mergeme/Model/Service/Auth_service.dart';
 import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
-import 'package:mergeme/Model/UserModel/userModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
-import 'package:provider/provider.dart';
 import 'BaseModel.dart';
 
 
@@ -15,19 +13,10 @@ class HomeViewModel extends BaseModel {
   final LocalStorageService storageService =locator<LocalStorageService>();
   final AuthenticationService _authenticationService =
   locator<AuthenticationService>();
-  userLocation(context) async{
-    return  Provider.of<UserLocation>(context,listen:false);
-  }
 
-  updateUser() async {
-    return await _authenticationService.welcomeBack();;
-  }
 
   get update => _authenticationService.welcomeBack();
 
-  Future landingPage() {
-    return _navigationService.nextPage(route.LandingPageRoute);
-  }
 
  Future login(){
     return _navigationService.nextPage(route.LoginRoute);

@@ -52,4 +52,5 @@ class CreatePostViewModel extends BaseModel {
   void setEdittingPost(Post edittingPost) {
     _edittingPost = edittingPost;
   }
-}*/
+}
+*/

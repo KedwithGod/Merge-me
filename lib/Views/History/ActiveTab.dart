@@ -1,13 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mergeme/ViewModel/JobPageViewModel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
+import 'package:provider_architecture/_provider_widget.dart';
 
-class ActiveTab extends StatelessWidget {
+class ActiveTab extends ProviderWidget<JobPageViewModel> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,JobPageViewModel model) {
     ResponsiveSize dynamicSize =ResponsiveSize(context);
     // custom width
     double width(value) {
@@ -29,7 +33,14 @@ class ActiveTab extends StatelessWidget {
               height:height(98),
               width: width(346),
               decoration: BoxDecoration(color: Colors.white,
-              borderRadius: adaptiveBorderRadius(context,radius: 11)),
+              borderRadius: adaptiveBorderRadius(context,radius: 11),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.35),
+                        offset:Offset (0,0),
+                        blurRadius: 5
+                    )
+                  ]),
               child: Stack(
                 children: <Widget>[
                   AdaptivePositioned(
@@ -38,10 +49,10 @@ class ActiveTab extends StatelessWidget {
                     child: Container(
                       width: width(60),
                       height: height(46),
-                      decoration: BoxDecoration(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(11)),
                           image: DecorationImage(
                               image: AssetImage('assets/office.jpg'),
-                              fit: BoxFit.contain)),
+                              fit: BoxFit.cover)),
                     ),
                   ),
                   AdaptivePositioned(
@@ -50,9 +61,9 @@ class ActiveTab extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.centerLeft,
                         height: height(19),
-                        width: width(134),
+                        width: width(150),
                         child: GeneralTextDisplay('Kareem Ayomide', Colors.black, 1,
-                            16, FontWeight.w600, 'Name on the active page'),
+                            14, FontWeight.w600, 'Name on the active page'),
                       )),
                   AdaptivePositioned(
                       left:85,
@@ -75,13 +86,13 @@ class ActiveTab extends StatelessWidget {
                             11, FontWeight.w600, 'Date on the active page'),
                       )),
                   AdaptivePositioned(
-                      left:249,
-                      top: 15,
+                      left:255,
+                      top: 12,
                       child: GeneralTextDisplay('Active', Colors.black, 1,
                           16, FontWeight.bold, 'the active page')),
                   AdaptivePositioned(
                       left:249,
-                      top: 12,
+                      top: 42,
                       child: Container(
                         height: height(17),
                         width: width(90),
@@ -94,17 +105,21 @@ class ActiveTab extends StatelessWidget {
             ),
           ),
           AdaptivePositioned(
-            left: 166,
-            top: 88,
+            left: 160,
+            top: 78,
               child: GeneralIconButton(
                   Colors.black,
                   10 / 667,
-                  Icon(
-                    Icons.arrow_drop_down_circle, color: Colors.black,size: 10/667,
+                  Transform.rotate(
+                    angle:
+                        pi ,
+                    child: Icon(
+                      Icons.navigation, color: Colors.black,size: height(20),
+                    ),
                   ),
                   Colors.grey,
                   14/667,
-                  (){}))
+                  (){model.onTapIndex();}))
         ],
       );
     }
@@ -114,7 +129,14 @@ class ActiveTab extends StatelessWidget {
           height:height(388),
           width: width(346),
           decoration: BoxDecoration(color: Colors.white,
-              borderRadius: adaptiveBorderRadius(context,radius: 11)),
+              borderRadius: adaptiveBorderRadius(context,radius: 11),
+              boxShadow: [
+                BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.35),
+                    offset:Offset (0,0),
+                    blurRadius: 5
+                )
+              ]),
           child: Stack(
             children: <Widget>[
               AdaptivePositioned(
@@ -124,9 +146,10 @@ class ActiveTab extends StatelessWidget {
                   width: width(60),
                   height: height(46),
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(11)),
                       image: DecorationImage(
                           image: AssetImage('assets/office.jpg'),
-                          fit: BoxFit.contain)),
+                          fit: BoxFit.cover)),
                 ),
               ),
               AdaptivePositioned(
@@ -135,9 +158,9 @@ class ActiveTab extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     height: height(19),
-                    width: width(134),
+                    width: width(150),
                     child: GeneralTextDisplay('Kareem Ayomide', Colors.black, 1,
-                        16, FontWeight.w600, 'Name on the active page'),
+                        14, FontWeight.w600, 'Name on the active page'),
                   )),
               AdaptivePositioned(
                   left:85,
@@ -160,17 +183,17 @@ class ActiveTab extends StatelessWidget {
                         11, FontWeight.w600, 'Date on the active page'),
                   )),
               AdaptivePositioned(
-                  left:249,
-                  top: 15,
+                  left:255,
+                  top: 12,
                   child: GeneralTextDisplay('Active', Colors.black, 1,
                       16, FontWeight.bold, 'the active page')),
               AdaptivePositioned(
-                left: 262,
-                top: 11,
+                left: 253,
+                top: 41,
                 child: GeneralIconButton(
-                    Color.fromRGBO(238, 83, 79, 1.0), height(30),
+                    Color.fromRGBO(238, 83, 79, 1.0), height(20),
                     Icon(Icons.chat,color:Color.fromRGBO(238, 83, 79, 1.0),),
-                    Colors.white70, width(30),
+                    Colors.white70, height(20),
                         (){}),),
               AdaptivePositioned(
                 left: 253,
@@ -188,10 +211,10 @@ class ActiveTab extends StatelessWidget {
 
               ),
               AdaptivePositioned(
-                left: 33,
+                left: 17,
                 top: 157,
                 child: Container(
-                  decoration: BoxDecoration(border: Border.all(color: Colors.black12,width: 1.0)),
+                  decoration: BoxDecoration(border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.05),width: 1.0)),
                   width: width(319),
                   height: height(102),
                   padding: EdgeInsets.all(height(5)),
@@ -240,7 +263,7 @@ class ActiveTab extends StatelessWidget {
 
               ),
               AdaptivePositioned(
-                left: 244,
+                left: 220,
                 top: 306,
                 child: GeneralTextDisplay(
                     'DURATION', Color.fromRGBO(127, 127, 127, 1.0),
@@ -249,7 +272,7 @@ class ActiveTab extends StatelessWidget {
 
               ),
               AdaptivePositioned(
-                left: 244,
+                left: 220,
                 top: 328,
                 child: GeneralTextDisplay(
                     '4 Weeks', Color.fromRGBO(0, 0, 0, 1.0),
@@ -259,18 +282,18 @@ class ActiveTab extends StatelessWidget {
               ),
               AdaptivePositioned(
                   left: 159,
-                  top: 375,
+                  top: 360,
                   child: GeneralIconButton(
                       Colors.black,
-                      10 / 667,
+                      height(20),
                       Icon(
-                      Icons.arrow_drop_up,
-                      color: Colors.black,
-                      size: 10 / 667,
-                    ),
+                        Icons.navigation, color: Colors.black,size: height(20),
+                      ),
                       Colors.grey,
-                      14/667,
-                          (){})),
+                      height(20),
+                          (){
+                        model.onTapIndex();
+                          })),
             ],
           ),
         );
@@ -279,7 +302,7 @@ class ActiveTab extends StatelessWidget {
 
     return SafeArea(
         child: IndexedStack(
-          index: 0,
+          index: model.indexValue,
           children: <Widget>[
             jobHalfDisplay(),
             jobFullDisplay()
