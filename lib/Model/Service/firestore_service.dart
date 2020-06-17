@@ -4,9 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:mergeme/Model/UserModel/Post.dart';
 import 'package:mergeme/Model/UserModel/userModel.dart';
 
+import 'dialog_service.dart';
+import 'locator_setup.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
+
 class FireStoreService {
   final CollectionReference _usersCollectionReference =
   Firestore.instance.collection('DataBase');
+  final DialogService _dialogService = locator<DialogService>();
 
 
   CollectionReference get userCollectionReference => _usersCollectionReference;
@@ -41,6 +46,19 @@ class FireStoreService {
       return e.toString();
     }
   }
+  Future notificationFile(collectionName, value,userID,senderUserId) async {
+    try{
+      await Firestore.instance.collection(collectionName).
+      document(userID).setData({senderUserId:value,
+        route.Notification:FieldValue.increment(1),
+      },merge: true);
+    }catch(e){
+      await _dialogService.showDialog(
+        title: 'Could not Save data to FireStore',
+        description: e.toString(),
+      );
+    }
+  }
 
   Future saveData(Map value, String collectionName ) async {
     try {
@@ -57,18 +75,26 @@ class FireStoreService {
 
   Stream listenToJobPosterDataRealTime(collectionName) {
     // Register the handler for when the posts data changes
-    Firestore.instance.collection(collectionName).snapshots().listen((snapshot) {
-      if (snapshot.documents.isNotEmpty) {
-        var dataSnapshot = snapshot.documents
-            .map((snapshot) => PostJobDetails.fromData(snapshot.data, snapshot.documentID))
-            .toList();
+    try{
+      Firestore.instance.collection(collectionName).snapshots().listen((snapshot) {
+        if (snapshot.documents.isNotEmpty) {
+          var dataSnapshot = snapshot.documents
+              .map((snapshot) => PostJobDetails.fromData(snapshot.data, snapshot.documentID))
+              .toList();
 
-        // Add the posts onto the controller
-        _dataFromFireStore.add(dataSnapshot );
-      }
-    });
+          // Add the posts onto the controller
+          _dataFromFireStore.add(dataSnapshot );
+        }
+      });
 
-    return  _dataFromFireStore.stream;
+      return  _dataFromFireStore.stream;
+    }catch(e) {
+       _dialogService.showDialog(
+        title: 'Could not Save data to FireStore',
+        description: e.toString(),
+      );
+    }
+    return null;
   }
 
  /* Stream listenToJobPosterName(documentName) {

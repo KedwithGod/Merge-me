@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mergeme/ViewModel/JobPageViewModel.dart';
@@ -10,6 +9,10 @@ import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:provider_architecture/_provider_widget.dart';
 
 class ActiveTab extends ProviderWidget<JobPageViewModel> {
+  final String pageStatus;
+
+  ActiveTab(this.pageStatus);
+
   @override
   Widget build(BuildContext context,JobPageViewModel model) {
     ResponsiveSize dynamicSize =ResponsiveSize(context);
@@ -49,7 +52,8 @@ class ActiveTab extends ProviderWidget<JobPageViewModel> {
                     child: Container(
                       width: width(60),
                       height: height(46),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(11)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(11)),
                           image: DecorationImage(
                               image: AssetImage('assets/office.jpg'),
                               fit: BoxFit.cover)),
@@ -62,7 +66,7 @@ class ActiveTab extends ProviderWidget<JobPageViewModel> {
                         alignment: Alignment.centerLeft,
                         height: height(19),
                         width: width(150),
-                        child: GeneralTextDisplay('Kareem Ayomide', Colors.black, 1,
+                        child: GeneralTextDisplay(pageStatus=='active'?'Kareem Ayomide':'Kim tasha', Colors.black, 1,
                             14, FontWeight.w600, 'Name on the active page'),
                       )),
                   AdaptivePositioned(

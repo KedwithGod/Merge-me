@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mergeme/ViewModel/JobPageViewModel.dart';
-import 'package:mergeme/Views/History/ActiveTab.dart';
+import 'package:mergeme/Views/History/JActiveTab.dart';
+import 'package:mergeme/Views/History/ClosedTab.dart';
 import 'package:mergeme/Views/History/CompletedTab.dart';
 import 'package:mergeme/Views/History/TabBar.dart';
 import 'package:mergeme/Views/History/shared_header.dart';
@@ -8,7 +9,9 @@ import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
 
 
+
 class MyJobPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize =ResponsiveSize(context);
@@ -22,6 +25,7 @@ class MyJobPage extends StatelessWidget {
       return dynamicSize.height(value / 667);
     }
     return ViewModelProvider<JobPageViewModel>.withConsumer(
+      onModelReady: (model){model.getNotificationFromDataBase();},
       viewModelBuilder: ()=>JobPageViewModel(),
       builder: (context, model, child)=>
       DefaultTabController(length: 3,
@@ -48,9 +52,9 @@ class MyJobPage extends StatelessWidget {
                   top: height(133),
                   child: TabBarView(
                       children: [
-                        ActiveTab(),
-                        CompletedTab(),
-                        Container()
+                        ActiveTab(model.pageStatus),
+                        CompletedTab(model.pageStatus),
+                        ClosedTab(),
                       ]),
                 )
               ]

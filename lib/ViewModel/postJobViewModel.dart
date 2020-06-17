@@ -39,6 +39,13 @@ class JobViewModel extends BaseModel  {
   var singleFileUploaded;
   var multipleFileUploaded=Map();
   var userIdentity;
+  var tradeFromJobDescription;
+  var budgetFromJobDescription;
+  var descriptionFromJobDescription;
+  var locationFromJobDescription;
+  var durationFromJobDescription;
+  var jobStatus;
+  var documentId;
   int _elapsed=0;
   bool _visible = false;
   ScrollController hideLabelController;
@@ -90,7 +97,8 @@ class JobViewModel extends BaseModel  {
           duration: doc.data[route.JobDuration],
           time: doc.data[route.TimeJobWasPosted],
           date: doc.data[route.DateJobWasPosted],
-          jobDescription: doc.data[route.JobDescription]
+          jobDescription: doc.data[route.JobDescription],
+          jobStatus: doc.data[route.JobStatus]
       );
     }).toList();
   }
@@ -160,6 +168,7 @@ class JobViewModel extends BaseModel  {
       await _storageService.setUser(route.JobPosterLocation,location);
       await _storageService.setUser(route.PostJobFilePath,fileNameForSingle);
       await _storageService.setUser(route.PostJobMultiplePaths,multipleFileUploaded);
+      await _storageService.setUser(route.JobStatus,jobStatus);
 
 
       final jobDetails = PostJobDetails(
@@ -173,11 +182,22 @@ class JobViewModel extends BaseModel  {
           jobPosterId: jobPosterId,
           postJobFilePath: singleFileUploaded,
           noOfFilePosted: noOfFileUploaded,
-          postJobMultiplePaths: multipleFileUploaded);
-      await _fireStore.saveData(
-          jobDetails.toJson(), "${route.GiveWork + "" + tradePage}"
-      );
-
+          postJobMultiplePaths: multipleFileUploaded,
+          jobStatus: jobStatus);
+      // getting document reference
+      docRef()async {
+        var documentValue =await _fireStore.saveData(
+            jobDetails.toJson(), "${route.GiveWork + "" + tradePage}"
+        );
+        documentId=documentValue.documentID;
+        notifyListeners();
+        await Firestore.instance.collection("${route.GiveWork + "" + tradePage}")
+            .document(documentId).setData({
+          route.DocumentId:documentId
+        },merge: true);
+        return documentValue;
+      }
+     docRef();
       jobDetails.toJson().forEach((key, value) async {
         await _storageService.setUser(key, value);
       });
@@ -193,6 +213,7 @@ class JobViewModel extends BaseModel  {
         });
         userIdentity=true;
         notifyListeners();
+        setJobStatus();
         await _navigationService.nextPage(route.MyJobPageRoute);
       }
 
@@ -260,7 +281,7 @@ class JobViewModel extends BaseModel  {
     return finalString;
   }
 
-
+// not yet used
   hideControllerFunction() {
     hideLabelController.addListener(() {
       if (hideLabelController.position.userScrollDirection ==
@@ -323,7 +344,7 @@ class JobViewModel extends BaseModel  {
        _timerStream = StreamController.broadcast(sync: true);
   Stream get timerStream=>_timerStream.stream;
 
-
+// loading stream for timer
  Stream loadingWidget(){
     final cd = CountdownTimer(Duration(seconds: 15), Duration(seconds: 1));
     cd.listen((data) {
@@ -336,6 +357,7 @@ class JobViewModel extends BaseModel  {
     return _timerStream.stream;
   }
 
+  // timer for main page
   listenToTimer(){
    loadingWidget().listen((data){
      _elapsed=data;
@@ -351,4 +373,26 @@ class JobViewModel extends BaseModel  {
     _timerStream.close();
     super.dispose();
   }
+
+  // get values from jobDescription if Edit is true
+
+getValueFromJobDescription() async {
+  tradeFromJobDescription =
+        await _storageService.getString(route.JobDescriptionTradeName);
+  locationFromJobDescription =
+        await _storageService.getString(route.JobDescriptionLocation);
+  descriptionFromJobDescription=
+  await _storageService.getString(route.JobDescriptionDescription);
+  budgetFromJobDescription=
+  await _storageService.getString(route.JobDescriptionBudget);
+  durationFromJobDescription=
+  await _storageService.getString(route.JobDescriptionDuration);
+  notifyListeners();
+  }
+
+  // set jobStatus
+setJobStatus(){
+   jobStatus=route.NoBid;
+   notifyListeners();
+}
 }

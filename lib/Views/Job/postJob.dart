@@ -16,8 +16,9 @@ import 'package:provider_architecture/_viewmodel_provider.dart';
 class PostJobPage extends StatelessWidget {
 
 final String specificTrade;
+final bool edit;
 
-  const PostJobPage( this.specificTrade);
+  const PostJobPage( this.specificTrade, this.edit);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,9 @@ final String specificTrade;
 
     return ViewModelProvider<JobViewModel>.withoutConsumer(
       viewModelBuilder: ()=>JobViewModel(route.GiveWork+specificTrade),
-      onModelReady: (model)=>model.getSelected(),
+      onModelReady: (model){model.getSelected();
+      model.getValueFromJobDescription();
+      model.getNotificationFromDataBase();},
       builder: (context, model,_)=>
       Scaffold(
         drawer: CustomDrawer(),
@@ -97,11 +100,17 @@ final String specificTrade;
                           color: Colors.black,
                           shape: BoxShape.circle,
                         ),
-                        child: GeneralTextDisplay('0', Colors.white, 1, 7,
-                            FontWeight.w600, '0 tile in Post job'),
-                      ),
-
-                    ),
+                        child: GeneralTextDisplay(
+                                model.notificationValue == null
+                                    ? '0'
+                                    : '${model.notificationValue}',
+                                Colors.white,
+                                1,
+                                7,
+                                FontWeight.w600,
+                                '0 tile in Post job'),
+                          ),
+                        ),
                     AdaptivePositioned(
                       left: 333,
                       top: 19,
@@ -147,7 +156,7 @@ final String specificTrade;
               ),
 
             ),
-            MainView()
+            MainView(edit)
 
 
           ],),
@@ -158,10 +167,11 @@ final String specificTrade;
 }
 
 class MainView extends ProviderWidget<JobViewModel>{
-  final TextEditingController budget=TextEditingController();
-  final TextEditingController duration=TextEditingController();
-  final TextEditingController jobDescription=TextEditingController();
   final  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final bool edit;
+
+  MainView(this.edit);
+
 
   @override
   Widget build(BuildContext context, JobViewModel model) {
@@ -177,10 +187,16 @@ class MainView extends ProviderWidget<JobViewModel>{
       return dynamicSize.height(value / 667);
     }
     final TextEditingController typeOfJob = TextEditingController(
-        text: model.selectedTrade);
+        text: edit==true?model.selectedTrade:model.tradeFromJobDescription);
     final TextEditingController location = TextEditingController(
-        text:model.locationValue);
-    // TODO: implement build
+        text:edit==true?model.locationValue:model.locationFromJobDescription);
+    final TextEditingController budget= edit==true?TextEditingController():
+    TextEditingController(text:model.budgetFromJobDescription);
+    final TextEditingController duration=edit==true?TextEditingController():
+    TextEditingController(text:model.durationFromJobDescription);
+    final TextEditingController jobDescription=edit==true?TextEditingController():
+    TextEditingController(text:model.descriptionFromJobDescription);
+
     return  Stack(
       children: <Widget>[
         AdaptivePositioned(

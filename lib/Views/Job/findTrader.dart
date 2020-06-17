@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Model/constants/loading.dart';
+import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
@@ -10,6 +11,7 @@ import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:mergeme/Views/Uielements/work_utilites.dart';
+import 'package:provider_architecture/_viewmodel_provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 
@@ -76,7 +78,11 @@ class FindTraderPage extends StatelessWidget {
       return dynamicSize.height(value / 667);
     }
 
-    return Scaffold(
+    return ViewModelProvider<BaseModel>.withConsumer(
+    viewModelBuilder: ()=>BaseModel(),
+    onModelReady: (model)=>model.getNotificationFromDataBase(),
+    disposeViewModel: false,
+    builder: (context, model,_)=> Scaffold(
         drawer: CustomDrawer(),
         body: SafeArea(
             child: Stack(
@@ -131,7 +137,9 @@ class FindTraderPage extends StatelessWidget {
                             color: Colors.black,
                             shape: BoxShape.circle,
                           ),
-                          child: GeneralTextDisplay('0', Colors.white, 1, 7,
+                          child: GeneralTextDisplay(model.notificationValue == null
+                              ? '0'
+                              : '${model.notificationValue}', Colors.white, 1, 7,
                               FontWeight.w600, '0 tile in job template'),
                         ),
                       ),
@@ -247,7 +255,7 @@ class FindTraderPage extends StatelessWidget {
                   140,
                           (){Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
-                                  PostJobPage(specificTrade)));},
+                                  PostJobPage(specificTrade,false)));},
                   11,
                   11,
                   11,
@@ -257,7 +265,7 @@ class FindTraderPage extends StatelessWidget {
                   10.0),
             ):Container()
               ],
-            )));
+            ))));
   }
 }
 

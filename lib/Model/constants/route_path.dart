@@ -1,6 +1,11 @@
+import 'dart:html';
+
 const String LoginRoute = 'Login';
 const String HomeRoute = 'Home';
 const String LandingPageRoute = 'LandingPage';
+const String LearningPageRoute = 'learningPage';
+const String ProjectPageRoute = 'projectPage';
+const String SplashRoute = 'splashRoute';
 const String SignUpRoute = 'SignUp';
 const String OnBoardingGiveWork = 'OnBoardingGiveWork';
 const String OnBoardingSearchWork = 'OnBoardingSearchWork';
@@ -64,6 +69,9 @@ const String JobDuration='JobDuration';
 const String FindJobPageRoute='findJobPage';
 const String FindTraderPageRoute='findTraderPage';
 const String JobDescriptionPageRoute='jobDescriptionPage';
+
+// constants for document id
+const String DocumentId='documentId';
 const String PostJobPageRoute='postJobPage';
 const String JobPosterId='jobPosterId';
 const String JobPosterLocation='jobPosterLocation';
@@ -75,4 +83,21 @@ const String PostJobFilePath='postJobFilePath';
 const String PostJobMultiplePaths='postJobMultiplePaths';
 const String FilePickerPageRoute='filePickerPageRoute';
 const String LengthOfFileUploaded='lengthOfFileUploaded';
+const String JobStatus='jobStatus';
 const String Rating='rating';
+const String JobDescriptionTradeName='jobDescriptionTradeName';
+const String JobDescriptionBudget='jobDescriptionBudget';
+const String JobDescriptionDescription='jobDescriptionDescription';
+const String JobDescriptionLocation='jobDescriptionLocation';
+const String JobDescriptionDuration='jobDescriptionDuration';
+const String BidFireStoreDocument='Notification/Bid Messages';
+
+// bid status
+const String NoBid='noBid';
+const String Bid='bid';
+const String Active='active';
+const String Completed='completed';
+const String Closed='closed';
+
+// Notification data
+const String Notification='notification';

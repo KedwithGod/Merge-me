@@ -36,6 +36,7 @@ class WelcomeBack extends StatelessWidget {
     return ViewModelProvider<WelcomeViewModel>.withConsumer(
       onModelReady: (model){model.userLocation(context,);
       model.updateUser();model.networkConnection();
+      model.getNotificationFromDataBase();
       },
         viewModelBuilder: ()=>WelcomeViewModel(),
           builder: (context, model, child) => model.netStat==false?
@@ -47,16 +48,12 @@ class WelcomeBack extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                      GeneralIconDisplay(
-                          Icons.network_check,
-                          Color.fromRGBO(217, 0, 42, 1.0),
-                          Key(randomAlphaNumeric(5)),
-                          40 / 667),
+                    Image.asset('assets/network.gif'),
                       AdaptiveSizedBox(
                         height: 20/667,
                       ),
                       GeneralTextDisplay('Kindly switch on your data', Colors.black87, 2,
-                          14, FontWeight.w600, 'data connection')
+                          15, FontWeight.w600, 'data connection')
                     ],
                 ),
               ),

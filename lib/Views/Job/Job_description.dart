@@ -6,6 +6,7 @@ import 'package:mergeme/ViewModel/DropDownButton.dart';
 import 'package:mergeme/ViewModel/JobDescriptionViewModel.dart';
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
 import 'package:mergeme/Views/FeedBack/Rating.dart';
+import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
@@ -90,9 +91,9 @@ class BodyContent extends StatelessWidget{
                       'Download is almost done': model.elapsed>12?"Almost ready":'', Colors.black54, 1, 12,
                       FontWeight.w400, 'downloading progress button'),
                   AnimatedOpacity(
-                    opacity: model.elapsed*0.3,
+                    opacity: model.elapsed*0.06,
                     child: GeneralTextDisplay(
-                        '${model.elapsed*33}%',
+                        '${model.elapsed*6}%',
                               Colors.black,
                               1,
                               15,
@@ -181,22 +182,41 @@ class BodyContent extends StatelessWidget{
 
 
 
-
-
     return  ViewModelProvider<JobDescriptionViewModel>.withConsumer(
-        onModelReady: (model) async{ await model.getJobPosterData(document);
+        onModelReady: (model) async{await model.getJobPosterData(document);
         model.waitingFunction();
         if(model.currentUser.id==document.jobPosterId)
         {model.setUseIdentity(true);}
-        if(model.currentUser.id!=document.jobPosterId)
+        else if(model.currentUser.id!=document.jobPosterId)
         {model.setUseIdentity(false);}
         model.initLoading();
         model.initTimer();
+        model.getBidSenderName();
+        model.getTrade(specificTrade);
+        model.getNotificationFromDataBase();
         },
 
         viewModelBuilder: ()=>JobDescriptionViewModel(),
         disposeViewModel: false,
-        builder: (context, model,_)=>model.loading==true && document!=null ? SafeArea(
+        builder: (context, model,_)=>model.netStat==false?
+        SafeArea(
+          child:  Container(
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assets/network.gif'),
+                  AdaptiveSizedBox(
+                    height: 20/667,
+                  ),
+                  GeneralTextDisplay('Kindly switch on your data', Colors.black87, 2,
+                      15, FontWeight.w600, 'data connection')
+                ],
+              ),
+            ),
+
+        ):model.loading==true && document!=null ? SafeArea(
           child:  Container(
             padding: EdgeInsets.symmetric(vertical: height(330)),
             child: Column(
@@ -301,8 +321,14 @@ class BodyContent extends StatelessWidget{
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: GeneralTextDisplay('0', Colors.black, 1, 6,
-                      FontWeight.w600, '0 tile in Post job'),
+                  child: GeneralTextDisplay(
+                              model.notificationValue == null
+                                  ? '0'
+                                  : '${model.notificationValue}',
+                              Colors.black,
+                              1,
+                              6,
+                              FontWeight.w600, '0 tile in Post job'),
                 ),
 
               ),
@@ -349,7 +375,8 @@ class BodyContent extends StatelessWidget{
                         child: GeneralTextDisplay(
                             document.location, Color.fromRGBO(215, 215, 215, 1.0), 1, 12,
                             FontWeight.w400, 'location in job description'),
-                      ), AdaptivePositioned(
+                      ),
+                      AdaptivePositioned(
                         left: 17,
                         top: 69,
                         child
@@ -494,19 +521,34 @@ class BodyContent extends StatelessWidget{
                     model.userIdentity==null ||
                         model.userIdentity == false ||
                                 model.currentUser.id != document.jobPosterId
-                            ? 'Bid'
+                            ? model.onBidClicked==true?'Bid':'Bidded'
                             : 'Edit',
                         Colors.white,
                     13,
                     FontWeight.w600,
                     40,
                     140,
-                        (){
+                        () async {
                           if(model.currentUser.id==document.jobPosterId &&
                           model.userIdentity==true){
+                            model.setBudgetName(document.budget);
+                            model.setDuration(document.duration);
+                            model.setDescription(document);
+                            model.setLocation(document.location);
+                            model.setTradeName(specificTrade);
 
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) =>
+                                    PostJobPage(specificTrade,true)));
                           }
-
+                      if(model.currentUser.id!=document.jobPosterId &&
+                          model.userIdentity==false){
+                        model.sendNotification(
+                            '${model.bidSenderName} bid for the job you posted',
+                            document.jobPosterId,model.bidSenderName);
+                        model.statusBid(document.jobType,document);
+                        model.setBidClicked();
+;                      }
                         },
                     11,
                     11,

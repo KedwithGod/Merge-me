@@ -8,9 +8,9 @@ import 'package:provider_architecture/_provider_widget.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class CompletedTab extends ProviderWidget<JobPageViewModel> {
-  final Widget optionalChild;
+  final String pageStatus;
 
-   CompletedTab({this.optionalChild});
+   CompletedTab(this.pageStatus);
 
   @override
   Widget build(BuildContext context, JobPageViewModel model) {
@@ -31,7 +31,7 @@ class CompletedTab extends ProviderWidget<JobPageViewModel> {
           left: 0,
           top: 0,
           child: Container(
-            height:height(200),
+            height:pageStatus=='active'?height(200):height(130),
             width: width(350),
             decoration: BoxDecoration(color: Colors.white,
                 borderRadius: adaptiveBorderRadius(context,radius: 11),
@@ -113,7 +113,7 @@ class CompletedTab extends ProviderWidget<JobPageViewModel> {
                       FontWeight.w600,
                       'Rate me button in completed tab'),
                 ),
-                AdaptivePositioned(
+                pageStatus=='active'?AdaptivePositioned(
                   left:80 ,
                   top: 162,
                   child: Container(
@@ -138,8 +138,8 @@ class CompletedTab extends ProviderWidget<JobPageViewModel> {
                       },
                     ),
                   ),
-                ),
-                AdaptivePositioned(
+                ):Container(),
+                pageStatus=='active'?AdaptivePositioned(
                   left: 210,
                   top: 162,
                   child: Container(
@@ -153,7 +153,7 @@ class CompletedTab extends ProviderWidget<JobPageViewModel> {
                         '${model.rating}', Color.fromRGBO(51, 51, 51, 1.0), 1, 13,
                         FontWeight.w600, 'Rate reading'),
                   ),
-                )
+                ):Container()
               ],
             ),
           ),

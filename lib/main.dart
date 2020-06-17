@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './Model/Service/Navigator_service.dart';
@@ -67,8 +68,9 @@ class _MyAppState extends State<MyApp> {
         ),
        navigatorKey: locator<NavigatorService>().navigatorKey,
        onGenerateRoute: router.generateRoute,
-        initialRoute: routes.WrapperRoute,
+        initialRoute: routes.SplashRoute,
       ));
   }
 }
+
 

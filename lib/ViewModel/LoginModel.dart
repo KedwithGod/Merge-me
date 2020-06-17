@@ -5,11 +5,8 @@ import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/dialog_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
-import 'package:mergeme/Model/UserModel/userModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
-import 'package:provider/provider.dart';
-
 
 import 'BaseModel.dart';
 

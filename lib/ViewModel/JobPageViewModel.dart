@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/ViewModel/BaseModel.dart';
-import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:quiver/async.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 
 class JobPageViewModel extends BaseModel{
   // locator services
@@ -22,6 +20,7 @@ class JobPageViewModel extends BaseModel{
   var noOfFileUploaded;
   var singleFileUploaded;
   var indexValue=0;
+  var pageStatus=route.Active;
   Map<dynamic, dynamic> multipleFileUploaded;
   double rating=0;
   bool onComplete;

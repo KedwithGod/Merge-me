@@ -23,6 +23,9 @@ class WelcomeViewModel extends BaseModel{
   Future landingPage() {
     return _navigationService.nextPage(route.LandingPageRoute);
   }
+  Future wrapper() {
+    return _navigationService.nextPage(route.WrapperRoute);
+  }
 
   String time=currentTime();
   List get timeString=>time.split('');

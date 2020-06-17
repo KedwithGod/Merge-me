@@ -253,8 +253,13 @@ class CustomDrawer extends StatelessWidget {
                               'wallet_icon', 235, 'Wallet', 'Wallet_subtitle'),
                           drawerItems(276, Icons.person, 'person_icon', 273,
                               'Profile', 'profile_subtitle'),
-                          drawerItems(315, Icons.group_work, 'project_icon',
-                              315, 'Projects', 'Projects_subtitle'),
+                          GestureDetector(
+                            onTap: () {
+                              model.projectPage();
+                            },
+                            child: drawerItems(315, Icons.group_work, 'project_icon',
+                                315, 'Projects', 'Projects_subtitle'),
+                          ),
                           GestureDetector(
                             onTap: () {
                               model.jobPage();
@@ -262,8 +267,13 @@ class CustomDrawer extends StatelessWidget {
                             child: drawerItems(357, Icons.work, 'Job_icon', 354, 'Job',
                                 'Job_subtitle'),
                           ),
-                          drawerItems(397, Icons.book, 'learning_icon', 396,
-                              'Learning page', 'Learning_subtitle'),
+                          GestureDetector(
+                            onTap: () {
+                              model.learningPage();
+                            },
+                            child: drawerItems(397, Icons.book, 'learning_icon', 396,
+                                'Learning page', 'Learning_subtitle'),
+                          ),
                           drawerItems(439, Icons.phonelink_setup, "Job_icon",
                               436, 'Job updates', 'job_subtitle'),
                           drawerItems(481, Icons.feedback, 'feedback_icon', 478,

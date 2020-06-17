@@ -47,6 +47,7 @@ class FindJobPage extends StatelessWidget {
       onModelReady: (model) {model.listenToPosts();
       model.hideLabelController=ScrollController();
       model.hideControllerFunction();
+      model.getNotificationFromDataBase();
       },
       disposeViewModel: false,
       viewModelBuilder: ()=>JobViewModel(route.GiveWork+specificTrade),
@@ -59,11 +60,7 @@ class FindJobPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  GeneralIconDisplay(
-                      Icons.network_check,
-                      Color.fromRGBO(217, 0, 42, 1.0),
-                      Key(randomAlphaNumeric(7)),
-                      40 / 667),
+                  Image.asset('assets/network.gif'),
                   AdaptiveSizedBox(
                     height: 20/667,
                   ),
@@ -130,11 +127,18 @@ class FindJobPage extends StatelessWidget {
                                 color: Colors.black,
                                 shape: BoxShape.circle,
                               ),
-                              child: GeneralTextDisplay('0', Colors.white, 1, 7,
-                                  FontWeight.w600, '0 tile in job template'),
+                              child: GeneralTextDisplay(
+                                    model.notificationValue == null
+                                        ? '0'
+                                        : '${model.notificationValue}',
+                                    Colors.white,
+                                    1,
+                                    7,
+                                    FontWeight.w600,
+                                    '0 tile in job template'),
+                              ),
                             ),
-                          ),
-                          AdaptivePositioned(
+                            AdaptivePositioned(
                             left: 333,
                             top: 19,
                             child: GestureDetector(

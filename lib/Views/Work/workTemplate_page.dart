@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
+import 'package:mergeme/ViewModel/BaseModel.dart';
+import 'package:mergeme/ViewModel/JobDescriptionViewModel.dart';
 import 'package:mergeme/Views/Job/findJob.dart';
 import 'package:mergeme/Views/Job/findTrader.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
@@ -13,6 +15,7 @@ import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:mergeme/Views/Uielements/work_utilites.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:provider_architecture/_viewmodel_provider.dart';
 import 'package:random_string/random_string.dart';
 
 class WorkTemplate extends StatelessWidget {
@@ -252,7 +255,11 @@ class WorkTemplate extends StatelessWidget {
     }
 
 
-    return DefaultTabController(length: 4,
+    return ViewModelProvider<BaseModel>.withConsumer(
+      onModelReady: (model)=>model.getNotificationFromDataBase(),
+    viewModelBuilder: ()=>BaseModel(),
+    disposeViewModel: false,
+    builder: (context, model,_)=> DefaultTabController(length: 4,
         child:Scaffold(
         drawer: CustomDrawer(),
         body:SafeArea(
@@ -264,8 +271,9 @@ class WorkTemplate extends StatelessWidget {
                 child: Container(
                   height:height(94),
                   width: width(375),
-                  decoration: BoxDecoration(color: Color.fromRGBO(238, 83, 79, 1.0),
-                    boxShadow: [
+                  decoration: BoxDecoration(
+                            color: Color.fromRGBO(238, 83, 79, 1.0),
+                            boxShadow: [
                       BoxShadow(
                         color: Colors.grey,
                         offset: Offset(1.0, 1.0), //(x,y)
@@ -329,7 +337,9 @@ class WorkTemplate extends StatelessWidget {
                             color: Colors.black,
                             shape: BoxShape.circle,
                           ),
-                          child: GeneralTextDisplay('0', Colors.white, 1, 7,
+                          child: GeneralTextDisplay(model.notificationValue == null
+                              ? '0'
+                              : '${model.notificationValue}', Colors.white, 1, 7,
                               FontWeight.w600, '0 tile in $tileTradeRegistry'),
                         ),
 
@@ -444,7 +454,7 @@ class WorkTemplate extends StatelessWidget {
             ],
           ),
         )
-    ));
+    )));
   }
 }
 
