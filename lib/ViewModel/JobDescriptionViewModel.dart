@@ -187,7 +187,7 @@ statusBid(tradePage,document)async{
   var timeCurrently = await currentTime();
   print('job documentId at status Active: ${document.documentId}');
   return await Firestore.instance.collection("${route.GiveWork + "" + tradePage}")
-      .document(document.documentId).setData({
+      .document(document['documentId']).setData({
     route.JobStatus:route.Bid,
     route.TimeJobWasPosted:timeCurrently,
     route.DateJobWasPosted:dateCurrently

@@ -1,19 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Service/Network_connection.dart';
 import 'package:mergeme/Model/constants/loading.dart';
-import 'package:mergeme/ViewModel/HomeModel.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/ViewModel/WelcomeViewmodel.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
-import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
-import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
-import 'package:random_string/random_string.dart';
 
 class WelcomeBack extends StatelessWidget {
 
@@ -59,23 +55,7 @@ class WelcomeBack extends StatelessWidget {
               ),
             ),
 
-          ):model.currentUser==null?
-          SafeArea(
-            child:  Container(
-              color: Colors.white,
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Loading(
-                  ),
-
-                ],
-              ),
-            ),
-
-          )
-          :Scaffold(
+          ):model.currentUser==null?Loading():Scaffold(
               body: SafeArea(
             child: Stack(children: <Widget>[
               AdaptivePositioned(

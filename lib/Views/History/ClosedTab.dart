@@ -21,8 +21,14 @@ class ClosedTab extends StatelessWidget {
         height: height(101),
         width: width(346),
         decoration: BoxDecoration(
-          borderRadius: adaptiveBorderRadius(11),
-          color: Colors.white
+          borderRadius: adaptiveBorderRadius(context,radius: 11),
+          color: Colors.white,boxShadow: [
+          BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.35),
+              offset:Offset (0,0),
+              blurRadius: 5
+          )
+        ]
         ),
         child: Stack(
           children: <Widget>[

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/ViewModel/JobPageViewModel.dart';
 import 'package:mergeme/Views/History/JActiveTab.dart';
 import 'package:mergeme/Views/History/ClosedTab.dart';
@@ -30,6 +31,7 @@ class MyJobPage extends StatelessWidget {
       builder: (context, model, child)=>
       DefaultTabController(length: 3,
         child: Scaffold(
+          drawer: CustomDrawer(),
           body: SafeArea(
             child: Stack(
               children:[

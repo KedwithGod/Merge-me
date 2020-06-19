@@ -7,6 +7,7 @@ import 'package:mergeme/Model/Service/Navigator_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
+import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'package:mergeme/Views/Uielements/Generaldropdowndisplay.dart';
 import 'package:quiver/async.dart';
 
@@ -14,6 +15,7 @@ class MainBloc extends BloCSetting {
 
   final NavigatorService _navigationService = locator<NavigatorService>();
   final LocalStorageService storageService = locator<LocalStorageService>();
+  final BaseModel _baseModel=BaseModel();
   var specificTradeVal;
   var tutorOption;
   var noOfUser;
@@ -73,37 +75,23 @@ class MainBloc extends BloCSetting {
             'Trade Category');
     }
     if (tradeCategory == 'Search for work') {
-      return
-        GeneralDropDownDisplay(
-          '',
-          ['',
-            'Local Trade',
-            'Tech Jobs',
-            'Artisans',
-            'Repairs'
-          ],
-          route.tradeCategory,
-          'Choose a Trade',
-          'Trade Category',);
+      return _baseModel.getTradeCategoryFromDataBase(
+          GeneralDropDownDisplay(
+        '',
+        _baseModel.tradeCategory==[]?['loading..']:_baseModel.tradeCategory,
+        route.tradeCategory,
+        'Choose a Trade',
+        'Trade Category',));
     }
 
 
     if (tradeCategory == '' || tradeCategory == 'Give a work') {
       return Container(
 
-          child: Text('i am rebuilt $s'),
-          color: Colors.blue,
-          height: 40
-
       );
     }
 
     return Container(
-
-        child: Text('tap on $s'),
-        color: Colors.blue,
-        height: 40
-
     );
   }
 
@@ -111,67 +99,51 @@ class MainBloc extends BloCSetting {
   Widget tradeValue() {
 
     if (tradeName == route.localTrade && tradeCategory != 'Give a work') {
-      return GeneralDropDownDisplay(
-          '',
-          ['',
-            'Bead making',
-            'House painting',
-            'Cake making',
-            'Plumbing work'
-          ],
-          route.localTrade,
-          'Select a trade',
-          'Local trade');
+      return _baseModel.getTradeFromDataBase('Local Trade',
+          GeneralDropDownDisplay(
+              '',
+              _baseModel.tradeList,
+              route.localTrade,
+              'Select a trade',
+              'Local trade'));
     }
-    else if (tradeName == route.techJobs && tradeName != '' &&
+    else if (tradeName == 'TechJob' && tradeName != '' &&
         tradeCategory != 'Give a work') {
-      return GeneralDropDownDisplay(
-          '',
-          ['',
-            'Graphic Design',
-            'Mobile developer',
-            'Data scientist',
-            'Web developer'
-          ],
-          route.techJobs,
-          'Select a trade',
-          'Tech jobs');
+     return _baseModel.getTradeFromDataBase('TechJob',
+         GeneralDropDownDisplay(
+             '',
+             _baseModel.tradeList,
+             route.techJobs,
+             'Select a trade',
+             'Tech jobs'));
+
     }
     else if (tradeName == route.artisans && tradeName != '' &&
         tradeCategory != 'Give a work') {
-      return GeneralDropDownDisplay(
-          '',
-          ['',
-            'AutoMechanic',
-            'Tailor',
-            'Electrician',
-            'Carpenter'
-          ],
-          route.artisans,
-          'Select a trade',
-          'Artisans');
+      return _baseModel.getTradeFromDataBase('Artisans',
+          GeneralDropDownDisplay(
+              '',
+              _baseModel.tradeList,
+              route.artisans,
+              'Select a trade',
+              'Artisans'));
+
     }
     else if (tradeName == route.repairs && tradeName != '' &&
         tradeCategory != 'Give a work') {
-      return GeneralDropDownDisplay(
-          '',
-          ['',
-            'Refrigerator repairs',
-            'Fan repairs',
-            'Television repairs',
-            'Bag repairs'
-          ],
-          route.artisans,
-          'Select a trade',
-          'Repairs');
+      return _baseModel.getTradeFromDataBase('Repairs',
+          GeneralDropDownDisplay(
+              '',
+              _baseModel.tradeList,
+              route.artisans,
+              'Select a trade',
+              'Repairs'));
+
     }
 
     else {
       return Container(
-
-          child: Text('i am rebuilt $s'),
-          color: Colors.blue,
-          height: 40);
+      );
     }
   }
 
@@ -297,3 +269,5 @@ class MainBloc extends BloCSetting {
   }
 }
 MainBloc mainBloc;
+
+

@@ -161,7 +161,7 @@ class Home extends StatelessWidget {
                       5,
                       5,
                       Colors.transparent,
-                      Colors.red,
+                      Colors.transparent,
                       0.0),
                 )
 

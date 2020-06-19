@@ -20,6 +20,7 @@ class Tabs extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Color.fromRGBO(238, 83, 79, 1.0),
         unselectedLabelColor: Colors.white,
+        labelPadding: EdgeInsets.symmetric(horizontal: height(40)),
         indicator: new BubbleTabIndicator(
           indicatorHeight: height(31),
           indicatorColor: Colors.white,

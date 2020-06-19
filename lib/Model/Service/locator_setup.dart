@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mergeme/Model/Database/FirebaseStorage.dart';
 import 'package:mergeme/Model/constants/CountDown.dart';
+import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'Auth_service.dart';
 import 'Navigator_service.dart';
 import 'Network_connection.dart';
@@ -20,5 +21,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => Firebase());
   locator.registerFactory(() => CountDown());
   locator.registerFactory(() =>Main());
+  locator.registerFactory(() => BaseModel());
 
 }

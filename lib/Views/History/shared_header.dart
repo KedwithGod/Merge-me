@@ -65,7 +65,7 @@ class SharedHeader extends StatelessWidget {
                     width: width(258),
                     height: height(35),
                     alignment: Alignment.center,
-                    child: GeneralTextDisplay(_pageTitle , Colors.white, 1, 28,
+                    child: GeneralTextDisplay(_pageTitle , Colors.white, 1, 26,
                         FontWeight.bold, 'trade page title'),
                   ),
                 ),

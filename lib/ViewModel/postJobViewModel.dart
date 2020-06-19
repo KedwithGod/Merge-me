@@ -257,6 +257,7 @@ class JobViewModel extends BaseModel  {
       print(data);
       if (updatedData != null && updatedData.length > 0) {
         _jobDetails = updatedData;
+        neededDocument
         print('_jobDetails: $_jobDetails');
         notifyListeners();
       }

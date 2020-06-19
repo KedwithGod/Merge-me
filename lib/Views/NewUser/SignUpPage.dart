@@ -10,7 +10,7 @@ import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextfielddisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
-import 'package:provider/provider.dart';
+import 'package:provider_architecture/_viewmodel_provider.dart';
 
 
 class SignUp extends StatelessWidget {
@@ -26,10 +26,30 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
-    return ChangeNotifierProvider(
-      create: (context) => SignUpViewModel(),
-      child: Consumer<SignUpViewModel>(
-        builder: (context, model, child) => Scaffold(
+    return ViewModelProvider<SignUpViewModel>.withConsumer(
+      onModelReady: (model)=>model.networkConnection(),
+     viewModelBuilder: ()=>SignUpViewModel(),
+        builder: (context, model, child) =>model.netStat==false?
+        SafeArea(
+          child:  Scaffold(
+            body: Container(
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset('assets/network.gif'),
+                  AdaptiveSizedBox(
+                    height: 20/667,
+                  ),
+                  GeneralTextDisplay('Kindly switch on your data', Colors.black87, 2,
+                      15, FontWeight.w600, 'data connection')
+                ],
+              ),
+            ),
+          ),
+
+        ): Scaffold(
             body: SafeArea(
               child: Stack(
           children: <Widget>[
@@ -72,7 +92,7 @@ class SignUp extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       horizontal: dynamicSize.width(14 / 375),
                     ),
-                    height: dynamicSize.height(408 / 667),
+                    height: dynamicSize.height(370 / 667),
                     width: dynamicSize.width(344 / 375),
                     decoration: (BoxDecoration(
                         borderRadius:
@@ -193,8 +213,23 @@ class SignUp extends StatelessWidget {
                     ),
                   )),
               AdaptivePositioned(
-                  top: 535,
-                  left: 30,
+                left: 26,
+                top: 518,
+                child: GestureDetector(
+                  onTap: (){showDialog(context: context,
+                  builder: (context){
+                    return model.getTermsAndConditions(context);
+                  });},
+                  child: GeneralTextDisplay(
+                      'Terms and condition are applied, click to read',
+                      Color.fromRGBO(85, 85, 85, 1.0),
+                      1,
+                      10, FontWeight.w400, 'Terms and condition'),
+                ),
+              ),
+              AdaptivePositioned(
+                  top: 543,
+                  left: 26,
                   child: StatesBuilder(
                     stateID: 'Sign in' ,
                     blocs: [mainBloc],
@@ -252,9 +287,9 @@ class SignUp extends StatelessWidget {
           ],
         ),
             )),
-      ),
     );
   }
 }
 
 
+//: if request.auth.uid != null

@@ -187,14 +187,14 @@ class MainView extends ProviderWidget<JobViewModel>{
       return dynamicSize.height(value / 667);
     }
     final TextEditingController typeOfJob = TextEditingController(
-        text: edit==true?model.selectedTrade:model.tradeFromJobDescription);
+        text: edit==false?model.selectedTrade:model.tradeFromJobDescription);
     final TextEditingController location = TextEditingController(
-        text:edit==true?model.locationValue:model.locationFromJobDescription);
+        text:edit==false?model.locationValue:model.locationFromJobDescription);
     final TextEditingController budget= edit==true?TextEditingController():
     TextEditingController(text:model.budgetFromJobDescription);
-    final TextEditingController duration=edit==true?TextEditingController():
+    final TextEditingController duration=edit==false?TextEditingController():
     TextEditingController(text:model.durationFromJobDescription);
-    final TextEditingController jobDescription=edit==true?TextEditingController():
+    final TextEditingController jobDescription=edit==false?TextEditingController():
     TextEditingController(text:model.descriptionFromJobDescription);
 
     return  Stack(

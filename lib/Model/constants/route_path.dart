@@ -1,5 +1,3 @@
-import 'dart:html';
-
 const String LoginRoute = 'Login';
 const String HomeRoute = 'Home';
 const String LandingPageRoute = 'LandingPage';

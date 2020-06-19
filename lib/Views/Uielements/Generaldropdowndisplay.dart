@@ -12,7 +12,7 @@ import 'package:mergeme/Model/constants/route_path.dart' as route;
 
 class GeneralDropDownDisplay extends StatelessWidget {
   final String initialText;
-  final List<String> dropDownList;
+  final List dropDownList;
   final String userKey;
   final String labelText;
   final String hintText;
@@ -78,7 +78,7 @@ class GeneralDropDownDisplay extends StatelessWidget {
                             },
 
                             items:dropDownList
-                                .map<DropdownMenuItem<String>>((String value) {
+                                .map<DropdownMenuItem<String>>((value) {
                               return DropdownMenuItem<String>(
                                 key: Key(randomString(10)),
                                 value: value,
