@@ -11,95 +11,97 @@ import 'package:mergeme/ViewModel/BaseModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
 
-class JobDescriptionViewModel extends BaseModel{
-
+class JobDescriptionViewModel extends BaseModel {
   // field instance
-  int _elapsed=0;
-  int init=0;
+  int _elapsed = 0;
+  int init = 0;
   var userIdentity;
   var jobPosterName;
   var bidSenderName;
   String specificTrade;
-  int get elapsed=>_elapsed>=15?_elapsed=0:_elapsed=_elapsed;
+
+  int get elapsed => _elapsed >= 15 ? _elapsed = 0 : _elapsed = _elapsed;
 
   // get field variable forms shared preferences
   final Firebase _firebase = locator<Firebase>();
-  final CountDown _countdown=locator<CountDown>();
+  final CountDown _countdown = locator<CountDown>();
   final LocalStorageService _storageService = locator<LocalStorageService>();
   final FireStoreService _fireStore = locator<FireStoreService>();
 
-
   loadingWidget() {
-   return _countdown.loadingWidget(_elapsed, 15);
+    return _countdown.loadingWidget(_elapsed, 15);
   }
 
-  initLoading(){
+  initLoading() {
     return _countdown.initLoading(init, 3);
   }
-  initTimer(){
-    _countdown.initLoading(init, 3).listen((data){
-      init=data;
+
+  initTimer() {
+    _countdown.initLoading(init, 3).listen((data) {
+      init = data;
       notifyListeners();
     });
     print('$init');
   }
 
-  listenToTimer(){
-    _countdown.loadingWidget(_elapsed, 15).listen((data){
-      _elapsed=data;
+  listenToTimer() {
+    _countdown.loadingWidget(_elapsed, 15).listen((data) {
+      _elapsed = data;
       notifyListeners();
     });
     print('$elapsed');
   }
 
-  static Future<int> getData(){
-    return Future.delayed(Duration(seconds:15));
+  static Future<int> getData() {
+    return Future.delayed(Duration(seconds: 15));
   }
 
-  Stream stream =Stream.fromFuture(getData());
+  Stream stream = Stream.fromFuture(getData());
 
-  setTradeName(tradeName){
+  setTradeName(tradeName) {
     _storageService.setUser(route.JobDescriptionTradeName, tradeName);
     notifyListeners();
   }
-  setBudgetName(budget){
-    _storageService.setUser(route.JobDescriptionBudget,  budget);
+
+  setBudgetName(budget) {
+    _storageService.setUser(route.JobDescriptionBudget, budget);
     notifyListeners();
   }
 
-  setDescription(description){
+  setDescription(description) {
     _storageService.setUser(route.JobDescriptionDescription, description);
     notifyListeners();
   }
 
-  setDuration(duration){
-    _storageService.setUser(route.JobDescriptionDuration,duration);
+  setDuration(duration) {
+    _storageService.setUser(route.JobDescriptionDuration, duration);
     notifyListeners();
   }
 
-  setLocation(location){
-    _storageService.setUser(route.JobDescriptionLocation,location);
+  setLocation(location) {
+    _storageService.setUser(route.JobDescriptionLocation, location);
     notifyListeners();
   }
 
   @override
   void dispose() {
-
     _countdown..dispose();
     super.dispose();
   }
 
   // to set user identity to true if job poster is  the one viewing the post
-  setUseIdentity(value){
-    userIdentity=value;
+  setUseIdentity(value) {
+    userIdentity = value;
     notifyListeners();
   }
 
-  getBidSenderName() async{
+  getBidSenderName() async {
     try {
-      var jobDocumentSnapshot = await Firestore.instance.collection('DataBase')
+      var jobDocumentSnapshot = await Firestore.instance
+          .collection('DataBase')
           .document(currentUser.id)
-          .get().then((value) {
+          .get()
+          .then((value) {
         bidSenderName = value.data[route.Name];
         notifyListeners();
       });
@@ -116,9 +118,11 @@ class JobDescriptionViewModel extends BaseModel{
 
   getJobPosterData(document) async {
     try {
-      var jobDocumentSnapshot = await Firestore.instance.collection('DataBase')
+      var jobDocumentSnapshot = await Firestore.instance
+          .collection('DataBase')
           .document(document.jobPosterId)
-          .get().then((value) {
+          .get()
+          .then((value) {
         jobPosterName = value.data[route.Name];
         notifyListeners();
       });
@@ -142,9 +146,9 @@ class JobDescriptionViewModel extends BaseModel{
     return finalString;
   }
 
-  getUploadedDocuments(singleFileFolder,multiFileFolder,length)async {
-    try{
-      var file=[];
+  getUploadedDocuments(singleFileFolder, multiFileFolder, length) async {
+    try {
+      var file = [];
       length == 0
           ? await _firebase
               .downloadAnyFile(
@@ -152,46 +156,49 @@ class JobDescriptionViewModel extends BaseModel{
             )
               .then((value) {
               file.add(value);
-            }):
-
-      multiFileFolder.forEach((key,value) async{
-        await _firebase.downloadAnyFile(key).then((value) { file.add(value);
-        });
-
-      });
-      file==null?file=[]: file=file;
+            })
+          : multiFileFolder.forEach((key, value) async {
+              await _firebase.downloadAnyFile(key).then((value) {
+                file.add(value);
+              });
+            });
+      file == null ? file = [] : file = file;
       return file;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
 
-  sendNotification(message,userId, notificationSender) async {
+  sendNotification(message, userId, notificationSender) async {
     await _fireStore.notificationFile(
-        "${route.BidFireStoreDocument} ",
-        message, userId, notificationSender);
+        "${route.BidFireStoreDocument} ", message, userId, notificationSender);
+  }
+
+  setNotification() async {
+    return await _fireStore
+        .notificationCounter("${route.BidFireStoreDocument} ");
   }
 
   // get specificTrade
 
-  getTrade(value){
-    specificTrade=value;
+  getTrade(value) {
+    specificTrade = value;
     notifyListeners();
   }
 
   //set status to active
 
-statusBid(tradePage,document)async{
-  var dateCurrently = await currentDate(route.Date);
-  var timeCurrently = await currentTime();
-  print('job documentId at status Active: ${document.documentId}');
-  return await Firestore.instance.collection("${route.GiveWork + "" + tradePage}")
-      .document(document['documentId']).setData({
-    route.JobStatus:route.Bid,
-    route.TimeJobWasPosted:timeCurrently,
-    route.DateJobWasPosted:dateCurrently
-  },merge: true);
-}
-
+  statusBid(tradePage, document) async {
+    var dateCurrently = await currentDate(route.Date);
+    var timeCurrently = await currentTime();
+    print('job documentId at status Active: ${document.documentId}');
+    return await Firestore.instance
+        .collection("${route.GiveWork + "" + tradePage}")
+        .document(document.documentId)
+        .setData({
+      route.JobStatus: onBidClicked == true ? route.Bid : route.NoBid,
+      route.TimeJobWasPosted: timeCurrently,
+      route.DateJobWasPosted: dateCurrently
+    }, merge: true);
+  }
 }

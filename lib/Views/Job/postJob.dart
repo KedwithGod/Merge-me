@@ -39,7 +39,8 @@ final bool edit;
       viewModelBuilder: ()=>JobViewModel(route.GiveWork+specificTrade),
       onModelReady: (model){model.getSelected();
       model.getValueFromJobDescription();
-      model.getNotificationFromDataBase();},
+      model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);},
       builder: (context, model,_)=>
       Scaffold(
         drawer: CustomDrawer(),
@@ -190,7 +191,7 @@ class MainView extends ProviderWidget<JobViewModel>{
         text: edit==false?model.selectedTrade:model.tradeFromJobDescription);
     final TextEditingController location = TextEditingController(
         text:edit==false?model.locationValue:model.locationFromJobDescription);
-    final TextEditingController budget= edit==true?TextEditingController():
+    final TextEditingController budget= edit==false?TextEditingController():
     TextEditingController(text:model.budgetFromJobDescription);
     final TextEditingController duration=edit==false?TextEditingController():
     TextEditingController(text:model.durationFromJobDescription);

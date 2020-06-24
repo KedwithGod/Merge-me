@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mergeme/Model/Service/Bloc_settings.dart';
 import 'package:mergeme/Model/constants/drawer.dart';
 import 'package:mergeme/Model/constants/loading.dart';
-import 'package:mergeme/ViewModel/DropDownButton.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/ViewModel/JobDescriptionViewModel.dart';
-import 'package:mergeme/ViewModel/postJobViewModel.dart';
-import 'package:mergeme/Views/FeedBack/Rating.dart';
 import 'package:mergeme/Views/Job/postJob.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
 import 'package:mergeme/Views/Uielements/Generalbuttondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generalicondisplay.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
 import 'package:mergeme/Views/Uielements/Shared.dart';
-import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
 import 'package:random_string/random_string.dart';
@@ -60,6 +56,7 @@ class BodyContent extends StatelessWidget{
   final dynamic document;
   final Function height;
   final Function width;
+
 
   _launchURL(String url) async {;
   if (await canLaunch(url)) {
@@ -193,7 +190,8 @@ class BodyContent extends StatelessWidget{
         model.initTimer();
         model.getBidSenderName();
         model.getTrade(specificTrade);
-        model.getNotificationFromDataBase();
+        model.getNotificationFromDataBase(context);
+        model.getNotificationValue(context);
         },
 
         viewModelBuilder: ()=>JobDescriptionViewModel(),
@@ -521,21 +519,26 @@ class BodyContent extends StatelessWidget{
                     model.userIdentity==null ||
                         model.userIdentity == false ||
                                 model.currentUser.id != document.jobPosterId
-                            ? model.onBidClicked==true?'Bid':'Bidded'
+                        ? document.jobStatus == route.Bid ||
+                        model.onBidClicked == true ? 'Bidded' : document
+                        .jobStatus == route.NoBid || model.onBidClicked == false
+                    || document
+                            .jobStatus==null
+                        ? 'Bid':null
                             : 'Edit',
                         Colors.white,
                     13,
                     FontWeight.w600,
                     40,
                     140,
-                        () async {
+                    document.jobStatus==route.Bid?null:() async {
                           if(model.currentUser.id==document.jobPosterId &&
                           model.userIdentity==true){
                             model.setBudgetName(document.budget);
                             model.setDuration(document.duration);
-                            model.setDescription(document);
+                            model.setDescription(document.jobDescription);
                             model.setLocation(document.location);
-                            model.setTradeName(specificTrade);
+                            model.setTradeName(document.jobType);
 
                             await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) =>
@@ -543,11 +546,13 @@ class BodyContent extends StatelessWidget{
                           }
                       if(model.currentUser.id!=document.jobPosterId &&
                           model.userIdentity==false){
+                        model.setBidClicked();
+                        model.setNotification();
                         model.sendNotification(
                             '${model.bidSenderName} bid for the job you posted',
                             document.jobPosterId,model.bidSenderName);
                         model.statusBid(document.jobType,document);
-                        model.setBidClicked();
+
 ;                      }
                         },
                     11,

@@ -10,20 +10,18 @@ import 'package:mergeme/Model/constants/route_path.dart' as route;
 
 class FireStoreService {
   final CollectionReference _usersCollectionReference =
-  Firestore.instance.collection('DataBase');
+      Firestore.instance.collection('DataBase');
   final DialogService _dialogService = locator<DialogService>();
-
 
   CollectionReference get userCollectionReference => _usersCollectionReference;
   final CollectionReference _postsCollectionReference =
-  Firestore.instance.collection('posts');
+      Firestore.instance.collection('posts');
 
   final StreamController<List<Post>> _postsController =
-  StreamController<List<Post>>.broadcast();
+      StreamController<List<Post>>.broadcast();
 
-  final StreamController<
-      List<PostJobDetails>> _dataFromFireStore = StreamController<
-      List<PostJobDetails>>.broadcast();
+  final StreamController<List<PostJobDetails>> _dataFromFireStore =
+      StreamController<List<PostJobDetails>>.broadcast();
 
   Stream get dataFromFireStore => _dataFromFireStore.stream;
 
@@ -46,13 +44,16 @@ class FireStoreService {
       return e.toString();
     }
   }
-  Future notificationFile(collectionName, value,userID,senderUserId) async {
-    try{
-      await Firestore.instance.collection(collectionName).
-      document(userID).setData({senderUserId:value,
-        route.Notification:FieldValue.increment(1),
-      },merge: true);
-    }catch(e){
+
+  Future notificationFile(collectionName, value, userID, senderUserId) async {
+    try {
+      return await Firestore.instance
+          .collection(collectionName)
+          .document(userID)
+          .setData({
+        senderUserId: value,
+      }, merge: true);
+    } catch (e) {
       await _dialogService.showDialog(
         title: 'Could not Save data to FireStore',
         description: e.toString(),
@@ -60,9 +61,28 @@ class FireStoreService {
     }
   }
 
-  Future saveData(Map value, String collectionName ) async {
+  Future notificationCounter(collectionName) async {
     try {
-      await  Firestore.instance.collection(collectionName).add(value);
+      return await Firestore.instance
+          .collection(collectionName)
+          .document(route.Notification)
+          .setData({
+        route.Notification: FieldValue.increment(1),
+      }, merge: true);
+    } catch (e) {
+      await _dialogService.showDialog(
+        title: 'Could not Save data to FireStore',
+        description: e.toString(),
+      );
+    }
+  }
+
+  Future saveData(Map value, String collectionName, documentId) async {
+    try {
+      return await Firestore.instance
+          .collection(collectionName)
+          .document(documentId)
+          .setData(value);
     } catch (e) {
       // TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -75,21 +95,25 @@ class FireStoreService {
 
   Stream listenToJobPosterDataRealTime(collectionName) {
     // Register the handler for when the posts data changes
-    try{
-      Firestore.instance.collection(collectionName).snapshots().listen((snapshot) {
+    try {
+      Firestore.instance
+          .collection(collectionName)
+          .snapshots()
+          .listen((snapshot) {
         if (snapshot.documents.isNotEmpty) {
           var dataSnapshot = snapshot.documents
-              .map((snapshot) => PostJobDetails.fromData(snapshot.data, snapshot.documentID))
+              .map((snapshot) =>
+                  PostJobDetails.fromData(snapshot.data, snapshot.documentID))
               .toList();
 
           // Add the posts onto the controller
-          _dataFromFireStore.add(dataSnapshot );
+          _dataFromFireStore.add(dataSnapshot);
         }
       });
 
-      return  _dataFromFireStore.stream;
-    }catch(e) {
-       _dialogService.showDialog(
+      return _dataFromFireStore.stream;
+    } catch (e) {
+      _dialogService.showDialog(
         title: 'Could not Save data to FireStore',
         description: e.toString(),
       );
@@ -97,7 +121,7 @@ class FireStoreService {
     return null;
   }
 
- /* Stream listenToJobPosterName(documentName) {
+  /* Stream listenToJobPosterName(documentName) {
     // Register the handler for when the posts data changes
     Firestore.instance.collection('DataBase').document(documentName).snapshots().listen((snapshot) {
       if (snapshot.data.isNotEmpty ) {
@@ -111,16 +135,14 @@ class FireStoreService {
     return  _dataFromFireStore.stream;
   }*/
 
-
-
-
-
-  retrieveDocumentSnapshot(String collectionName,String documentName ){
-    return Firestore.instance.collection(collectionName).document(documentName
-    ).snapshots();
+  retrieveDocumentSnapshot(String collectionName, String documentName) {
+    return Firestore.instance
+        .collection(collectionName)
+        .document(documentName)
+        .snapshots();
   }
 
-  retrieveCollectionSnapshot(String collectionName){
+  retrieveCollectionSnapshot(String collectionName) {
     return Firestore.instance.collection(collectionName).getDocuments();
   }
 
@@ -137,8 +159,6 @@ class FireStoreService {
       return e.toString();
     }
   }
-
-
 
   Future addPost(Post post) async {
     try {

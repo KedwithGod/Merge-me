@@ -88,7 +88,7 @@ const String JobDescriptionBudget='jobDescriptionBudget';
 const String JobDescriptionDescription='jobDescriptionDescription';
 const String JobDescriptionLocation='jobDescriptionLocation';
 const String JobDescriptionDuration='jobDescriptionDuration';
-const String BidFireStoreDocument='Notification/Bid Messages';
+const String BidFireStoreDocument='Notification/Trade/Bid Messages';
 
 // bid status
 const String NoBid='noBid';

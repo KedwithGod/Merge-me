@@ -25,7 +25,8 @@ class LandingPage extends StatelessWidget {
     ResponsiveSize dynamicSize = ResponsiveSize(context);
     return  ViewModelProvider<LandingPageViewModel>.withConsumer(
       viewModelBuilder: ()=>LandingPageViewModel(),
-      onModelReady: (model)=>model.getNotificationFromDataBase(),
+      onModelReady: (model){model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);},
       disposeViewModel: false,
       builder: (context, model,_)=> Scaffold(
         drawer: CustomDrawer(),

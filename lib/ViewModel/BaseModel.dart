@@ -8,14 +8,11 @@ import 'package:mergeme/Model/UserModel/userModel.dart';
 import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/enums/viewstate.dart';
 import 'package:mergeme/Views/Uielements/Generaltextdisplay.dart';
-import 'package:quiver/async.dart';
-
 
 class BaseModel with ChangeNotifier {
   final AuthenticationService _authenticationService =
-  locator<AuthenticationService>();
+      locator<AuthenticationService>();
   final LocalStorageService storageService = locator<LocalStorageService>();
-
 
   ViewState _state = ViewState.Idle;
   bool loading = true;
@@ -28,12 +25,12 @@ class BaseModel with ChangeNotifier {
   var notification;
   var jobPoster;
   bool isLoggedIn = false;
-  bool onBidClicked = true;
+  bool onBidClicked = false;
   List tradeList = [''];
-  List tradeCategory=[''];
-  List termsAndConditions=[] ;
-  var listener;
+  List tradeCategory = [''];
+  List termsAndConditions = [];
 
+  var listener;
 
   User get currentUser => _authenticationService.currentUser;
 
@@ -62,10 +59,12 @@ class BaseModel with ChangeNotifier {
     notifyListeners();
   }
 
-  getNotificationFromDataBase() {
+  getNotificationFromDataBase(context) {
     return StreamBuilder(
-        stream: Firestore.instance.collection(route.BidFireStoreDocument).
-        document(currentUser.id).snapshots(),
+        stream: Firestore.instance
+            .collection(route.BidFireStoreDocument)
+            .document(currentUser!=null?currentUser.id:'')
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             notificationValue = 0;
@@ -78,21 +77,19 @@ class BaseModel with ChangeNotifier {
             notifyListeners();
           }
           if (snapshot.hasData) {
-            print('...notification: ${snapshot.data}');
+            print('...notification: ${snapshot.data.document}');
             return ListView.builder(
-                itemCount: snapshot.data == null ? 0 : snapshot.data[route
-                    .Notification],
+                itemCount: snapshot.data == null
+                    ? 0
+                    : snapshot.data[route.Notification],
                 itemBuilder: (context, index) {
-                  var neededId;
-                  notificationValue = snapshot.data == null
-                      ? 0
-                      : snapshot.data[route.Notification];
-                  snapshot.data == null
-                      ? notification = [] :
-                  snapshot.data.forEach((key, value) {
-                    notification.add(value);
-                    notifyListeners();
-                  });
+
+                  snapshot.data.documents == null
+                      ? notification = []
+                      :
+                          notification.add(snapshot.data.documents[index]);
+                          notifyListeners();
+
 
                   return null;
                 });
@@ -101,8 +98,45 @@ class BaseModel with ChangeNotifier {
         });
   }
 
+  getNotificationValue(context) {
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection(route.BidFireStoreDocument)
+            .document(route.Notification)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+
+            notificationValue = 0;
+            print('...notification: no data');
+            notifyListeners();
+          }
+          if (snapshot.hasError) {
+            notificationValue = 0;
+            print('...notification: ${snapshot.error}');
+            notifyListeners();
+          }
+          if (snapshot.hasData) {
+            print('...notification: ${snapshot.data.document}');
+            var dataGotten;
+            snapshot.data == null
+                ?notificationValue=0
+                : dataGotten = snapshot.data.data;
+
+            if (dataGotten != null || dataGotten!=0) {
+              dataGotten.forEach((key, value) {
+                notificationValue=value;
+                print('notification from baseModel:$notificationValue');
+                notifyListeners();
+              });
+            }
+          }
+          return null;
+        });
+  }
+
   networkConnection() {
-    return listener=DataConnectionChecker().onStatusChange.listen((status) {
+    return listener = DataConnectionChecker().onStatusChange.listen((status) {
       switch (status) {
         case DataConnectionStatus.connected:
           netStat = true;
@@ -120,7 +154,7 @@ class BaseModel with ChangeNotifier {
   }
 
   // dispose listener
-  disposeListener(){
+  disposeListener() {
     listener.cancel();
   }
 
@@ -129,11 +163,11 @@ class BaseModel with ChangeNotifier {
     notifyListeners();
   }
 
-
-  getTradeCategoryFromDataBase( child) {
+  getTradeCategoryFromDataBase(child) {
     return StreamBuilder(
-        stream: Firestore.instance.collection('DataBase/Trade/TradeCategory').
-        snapshots(),
+        stream: Firestore.instance
+            .collection('DataBase/Trade/TradeCategory')
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return GeneralTextDisplay(
@@ -146,7 +180,6 @@ class BaseModel with ChangeNotifier {
             ;
           }
           if (snapshot.hasError) {
-
             print('...tradeData error: ${snapshot.error}');
           }
           if (snapshot.hasData) {
@@ -154,13 +187,17 @@ class BaseModel with ChangeNotifier {
             List goodBoy;
             print('...tradeData: ${snapshot.data}');
             snapshot.data == null
-                ? tradeCategory = [''] :
-            snapshot.data.documents
-            !=null?goodBoy= snapshot.data.documents:null;
-            goodBoy!=null?goodBoy.map((e) {
-              tradeCategory.length>4?tradeList=['']:null;
-              tradeCategory.add(e.documentID);
-            }).toList():null;
+                ? tradeCategory = ['']
+                : snapshot.data.documents != null
+                    ? goodBoy = snapshot.data.documents
+                    : null;
+            goodBoy != null
+                ? goodBoy.map((e) {
+                    tradeCategory.length > 4 ? tradeList = [''] : null;
+                    tradeCategory.add(e.documentID);
+                    notifyListeners();
+                  }).toList()
+                : null;
 
             print('tradeCategory :$tradeCategory');
             return child;
@@ -169,36 +206,36 @@ class BaseModel with ChangeNotifier {
         });
   }
 
-
   getTradeFromDataBase(tradeName, child) {
     return StreamBuilder(
-        stream: Firestore.instance.collection('DataBase/Trade/TradeCategory')
+        stream: Firestore.instance
+            .collection('DataBase/Trade/TradeCategory')
             .document(tradeName)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return GeneralTextDisplay('loading..', Colors.black87, 1, 13, FontWeight.w400,
-                'place holder at get trade from database');
+            return GeneralTextDisplay('loading..', Colors.black87, 1, 13,
+                FontWeight.w400, 'place holder at get trade from database');
           }
           if (snapshot.hasError) {
-
             print('...tradeData error: ${snapshot.error}');
           }
           if (snapshot.hasData) {
-
-            Map dataGotten={};
+            Map dataGotten = {};
             print('...tradeData: ${snapshot.data}');
             snapshot.data == null
-                ? tradeList = [''] :
-            dataGotten=snapshot.data.data;
+                ? tradeList = ['']
+                : dataGotten = snapshot.data.data;
 
-            if(dataGotten!={}){
-              tradeList=[''];
+            if (dataGotten != {}) {
+              tradeList = [''];
               dataGotten.forEach((key, value) {
-                tradeList.length>4?tradeList=['']:null;
-                tradeList.add(value);});
-          print(tradeList);
-          print(dataGotten);
+                tradeList.length > 4 ? tradeList = [''] : null;
+                tradeList.add(value);
+              });
+              notifyListeners();
+              print(tradeList);
+              print(dataGotten);
             }
             return child;
           }
@@ -208,33 +245,37 @@ class BaseModel with ChangeNotifier {
 
   getTermsAndConditions(context) {
     return StreamBuilder(
-        stream: Firestore.instance.collection('DataBase').
-        document('Terms and Conditions').snapshots(),
+        stream: Firestore.instance
+            .collection('DataBase')
+            .document('Terms and Conditions')
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Container();
           }
           if (snapshot.hasError) {
-
             print('...terms and condition error: ${snapshot.error}');
           }
           if (snapshot.hasData) {
-            Map dataValue ={};
+            Map dataValue = {};
             snapshot.data.data == null
-                ? termsAndConditions = [] : dataValue=snapshot.data.data;
-            dataValue==null?termsAndConditions=[]:
-                dataValue.forEach((key, value) {
-                  termsAndConditions.add(value);
-                });
+                ? termsAndConditions = []
+                : dataValue = snapshot.data.data;
+            dataValue == null
+                ? termsAndConditions = []
+                : dataValue.forEach((key, value) {
+                    termsAndConditions.add(value);
+                  });
 
             return AlertDialog(
-              title: GeneralTextDisplay(
-                  'Terms and Condition', Colors.black, 1, 16,
-                  FontWeight.w600, 'terms and condition title'),
+              title: GeneralTextDisplay('Terms and Condition', Colors.black, 1,
+                  16, FontWeight.w600, 'terms and condition title'),
               content: Container(
                 decoration: BoxDecoration(
-                    image:
-                    DecorationImage(image: AssetImage('assets/Merge.PNG',))),
+                    image: DecorationImage(
+                        image: AssetImage(
+                  'assets/Merge.PNG',
+                ))),
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -242,8 +283,7 @@ class BaseModel with ChangeNotifier {
                   itemBuilder: (context, index) {
                     return ListTile(
                       leading: GeneralTextDisplay(
-                          termsAndConditions != []
-                              ? '${index+1}.':'',
+                          termsAndConditions != [] ? '${index + 1}.' : '',
                           Color.fromRGBO(238, 83, 79, 1.0),
                           1,
                           14,
@@ -253,9 +293,11 @@ class BaseModel with ChangeNotifier {
                           termsAndConditions != []
                               ? '${termsAndConditions[index]}'
                               : '',
-                          Color.fromRGBO(20, 20, 20 ,1.0),
-                          20, 12,
-                          FontWeight.w400, 'terms and condition label'),
+                          Color.fromRGBO(20, 20, 20, 1.0),
+                          20,
+                          12,
+                          FontWeight.w400,
+                          'terms and condition label'),
                     );
                   },
                 ),
@@ -265,8 +307,4 @@ class BaseModel with ChangeNotifier {
           return null;
         });
   }
-
 }
-
-
-

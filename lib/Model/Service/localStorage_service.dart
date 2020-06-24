@@ -11,7 +11,7 @@ class LocalStorageService {
     return value;
   }
 
-    Future<String> getString ( value) async {
+    Future<String> getString (value) async {
     final prefString=await SharedPreferences.getInstance();
       var gottenValue = prefString.getString(value) ?? '';
       return gottenValue;
@@ -19,27 +19,27 @@ class LocalStorageService {
 
   Future<bool> getBool ( value) async {
     final prefBool=await SharedPreferences.getInstance();
-    var gottenValue = prefBool.getBool(value) ?? '';
+    var gottenValue = prefBool.getBool(value) ?? false;
     return gottenValue;
   }
 
 
   Future<int> getInt ( value) async {
     final prefInt=await SharedPreferences.getInstance();
-    var gottenValue = prefInt.getInt(value) ?? '';
+    var gottenValue = prefInt.getInt(value) ?? 0;
     return gottenValue;
   }
 
 
   Future<List<String>> getList ( value) async {
     final prefList=await SharedPreferences.getInstance();
-    var gottenValue = prefList.getStringList(value) ?? '';
+    var gottenValue = prefList.getStringList(value) ?? [];
     return gottenValue;
   }
 
   Future<double> getDouble ( value) async {
     final prefDouble=await SharedPreferences.getInstance();
-    var gottenValue = prefDouble.getDouble(value) ?? '';
+    var gottenValue = prefDouble.getDouble(value) ?? 0.0;
     return gottenValue;
   }
 

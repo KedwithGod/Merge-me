@@ -256,7 +256,8 @@ class WorkTemplate extends StatelessWidget {
 
 
     return ViewModelProvider<BaseModel>.withConsumer(
-      onModelReady: (model)=>model.getNotificationFromDataBase(),
+      onModelReady: (model){model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);},
     viewModelBuilder: ()=>BaseModel(),
     disposeViewModel: false,
     builder: (context, model,_)=> DefaultTabController(length: 4,

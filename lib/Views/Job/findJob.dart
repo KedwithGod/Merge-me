@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mergeme/Model/Service/firestore_service.dart';
 import 'package:mergeme/Model/Service/localStorage_service.dart';
 import 'package:mergeme/Model/Service/locator_setup.dart';
-import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/Model/constants/drawer.dart';
+import 'package:mergeme/Model/constants/route_path.dart' as route;
 import 'package:mergeme/ViewModel/postJobViewModel.dart';
 import 'package:mergeme/Views/Job/Job_description.dart';
 import 'package:mergeme/Views/Uielements/AdaptivePostionedWidget.dart';
@@ -14,7 +14,6 @@ import 'package:mergeme/Views/Uielements/Shared.dart';
 import 'package:mergeme/Views/Uielements/sizedBox.dart';
 import 'package:provider_architecture/_provider_widget.dart';
 import 'package:provider_architecture/_viewmodel_provider.dart';
-import 'package:random_string/random_string.dart';
 
 class FindJobPage extends StatelessWidget {
   final LocalStorageService storageService =locator<LocalStorageService>();
@@ -47,7 +46,8 @@ class FindJobPage extends StatelessWidget {
       onModelReady: (model) {model.listenToPosts();
       model.hideLabelController=ScrollController();
       model.hideControllerFunction();
-      model.getNotificationFromDataBase();
+      model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);
       },
       disposeViewModel: false,
       viewModelBuilder: ()=>JobViewModel(route.GiveWork+specificTrade),
@@ -189,6 +189,7 @@ class FindJobPage extends StatelessWidget {
                                 controller: model.hideLabelController,
                                   itemCount: model.jobDetails.length,
                                   itemBuilder:(context, index){
+
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10),
@@ -216,7 +217,7 @@ class JobTile extends ProviderWidget<JobViewModel>{
   final dynamic documents;
 
   final String specificTrade;
-  JobTile(this.documents,this.specificTrade);
+  JobTile(this.documents, this.specificTrade);
 
 
   @override

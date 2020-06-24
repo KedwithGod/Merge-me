@@ -128,7 +128,7 @@ class JobViewModel extends BaseModel  {
 
       // get length of file uploaded
       await _storageService.getInt(route.LengthOfFileUploaded).then((value) {
-        noOfFileUploaded = value;
+        noOfFileUploaded = value!=null?value:0;
         notifyListeners();
         // get single file uploaded
       });
@@ -171,6 +171,13 @@ class JobViewModel extends BaseModel  {
       await _storageService.setUser(route.JobStatus,jobStatus);
 
 
+      var documentID;
+
+
+      // getting document reference
+      final docRef=await Firestore.instance.collection("${route.GiveWork + "" + tradePage}").
+      add({'test':'test'});
+      documentID=docRef.documentID;
       final jobDetails = PostJobDetails(
           jobType: jobType,
           jobDescription: jobDescription,
@@ -183,30 +190,28 @@ class JobViewModel extends BaseModel  {
           postJobFilePath: singleFileUploaded,
           noOfFilePosted: noOfFileUploaded,
           postJobMultiplePaths: multipleFileUploaded,
-          jobStatus: jobStatus);
-      // getting document reference
-      docRef()async {
-        var documentValue =await _fireStore.saveData(
-            jobDetails.toJson(), "${route.GiveWork + "" + tradePage}"
+          jobStatus: jobStatus,
+          documentId:documentID);
+      await _fireStore.saveData(
+            jobDetails.toJson(), "${route.GiveWork + "" + tradePage}",docRef.documentID,
         );
-        documentId=documentValue.documentID;
+       documentId=docRef.documentID;
+        print('this documentId: $documentId');
         notifyListeners();
         await Firestore.instance.collection("${route.GiveWork + "" + tradePage}")
             .document(documentId).setData({
           route.DocumentId:documentId
         },merge: true);
-        return documentValue;
-      }
-     docRef();
+
       jobDetails.toJson().forEach((key, value) async {
         await _storageService.setUser(key, value);
       });
 
-      if (noOfFileUploaded == 0) { await _firebase.uploadAnyFile(
+      if (singleFileUploaded!='') { await _firebase.uploadAnyFile(
           fileNameForSingle, File(singleFileUploaded));
       return await _navigationService.nextPage(route.MyJobPageRoute);
      }
-     else if (noOfFileUploaded > 0) {
+     if (noOfFileUploaded > 0) {
         multipleFileUploaded.forEach((key, value) {
           _firebase.uploadAnyFile(
               '$key', File(value));
@@ -216,7 +221,7 @@ class JobViewModel extends BaseModel  {
         setJobStatus();
         await _navigationService.nextPage(route.MyJobPageRoute);
       }
-
+      await _navigationService.nextPage(route.MyJobPageRoute);
     }
   }
 
@@ -252,19 +257,22 @@ class JobViewModel extends BaseModel  {
 
 // get data from fireStore to find Job page
   listenToPosts() {
-    _fireStore.listenToJobPosterDataRealTime(collectionName).listen((data) {
-      List<PostJobDetails> updatedData = data;
-      print(data);
-      if (updatedData != null && updatedData.length > 0) {
-        _jobDetails = updatedData;
-        neededDocument
-        print('_jobDetails: $_jobDetails');
-        notifyListeners();
-      }
+   try {
+     return  _fireStore.listenToJobPosterDataRealTime(collectionName).listen((data) {
+       List<PostJobDetails> updatedData = data;
+       if (updatedData != null && updatedData.length > 0) {
+         _jobDetails = updatedData;
+         notifyListeners();
+       }
 
-      setState(ViewState.Idle);
-    });
+       setState(ViewState.Idle);
+     });
+   }catch(e){
+     print(e.toString);
+   }
   }
+
+
 
 // navigating to JobDescription page
   jobDescriptionNavigation(arguments) async {

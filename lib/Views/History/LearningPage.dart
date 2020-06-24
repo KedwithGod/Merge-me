@@ -24,8 +24,10 @@ class LearningPage extends StatelessWidget {
       return dynamicSize.height(value / 667);
     }
     return ViewModelProvider<LearningPageViewModel>.withConsumer(
-      onModelReady: (model){model.getNotificationFromDataBase();},
+      onModelReady: (model){model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);},
       viewModelBuilder: ()=>LearningPageViewModel(),
+      disposeViewModel: false,
       builder: (context, model, child)=> DefaultTabController(length: 3,
         child: Scaffold(
           drawer: CustomDrawer(),

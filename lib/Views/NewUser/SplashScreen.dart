@@ -8,7 +8,8 @@ class SplashScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<WelcomeViewModel>.withConsumer(
-
+  onModelReady: (model)=>model.updateUser(),
+      disposeViewModel: false,
       viewModelBuilder:()=> WelcomeViewModel(),
       builder: (context,model,child)=>
           SplashScreen(

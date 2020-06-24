@@ -61,6 +61,7 @@ class _MyAppState extends State<MyApp> {
       ),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          /*visualDensity: VisualDensity.adaptivePlatformDensity,*/
           textTheme: GoogleFonts.openSansTextTheme(
             Theme.of(context).textTheme,
           ),backgroundColor: Colors.pink,
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
        navigatorKey: locator<NavigatorService>().navigatorKey,
        onGenerateRoute: router.generateRoute,
         initialRoute: routes.SplashRoute,
+
       ));
   }
 }

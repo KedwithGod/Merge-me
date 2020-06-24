@@ -88,6 +88,7 @@ class PostJobDetails{
   final dynamic postJobFilePath;
   final dynamic noOfFilePosted;
   final dynamic jobStatus;
+  final dynamic documentId;
   final Map<dynamic,dynamic> postJobMultiplePaths;
 
   PostJobDetails(
@@ -97,7 +98,8 @@ class PostJobDetails{
       this.date,
       this.jobDescription,
       this.postJobFilePath,
-      this.postJobMultiplePaths,this.noOfFilePosted,this.jobStatus});
+      this.postJobMultiplePaths,this.noOfFilePosted,this.jobStatus,
+      this.documentId});
 
   Map<String, dynamic> toJson() {
     return {
@@ -112,7 +114,8 @@ class PostJobDetails{
       route.PostJobFilePath:postJobFilePath,
       route.PostJobMultiplePaths:postJobMultiplePaths,
       route.LengthOfFileUploaded:noOfFilePosted,
-      route.JobStatus:jobStatus
+      route.JobStatus:jobStatus,
+      route.DocumentId:documentId
     };
   }
 
@@ -128,6 +131,7 @@ class PostJobDetails{
         postJobFilePath = data[route.PostJobFilePath],
         postJobMultiplePaths= data[route.PostJobMultiplePaths],
         noOfFilePosted=data[route.LengthOfFileUploaded],
-        jobStatus=data[route.JobStatus]
+        jobStatus=data[route.JobStatus],
+  documentId=data[route.DocumentId]
         ;
 }

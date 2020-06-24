@@ -31,8 +31,11 @@ class WelcomeBack extends StatelessWidget {
 
     return ViewModelProvider<WelcomeViewModel>.withConsumer(
       onModelReady: (model){model.userLocation(context,);
-      model.updateUser();model.networkConnection();
-      model.getNotificationFromDataBase();
+      model.networkConnection();
+      model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);
+      model.updateUser();
+      print('notification from welcomepage${model.notificationValue}');
       },
         viewModelBuilder: ()=>WelcomeViewModel(),
           builder: (context, model, child) => model.netStat==false?
@@ -55,7 +58,7 @@ class WelcomeBack extends StatelessWidget {
               ),
             ),
 
-          ):model.currentUser==null?Loading():Scaffold(
+          ):Scaffold(
               body: SafeArea(
             child: Stack(children: <Widget>[
               AdaptivePositioned(

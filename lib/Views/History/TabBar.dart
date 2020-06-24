@@ -20,34 +20,15 @@ class Tabs extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Color.fromRGBO(238, 83, 79, 1.0),
         unselectedLabelColor: Colors.white,
-        labelPadding: EdgeInsets.symmetric(horizontal: height(40)),
         indicator: new BubbleTabIndicator(
           indicatorHeight: height(31),
           indicatorColor: Colors.white,
           tabBarIndicatorSize: TabBarIndicatorSize.tab,
         ),
         tabs:[
-          Container(
-
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Tab(text: 'Active',)),
-            width: dynamicSize.width(40/360),
-          ),
-          Container(
-
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Tab(text: 'Completed',)),
-            width: dynamicSize.width(87/360),
-          ),
-          Container(
-
-            child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Tab(text: 'Closed',)),
-            width: dynamicSize.width(40/360),
-          ),
+          Tab(text: 'Active',),
+          Tab(text: 'Completed',),
+          Tab(text: 'Closed',),
 
         ],
     );

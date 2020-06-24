@@ -80,7 +80,8 @@ class FindTraderPage extends StatelessWidget {
 
     return ViewModelProvider<BaseModel>.withConsumer(
     viewModelBuilder: ()=>BaseModel(),
-    onModelReady: (model)=>model.getNotificationFromDataBase(),
+    onModelReady: (model){model.getNotificationFromDataBase(context);
+      model.getNotificationValue(context);},
     disposeViewModel: false,
     builder: (context, model,_)=> Scaffold(
         drawer: CustomDrawer(),
